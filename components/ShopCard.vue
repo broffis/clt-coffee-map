@@ -1,16 +1,20 @@
 <template>
   <div class="shop-card">
     <div class="shop-card__upper">
-      <div class="shop-card__upper--logo">
-        {{ logo }}
-      </div><!-- /.shop-card__upper--logo -->
-
       <div class="shop-card__upper--text">
-        <div class="title">
+        <img
+          v-if="logo"
+          class="logo"
+          :src="logo"
+        >
+        <div
+          v-else
+          class="title"
+        >
           {{ name }}
         </div><!-- /.title -->
         <div class="roaster">
-          {{ roaster }}
+          Roaster: {{ roaster }}
         </div><!-- /.roaster -->
       </div><!-- /.shop-card__upper--text -->
     </div><!-- /.shop-card__upper -->
@@ -28,7 +32,8 @@
         <div class="contact-info">
           <span
             v-if="hasWebsite"
-            class="website">
+            class="website"
+          >
             <a :href="socialMediaLinks.websiteUrl">website</a>
           </span><!-- /.website -->
 

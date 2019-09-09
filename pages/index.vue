@@ -5,19 +5,21 @@
         Charlotte Coffee Map
       </h1>
       <shop-card
-        name="Test Coffee Shop"
-        roaster="Roasting Company"
-        logo="Logo placeholder"
-        street-address="123 Main Street"
-        city="Charlotte"
-        state="NC"
-        :zip-code="28210"
-        review="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam"
+        v-for="shop in shops"
+        :key="shop.id"
+        :name="shop.name"
+        :roaster="shop.roaster"
+        :logo="shop.logo"
+        :street-address="shop.address"
+        :city="shop.city"
+        :state="shop.state"
+        :zip-code="shop.zipCode"
+        :review="shop.review"
         :social-media-links="{
-          websiteUrl: 'www.google.com',
-          facebookLink: 'www.facebook.com',
-          twitterLink: 'www.twitter.com',
-          instagramLink: 'www.instagram.com'
+          websiteUrl: shop.websiteUrl,
+          facebookLink: shop.facebookLink,
+          twitterLink: shop.twitterLink,
+          instagramLink: shop.instagramLink
         }"
       />
     </div>
@@ -25,12 +27,19 @@
 </template>
 
 <script>
-// import coffeeShops from '@/config/shops'
+import { mapGetters } from 'vuex'
+// import { coffeeShops } from '@/config/shops'
 import ShopCard from '@/components/ShopCard'
 
 export default {
   components: {
     ShopCard
+  },
+
+  computed: {
+    ...mapGetters({
+      shops: 'shops/getShops'
+    })
   }
 }
 </script>

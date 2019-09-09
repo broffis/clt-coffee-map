@@ -16,20 +16,20 @@
       flex-direction: row;
     }
 
-    &--logo {
-      height: 100%;
-      border: 1px solid black;
-
-      @include breakpoint-sm {
-        width: 30%;
-      }      
-    }
-
     &--text {
       margin: 10px 0;
 
       @include breakpoint-sm {
         width: 70%;
+      }
+
+      .logo {
+        // height: 30px;
+        width: 100%;
+  
+        @include breakpoint-sm {
+          width: 30%;
+        }      
       }
 
       .title {
