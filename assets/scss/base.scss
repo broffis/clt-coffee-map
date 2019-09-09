@@ -6,12 +6,12 @@
 html {
   box-sizing: border-box;
   // font-family: $font-family-regular;
-  font-size: 14px;
   -moz-osx-font-smoothing: grayscale;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   word-spacing: 1px;
+  background: $clr-white-off;
 }
 
 *,
@@ -19,6 +19,10 @@ html {
 *::after {
   box-sizing: border-box;
   margin: 0;
+}
+
+a {
+  color: $clr-black;
 }
 
 @import 'modules/all';

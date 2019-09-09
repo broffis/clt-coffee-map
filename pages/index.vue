@@ -4,7 +4,22 @@
       <h1 class="title">
         Charlotte Coffee Map
       </h1>
-      <shop-card />
+      <shop-card
+        name="Test Coffee Shop"
+        roaster="Roasting Company"
+        logo="Logo placeholder"
+        street-address="123 Main Street"
+        city="Charlotte"
+        state="NC"
+        :zip-code="28210"
+        review="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam"
+        :social-media-links="{
+          websiteUrl: 'www.google.com',
+          facebookLink: 'www.facebook.com',
+          twitterLink: 'www.twitter.com',
+          instagramLink: 'www.instagram.com'
+        }"
+      />
     </div>
   </div>
 </template>
