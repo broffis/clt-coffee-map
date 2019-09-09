@@ -1,0 +1,24 @@
+/* BASE */
+
+@import 'variables/all';
+@import 'mixins/all';
+
+html {
+  box-sizing: border-box;
+  // font-family: $font-family-regular;
+  font-size: 14px;
+  -moz-osx-font-smoothing: grayscale;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  word-spacing: 1px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+@import 'modules/all';

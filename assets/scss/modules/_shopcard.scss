@@ -1,0 +1,75 @@
+.shop-card {
+  border: 5px solid black;
+  margin: 5px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+
+  &__upper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include breakpoint-sm {
+      flex-direction: row;
+    }
+
+    &--logo {
+      height: 100%;
+      border: 1px solid black;
+
+      @include breakpoint-sm {
+        width: 30%;
+      }      
+    }
+
+    &--text {
+
+      @include breakpoint-sm {
+        width: 70%;
+      }
+
+      .title {
+        font-size: 1.5rem;
+        font-weight: bold;
+
+        @include breakpoint-sm {
+          font-size: 2rem;
+        }
+      }
+
+      .roaster {
+        font-size: 1rem;
+
+        @include breakpoint-sm {
+          font-size: 1.25rem;
+        }
+      }
+    }
+  }
+
+  &__lower {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include breakpoint-sm {
+      flex-direction: row;
+    }
+
+    &--location {
+      @include breakpoint-sm {
+        width: 30%;
+      }
+    }
+
+    &--text {
+      @include breakpoint-sm {
+        width: 70%;
+      }
+    }
+  }
+}
