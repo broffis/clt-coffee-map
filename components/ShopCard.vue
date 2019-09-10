@@ -8,7 +8,6 @@
           :src="logo"
         >
         <div
-          v-else
           class="title"
         >
           {{ name }}
@@ -113,16 +112,16 @@ export default {
 
   computed: {
     hasWebsite () {
-      return this.socialMediaLinks && this.socialMediaLinks.websiteUrl !== null
+      return this.socialMediaLinks && this.socialMediaLinks.websiteUrl !== undefined
     },
     hasFacebook () {
-      return this.socialMediaLinks && this.socialMediaLinks.facebookLink !== null
+      return this.socialMediaLinks && this.socialMediaLinks.facebookLink !== undefined
     },
     hasTwitter () {
-      return this.socialMediaLinks && this.socialMediaLinks.twitterLink !== null
+      return this.socialMediaLinks && this.socialMediaLinks.twitterLink !== undefined
     },
     hasInstagram () {
-      return this.socialMediaLinks && this.socialMediaLinks.instagramLink !== null
+      return this.socialMediaLinks && this.socialMediaLinks.instagramLink !== undefined
     }
   }
 }
