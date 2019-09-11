@@ -41,7 +41,7 @@
             class="twitter"
             :href="socialMediaLinks.twitterLink"
           >
-            <img src="/images/twitter-icon.png">
+            <img src="/images/icons/twitter-icon.png">
           </a>
 
           <a
@@ -49,7 +49,7 @@
             class="facebook"
             :href="socialMediaLinks.facebookLink"
           >
-            <img src="/images/facebook-icon.png">
+            <img src="/images/icons/facebook-icon.png">
           </a>
 
           <a
@@ -57,7 +57,7 @@
             class="instagram"
             :href="socialMediaLinks.instagramLink"
           >
-            <img src="/images/instagram-icon.png">
+            <img src="/images/icons/instagram-icon.png">
           </a>
         </div><!-- /.contact-info -->
       </div><!-- /.shop-card__lower--text -->
