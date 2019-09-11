@@ -1,0 +1,29 @@
+/* BASE */
+
+@import 'variables/all';
+@import 'mixins/all';
+@import 'utilities/all';
+
+html {
+  box-sizing: border-box;
+  // font-family: $font-family-regular;
+  -moz-osx-font-smoothing: grayscale;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  word-spacing: 1px;
+  background: $clr-white-off;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+a {
+  color: $clr-black;
+}
+
+@import 'modules/all';

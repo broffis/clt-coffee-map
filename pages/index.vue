@@ -1,39 +1,45 @@
 <template>
   <div class="container">
     <div>
-      <logo />
       <h1 class="title">
-        clt-coffee-map
-      </h1>
-      <h2 class="subtitle">
         Charlotte Coffee Map
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+      </h1>
+      <shop-card
+        v-for="shop in shops"
+        :key="shop.id"
+        :name="shop.name"
+        :roaster="shop.roaster"
+        :logo="shop.logo"
+        :street-address="shop.address"
+        :city="shop.city"
+        :state="shop.state"
+        :zip-code="shop.zipCode"
+        :review="shop.review"
+        :social-media-links="{
+          websiteUrl: shop.websiteUrl,
+          facebookLink: shop.facebookLink,
+          twitterLink: shop.twitterLink,
+          instagramLink: shop.instagramLink
+        }"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import { mapGetters } from 'vuex'
+// import { coffeeShops } from '@/config/shops'
+import ShopCard from '@/components/ShopCard'
 
 export default {
   components: {
-    Logo
+    ShopCard
+  },
+
+  computed: {
+    ...mapGetters({
+      shops: 'shops/getShops'
+    })
   }
 }
 </script>
@@ -53,7 +59,7 @@ export default {
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   display: block;
   font-weight: 300;
-  font-size: 100px;
+  font-size: 4rem;
   color: #35495e;
   letter-spacing: 1px;
 }

@@ -1,0 +1,107 @@
+/* VARIABLES */
+
+/* COLORS */
+$clr-black: #000;
+
+$clr-gray-darker: #202020;
+$clr-gray-dark: #455051;
+$clr-gray: #b9c9d2;
+$clr-gray-light: #ebeff0;
+
+$clr-white: #fff;
+$clr-white-off: #e8e4d6;
+$clr-white-cream: #f4f2dd;
+
+// $clr-blue-darker: ;
+// $clr-blue-dark: ;
+// $clr-blue: ;
+// $clr-blue-light: ;
+// $clr-blue-lighter: ;
+// $clr-blue-lightest: ;
+
+// $clr-red-darker: ;
+// $clr-red-dark: ;
+// $clr-red: ;
+// $clr-red-light: ;
+// $clr-red-lighter: ;
+// $clr-red-lightest: ;
+
+// $clr-green-darker: ;
+// $clr-green-dark: ;
+// $clr-green: ;
+// $clr-green-light: ;
+// $clr-green-lighter: ;
+// $clr-green-lightest: ;
+
+// $clr-yellow-darker: ;
+// $clr-yellow-dark: ;
+// $clr-yellow: ;
+// $clr-yellow-light: ;
+// $clr-yellow-lighter: ;
+// $clr-yellow-lightest: ;
+
+
+// $clr-purple-darker: ;
+// $clr-purple-dark: ;
+// $clr-purple: ;
+// $clr-purple-light: ;
+// $clr-purple-lighter: ;
+// $clr-purple-lightest: ;
+
+
+$clr-list: (
+  default: $clr-black,
+  black: $clr-black,
+  gray-darker: $clr-gray-darker,
+  gray-dark: $clr-gray-dark,
+  gray: $clr-gray,
+  gray-light: $clr-gray-light,
+  white: $clr-white,
+  off-white: $clr-white-off,
+  cream: $clr-white-cream,
+
+  // blue-darker: $clr-blue-darker,
+  // blue-dark: $clr-blue-dark,
+  // blue: $clr-blue,
+  // blue-light: $clr-blue-light,
+  // blue-lighter: $clr-blue-lighter,
+  // blue-lightest: $clr-blue-lightest,
+
+  // red-darker: $clr-red-darker,
+  // red-dark: $clr-red-dark,
+  // red: $clr-red,
+  // red-light: $clr-red-light,
+  // red-lighter: $clr-red-lighter,
+  // red-lightest: $clr-red-lightest,
+
+  // green-darker: $clr-green-darker,
+  // green-dark: $clr-green-dark,
+  // green: $clr-green,
+  // green-light: $clr-green-light,
+  // green-lighter: $clr-green-lighter,
+  // green-lightest: $clr-green-lightest,
+
+  // yellow-darker: $clr-yellow-darker,
+  // yellow-dark: $clr-yellow-dark,
+  // yellow: $clr-yellow,
+  // yellow-light: $clr-yellow-light,
+  // yellow-lighter: $clr-yellow-lighter,
+  // yellow-lightest: $clr-yellow-lightest,
+
+  // purple-darker: $clr-purple-darker,
+  // purple-dark: $clr-purple-dark,
+  // purple: $clr-purple,
+  // purple-light: $clr-purple-light,
+  // purple-lighter: $clr-purple-lighter,
+  // purple-lightest: $clr-purple-lightest,
+);
+
+@each $key, $val in $clr-list {
+  .clr-#{$key} {
+    color: #{$val};
+  }
+
+  .bg-#{$key} {
+    background-color: #{$val};
+  }
+}

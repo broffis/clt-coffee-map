@@ -19,11 +19,7 @@ export default {
   ** Customize the progress-bar color
   */
   loading: { color: '#fff' },
-  /*
-  ** Global CSS
-  */
-  css: [
-  ],
+
   /*
   ** Plugins to load before mounting the App
   */
@@ -41,7 +37,21 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/style-resources'
+  ],
+
+  styleResources: {
+    sass: [
+      '@assets/scss/variables/_all.scss'
+    ]
+  },
+
+  /*
+  ** Global CSS
+  */
+  css: [
+    '@/assets/scss/base.scss'
   ],
   /*
   ** Axios module configuration
