@@ -133,7 +133,7 @@ export const coffeeShops = [
     review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
   },
   {
-    name: 'Mugs',
+    name: 'Mugs Coffee',
     id: 9,
     companyId: 7,
     address: '5126 Park Rd #1',
@@ -146,7 +146,58 @@ export const coffeeShops = [
     roaster: 'Magnolia Coffee',
     roasterId: 7,
     review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+  },
+  {
+    name: 'Not Just Coffee',
+    id: 10,
+    companyId: 8,
+    address: '224 E 7th St',
+    city: 'Charlotte',
+    state: 'NC',
+    zipCode: 28202,
+    logo: '/images/logos/notjustcoffee-logo.png',
+    websiteUrl: 'https://notjust.coffee/',
+    // facebookLink: '',
+    instagramLink: 'https://www.instagram.com/notjustcoffee/',
+    twitterLink: 'https://twitter.com/NotJCoffeeClt',
+    roaster: 'Counter Culture Coffee',
+    roasterId: 8,
+    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+  },
+  {
+    name: 'Not Just Coffee',
+    id: 10,
+    companyId: 8,
+    address: '222 S Church St',
+    city: 'Charlotte',
+    state: 'NC',
+    zipCode: 28202,
+    logo: '/images/logos/notjustcoffee-logo.png',
+    websiteUrl: 'https://notjust.coffee/',
+    // facebookLink: '',
+    instagramLink: 'https://www.instagram.com/notjustcoffee/',
+    twitterLink: 'https://twitter.com/NotJCoffeeClt',
+    roaster: 'Counter Culture Coffee',
+    roasterId: 8,
+    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
   }
+  // {
+  //   name: '',
+  //   id: ,
+  //   companyId: ,
+  //   address: '',
+  //   city: '',
+  //   state: '',
+  //   zipCode: ,
+  //   logo: '/images/logos/',
+  //   websiteUrl: '',
+  //   facebookLink: '',
+  //   instagramLink: '',
+  //   twitterLink: '',
+  //   roaster: '',
+  //   roasterId: ,
+  //   review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+  // }
   /**
    * Still need:
    *  Not Just Coffee
