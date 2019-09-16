@@ -1,0 +1,33 @@
+/* HOME PAGE */
+
+.coming-soon {
+  text-align: center;
+  width: 100%;
+
+  &--headline {
+    font-size: 2rem;
+    margin-bottom: 10px;
+
+    @include breakpoint-sm {
+      font-size: 4rem;
+    }
+  }
+
+  &--subtext {
+    font-size: 2rem;
+    margin-bottom: 25px;
+
+    @include breakpoint-sm {
+      font-size: 3rem;
+    }
+  }
+
+  &__logo {
+    width: 80%;
+  
+    @include breakpoint-sm {
+      max-width: 900;
+    }
+  }
+}
+
