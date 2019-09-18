@@ -1,44 +1,19 @@
 <template>
-  <div>
-    <div class="filters__company dropdown">
-      <button
-        class="dropbtn"
-        @click="toggleCompanyDropdown()"
-      >
-        {{ companyFilterText }}
-      </button>
+  <div class="filters">
+    <div class="filters__roaster">
       <div
-        class="dropdown-content"
-        :class="{'--is-active': activeCompanyDropdown}"
+        class="filters--dropdown__label"
+        @click="toggleRoasterDropdown"
       >
-        <a
-          @click="filterByCompany(null, null)"
-        >Show All Shops</a>
-        <a
-          v-for="(company, index) in companies"
-          :id="company.id"
-          :key="`${company.name}-${index}`"
-          :value="company.name"
-          @click="filterByCompany(company.name, company.id)"
-        >
-          {{ company.name }}
-        </a>
+        <p class="filters--dropdown__label--type">Filter by Roaster:</p>
+        <p class="filters--dropdown__label--value">{{ selectedRoaster }}</p>
       </div>
-    </div>
-
-    <div class="filters__roaster dropdown">
-      <button
-        class="dropbtn"
-        @click="toggleRoasterDropdown()"
-      >
-        {{ companyFilterText }}
-      </button>
       <div
         class="dropdown-content"
         :class="{'--is-active': activeRoasterDropdown}"
       >
         <a
-          @click="filterByRoaster(null, null)"
+          @click="filterByRoaster('All', null)"
         >Show All Shops</a>
         <a
           v-for="roaster in roasters"
@@ -49,8 +24,35 @@
         >
           {{ roaster.name }}
         </a>
+      </div><!-- /.dropdown-content -->
+    </div><!-- /.filters__roaster -->
+
+    <div class="filters__company">
+      <div
+        class="filters--dropdown__label"
+        @click="toggleCompanyDropdown"
+      >
+        <p class="filters--dropdown__label--type">Filter by Shop:</p>
+        <p class="filters--dropdown__label--value">{{ selectedCompany }}</p>
       </div>
-    </div>
+      <div
+        class="dropdown-content"
+        :class="{'--is-active': activeCompanyDropdown}"
+      >
+        <a
+          @click="filterByCompany('All', null)"
+        >Show All Shops</a>
+        <a
+          v-for="company in companies"
+          :id="company.id"
+          :key="`${company.name}-${company.id}`"
+          :value="company.name"
+          @click="filterByCompany(company.name, company.id)"
+        >
+          {{ company.name }}
+        </a>
+      </div><!-- /.dropdown-content -->
+    </div><!-- /.filters__company -->
   </div>
 </template>
 <script>
@@ -61,11 +63,11 @@ export default {
 
   data () {
     return {
-      companyFilterText: this.isFilteredByCompany ? this.selectedCompany : 'Filter by shop',
-      roasterFilterText: this.isFilteredByRoaster ? this.selectedRoaster : 'Filter by roaster',
+      companyFilterText: this.selectedCompany,
+      roasterFilterText: this.selectedRoaster,
 
-      selectedCompany: null,
-      selectedRoaster: null,
+      selectedCompany: 'All',
+      selectedRoaster: 'All',
 
       activeCompanyDropdown: false,
       activeRoasterDropdown: false
@@ -78,16 +80,11 @@ export default {
       roasters: 'shops/getRoasters'
     }),
     isFilteredByCompany () {
-      return this.selectedCompany !== null
+      return this.selectedCompany !== ''
     },
     isFilteredByRoaster () {
-      return this.selectedRoaster !== null
+      return this.selectedRoaster !== ''
     }
-  },
-
-  updated () {
-    console.log('Company filter text: ', this.companyFilterText)
-    console.log('Roaster filter text: ', this.roasterFilterText)
   },
 
   methods: {
@@ -118,46 +115,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-  /* Dropdown Button */
-.dropbtn {
-  background-color: #f1f1f1;
-  color: black;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-}
-
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-
-  &.--is-active {
-    display: block;
-  }
-
-  a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-  }
-
-  a:hover {
-    background-color: #ddd;
-  }
-}
-/* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {background-color: #3e8e41;}
-</style>
