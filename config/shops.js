@@ -292,18 +292,21 @@ export const coffeeShops = [
 
   /**
    * Still need:
+   *  Cafe Moka
+   *  Amelie's French Bakery & Cafe
+   *  Rhino Market
+   *  Uptown Coffee Co
    *  Queen City Grounds
    *  Dunx
    *  Coco and the Director
    *  Smelly Cat Coffee House & Roastery
    *  Trade and Lore Coffee
-   *  Amelie's French Bakery & Cafe
    *  South End Grind
    *  The People's Market
    *  Parliament Espresso & Coffee
    *  Earl's Grocery
    *  The Hobbyist
-   *  Cafe Moka
+   *  Okra
    *  Julia's Cafe & Books
    *  Crema Espresso Bar and Cafe
    *  Joe and Nosh
@@ -311,10 +314,8 @@ export const coffeeShops = [
    *  Rush Espresso Cafe and Wine Bar
    *  Waterbean Coffee
    *  Nova's Bakery
-   *  Okra
    *  Sunflour Baking Company
    *  Mayobird
-   *  Rhino Market
    *  Lincoln's Haberdashery
    *  Common Market
    */

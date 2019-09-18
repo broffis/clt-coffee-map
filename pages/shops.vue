@@ -4,6 +4,7 @@
       <h1 class="title">
         Charlotte Coffee Map
       </h1>
+      <Filters />
       <shop-card
         v-for="shop in shops"
         :key="shop.id"
@@ -29,15 +30,17 @@
 <script>
 import { mapGetters } from 'vuex'
 import ShopCard from '@/components/ShopCard'
+import Filters from '@/components/Filters'
 
 export default {
   components: {
-    ShopCard
+    ShopCard,
+    Filters
   },
 
   computed: {
     ...mapGetters({
-      shops: 'shops/getShops'
+      shops: 'shops/getFilteredShops'
     })
   }
 }
@@ -49,7 +52,6 @@ export default {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
   text-align: center;
 }
 
