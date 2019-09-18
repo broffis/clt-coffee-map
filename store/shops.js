@@ -19,14 +19,14 @@ export const getters = {
     const roasterFilter = state.roasterFilter
     const companyFilter = state.companyFilter
 
-    const filteredShops = JSON.parse(JSON.stringify(state.shops))
+    let filteredShops = JSON.parse(JSON.stringify(state.shops))
 
     if (roasterFilter !== null) {
-      filteredShops.filter(s => s.roasterId === roasterFilter)
+      filteredShops = filteredShops.filter(s => s.roasterId === roasterFilter)
     }
 
     if (companyFilter !== null) {
-      filteredShops.filter(s => s.companyId === companyFilter)
+      filteredShops = filteredShops.filter(s => s.companyId === companyFilter)
     }
 
     return filteredShops
