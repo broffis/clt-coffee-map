@@ -262,7 +262,7 @@ export const coffeeShops = [
     city: 'Charlotte',
     state: 'NC',
     zipCode: 28202,
-    logo: '/images/logos/',
+    logo: '/images/logos/qcgrounds-logo.png',
     websiteUrl: 'https://queencitygrounds.com/',
     facebookLink: 'https://www.facebook.com/qcgrounds/',
     instagramLink: 'https://www.instagram.com/queencitygrounds/',
