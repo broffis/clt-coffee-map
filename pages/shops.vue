@@ -1,31 +1,29 @@
 <template>
   <div class="shop-page">
-    <div>
+    <div class="header">
       <h1 class="title">
         Charlotte Coffee Map
       </h1>
       <Filters />
-      <div class="cards">
-        <shop-card
-          v-for="shop in shops"
-          :key="shop.id"
-          :name="shop.name"
-          :roaster="shop.roaster"
-          :logo="shop.logo"
-          :street-address="shop.address"
-          :city="shop.city"
-          :state="shop.state"
-          :zip-code="shop.zipCode"
-          :review="shop.review"
-          :social-media-links="{
-            websiteUrl: shop.websiteUrl,
-            facebookLink: shop.facebookLink,
-            twitterLink: shop.twitterLink,
-            instagramLink: shop.instagramLink
-          }"
-        />
-      </div><!-- /.cards -->
-    </div>
+    </div><!-- /.header -->
+    <shop-card
+      v-for="shop in shops"
+      :key="shop.id"
+      :name="shop.name"
+      :roaster="shop.roaster"
+      :logo="shop.logo"
+      :street-address="shop.address"
+      :city="shop.city"
+      :state="shop.state"
+      :zip-code="shop.zipCode"
+      :current-favorite-drink="shop.currentFavoriteDrink"
+      :social-media-links="{
+        websiteUrl: shop.websiteUrl,
+        facebookLink: shop.facebookLink,
+        twitterLink: shop.twitterLink,
+        instagramLink: shop.instagramLink
+      }"
+    />
   </div>
 </template>
 

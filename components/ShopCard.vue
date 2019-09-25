@@ -25,43 +25,46 @@
       </div><!-- /.shop-card__lower--location -->
 
       <div class="shop-card__lower--text">
-        <div class="blurb">
-          {{ review }}
-        </div><!-- /.blurb -->
-        <div class="contact-info">
-          <span
-            v-if="hasWebsite"
-            class="website"
-          >
-            <a :href="socialMediaLinks.websiteUrl">website</a>
-          </span><!-- /.website -->
-
-          <a
-            v-if="hasTwitter"
-            class="twitter"
-            :href="socialMediaLinks.twitterLink"
-          >
-            <img src="/images/icons/twitter-icon.png">
-          </a>
-
-          <a
-            v-if="hasFacebook"
-            class="facebook"
-            :href="socialMediaLinks.facebookLink"
-          >
-            <img src="/images/icons/facebook-icon.png">
-          </a>
-
-          <a
-            v-if="hasInstagram"
-            class="instagram"
-            :href="socialMediaLinks.instagramLink"
-          >
-            <img src="/images/icons/instagram-icon.png">
-          </a>
-        </div><!-- /.contact-info -->
+        <div
+          v-if="currentFavoriteDrink != ''"
+          class="about"
+        >
+          Favorite Offering: {{ currentFavoriteDrink }}
+        </div><!-- /.about -->
       </div><!-- /.shop-card__lower--text -->
     </div><!-- /.shop-card__lower -->
+    <div class="shop-card__contact-info">
+      <span
+        v-if="hasWebsite"
+        class="website"
+      >
+        <a :href="socialMediaLinks.websiteUrl">website</a>
+      </span><!-- /.website -->
+
+      <a
+        v-if="hasTwitter"
+        class="twitter"
+        :href="socialMediaLinks.twitterLink"
+      >
+        <img src="/images/icons/twitter-icon.png">
+      </a>
+
+      <a
+        v-if="hasFacebook"
+        class="facebook"
+        :href="socialMediaLinks.facebookLink"
+      >
+        <img src="/images/icons/facebook-icon.png">
+      </a>
+
+      <a
+        v-if="hasInstagram"
+        class="instagram"
+        :href="socialMediaLinks.instagramLink"
+      >
+        <img src="/images/icons/instagram-icon.png">
+      </a>
+    </div><!-- /.shop-card__contact-info -->
   </div><!-- /.shop-card -->
 </template>
 <script>
@@ -98,15 +101,15 @@ export default {
       type: Number,
       default: null
     },
-    review: {
-      type: String,
-      default: ''
-    },
     socialMediaLinks: {
       type: Object,
       default: () => {
         return {}
       }
+    },
+    currentFavoriteDrink: {
+      type: String,
+      default: ''
     }
   },
 

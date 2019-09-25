@@ -5,8 +5,12 @@
         class="filters--dropdown__label"
         @click="toggleRoasterDropdown"
       >
-        <p class="filters--dropdown__label--type">Filter by Roaster:</p>
-        <p class="filters--dropdown__label--value">{{ selectedRoaster }}</p>
+        <p class="filters--dropdown__label--type">
+          Filter by Roaster:
+        </p>
+        <p class="filters--dropdown__label--value">
+          {{ selectedRoaster }}
+        </p>
       </div>
       <div
         class="dropdown-content"
@@ -32,8 +36,12 @@
         class="filters--dropdown__label"
         @click="toggleCompanyDropdown"
       >
-        <p class="filters--dropdown__label--type">Filter by Shop:</p>
-        <p class="filters--dropdown__label--value">{{ selectedCompany }}</p>
+        <p class="filters--dropdown__label--type">
+          Filter by Shop:
+        </p>
+        <p class="filters--dropdown__label--value">
+          {{ selectedCompany }}
+        </p>
       </div>
       <div
         class="dropdown-content"
