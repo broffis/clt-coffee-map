@@ -1,17 +1,19 @@
 <template>
   <div class="shop-card">
     <div class="shop-card__upper">
+      <img
+        v-if="logo"
+        class="shop-card__upper--logo"
+        :src="logo"
+      >
+
+      <div
+        v-else
+        class="title"
+      >
+        {{ name }}
+      </div><!-- /.title -->
       <div class="shop-card__upper--text">
-        <img
-          v-if="logo"
-          class="logo"
-          :src="logo"
-        >
-        <div
-          class="title"
-        >
-          {{ name }}
-        </div><!-- /.title -->
         <div class="roaster">
           Roaster: {{ roaster }}
         </div><!-- /.roaster -->

@@ -10,7 +10,7 @@
   padding: 5px;
 
   @include breakpoint-sm {
-    width: 45%;
+    width: 32%;
     justify-content: space-between;
   }
 
@@ -20,8 +20,10 @@
     justify-content: center;
     align-items: center;
 
-    @include breakpoint-sm {
-      flex-direction: row;
+    &--logo {
+      max-height: 150px;
+      width: auto;
+      max-width: 90%;
     }
 
     &--text {
@@ -64,16 +66,9 @@
     align-items: center;
     margin: 10px 5px;
 
-    @include breakpoint-sm {
-      flex-direction: row;
-    }
-
     &--location {
       display: flex;
       flex-direction: column;
-      @include breakpoint-sm {
-        width: 30%;
-      }
     }
 
     &--text {
