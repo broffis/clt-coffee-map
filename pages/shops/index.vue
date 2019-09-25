@@ -10,20 +10,7 @@
       <shop-card
         v-for="shop in shops"
         :key="shop.id"
-        :name="shop.name"
-        :roaster="shop.roaster"
-        :logo="shop.logo"
-        :street-address="shop.address"
-        :city="shop.city"
-        :state="shop.state"
-        :zip-code="shop.zipCode"
-        :current-favorite-drink="shop.currentFavoriteDrink"
-        :social-media-links="{
-          websiteUrl: shop.websiteUrl,
-          facebookLink: shop.facebookLink,
-          twitterLink: shop.twitterLink,
-          instagramLink: shop.instagramLink
-        }"
+        :shop="shop"
       />
     </div>
   </div>

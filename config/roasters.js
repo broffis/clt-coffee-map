@@ -34,6 +34,14 @@ export const roasters = [
   {
     name: 'Nightflyer Roastworks',
     id: 9
+  },
+  {
+    name: 'Dilworth Coffee',
+    id: 10
+  },
+  {
+    name: 'Pure Intentions Coffee Roasting Co',
+    id: 11
   }
 ]
 

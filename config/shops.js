@@ -3,10 +3,6 @@ export const coffeeShops = [
     name: 'Enderly Coffee Co',
     id: 1,
     companyId: 1,
-    address: '2620 Tuckaseegee Rd',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28208,
     logo: '/images/logos/enderly-logo.png',
     websiteUrl: 'www.enderlycoffee.com',
     facebookLink: 'https://www.facebook.com/EnderlyCoffeeCo/',
@@ -18,16 +14,23 @@ export const coffeeShops = [
     shopInfo: 'Parking lot is limited, but extra parking on State Street is available.  We do Cinnamon Roll Saturdays.  We have a Point System in our register, it\'s pretty darn generous.',
     currentFavoriteDrink: 'Cortado',
     infoFromShop: 1,
-    neighboorhood: ''
+    locations: [
+      {
+        address: '2620 Tuckaseegee Rd',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28208,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      }
+    ]
   },
   {
     name: 'The Percantile and Creamery',
     id: 2,
     companyId: 2,
-    address: '8635 Concord Mills Boulevard',
-    city: 'Concord',
-    state: 'NC',
-    zipCode: 28027,
     logo: '/images/logos/percantile-logo.jpg',
     websiteUrl: 'http://www.thepercantileandcreamery.com/',
     twitterLink: '',
@@ -39,16 +42,23 @@ export const coffeeShops = [
     shopInfo: 'Tuesday-Family Board Game Night. Wednesday-Bingo Night. Friday-Open Mic. Sunday-Movie Matinee',
     currentFavoriteDrink: 'Bee\'s Knees',
     infoFromShop: 1,
-    neighboorhood: ''
+    locations: [
+      {
+        address: '8635 Concord Mills Boulevard',
+        city: 'Concord',
+        state: 'NC',
+        zipCode: 28027,
+        lat: '',
+        long: '',
+        neighborhood: 'Concord',
+        mapImage: ''
+      }
+    ]
   },
   {
     name: 'Brakeman\'s Coffee & Supply',
     id: 3,
     companyId: 3,
-    address: '225 N. Trade St',
-    city: 'Matthews',
-    state: 'NC',
-    zipCode: 28105,
     logo: '/images/logos/brakemans-logo.png',
     websiteUrl: 'https://brakemanscoffee.com/',
     facebookLink: 'https://www.facebook.com/BrakemansCoffee/',
@@ -60,16 +70,23 @@ export const coffeeShops = [
     shopInfo: 'We have limited parking space behind our shop. Just a 1 minute walk away, the surrounding block has several parking spaces free for 2 hours. Parking is also available by the train tracks nearby, with 2 hour or unlimited time slots available.',
     currentFavoriteDrink: 'Rosemary\'s Brown Sugar',
     infoFromShop: 1,
-    neighboorhood: ''
+    locations: [
+      {
+        address: '225 N. Trade St',
+        city: 'Matthews',
+        state: 'NC',
+        zipCode: 28105,
+        lat: '',
+        long: '',
+        neighborhood: 'Matthews',
+        mapImage: ''
+      }
+    ]
   },
   {
     name: 'Undercurrent Coffee',
     id: 4,
     companyId: 4,
-    address: '2012 Commonwealth Ave',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28205,
     logo: '/images/logos/undercurrent-logo.png',
     websiteUrl: 'http://undercurrentcoffee.com/',
     facebookLink: 'https://www.facebook.com/undercurrent.coffee.clt/',
@@ -81,16 +98,23 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
-    neighboorhood: ''
+    locations: [
+      {
+        address: '2012 Commonwealth Ave',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28205,
+        lat: '',
+        long: '',
+        neighborhood: 'Plaza Midwood',
+        mapImage: ''
+      }
+    ]
   },
   {
     name: 'Central Coffee Co',
     id: 5,
     companyId: 5,
-    address: '719 Louise Ave',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28204,
     logo: '/images/logos/centralcc-logo.png',
     websiteUrl: 'http://www.centralcoffeeco.com/',
     facebookLink: 'https://www.facebook.com/CentralCoffeeCo/',
@@ -102,37 +126,33 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
-    neighboorhood: ''
-  },
-  {
-    name: 'Central Coffee Co',
-    id: 6,
-    companyId: 5,
-    address: '1700 Camden Rd #101',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28203,
-    logo: '/images/logos/centralcc-logo.png',
-    websiteUrl: 'http://www.centralcoffeeco.com/',
-    facebookLink: 'https://www.facebook.com/CentralCoffeeCo/',
-    instagramLink: 'https://www.instagram.com/centralcoffee/',
-    twitterLink: 'https://twitter.com/CentralCoffee',
-    roaster: 'Joe Van Gogh',
-    roasterId: 5,
-    about: '',
-    shopInfo: '',
-    currentFavoriteDrink: '',
-    infoFromShop: 0,
-    neighboorhood: ''
+    locations: [
+      {
+        address: '719 Louise Ave',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28204,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      },
+      {
+        address: '1700 Camden Rd #101',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28203,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      }
+    ]
   },
   {
     name: 'Hex Espresso Bar',
-    id: 7,
+    id: 6,
     companyId: 6,
-    address: '125 Remount Rd',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28203,
     logo: '/images/logos/hex-logo.png',
     websiteUrl: 'https://hex.coffee/',
     facebookLink: 'https://www.instagram.com/hexcoffee/',
@@ -144,37 +164,33 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
-    neighboorhood: ''
-  },
-  {
-    name: 'Hex: The Roastery',
-    id: 8,
-    companyId: 6,
-    address: '1824 Statesville Ave. 101',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28206,
-    logo: '/images/logos/hex-logo.png',
-    websiteUrl: 'https://hex.coffee/',
-    facebookLink: 'https://www.instagram.com/hexcoffee/',
-    instagramLink: 'https://www.facebook.com/HEXcoffeeclt/',
-    twitterLink: 'https://twitter.com/hexcoffee',
-    roaster: 'Hex Coffee',
-    roasterId: 6,
-    about: '',
-    shopInfo: '',
-    currentFavoriteDrink: '',
-    infoFromShop: 0,
-    neighboorhood: ''
+    locations: [
+      {
+        address: '125 Remount Rd',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28203,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      },
+      {
+        address: '1824 Statesville Ave. 101',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28206,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      }
+    ]
   },
   {
     name: 'Mugs Coffee',
-    id: 9,
+    id: 7,
     companyId: 7,
-    address: '5126 Park Rd #1',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28209,
     logo: '/images/logos/mugs-logo.png',
     websiteUrl: 'http://mugsofcharlotte.com/',
     facebookLink: 'https://www.facebook.com/Mugs-Coffee-188668647824076/',
@@ -186,16 +202,23 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
-    neighboorhood: ''
+    locations: [
+      {
+        address: '5126 Park Rd #1',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28209,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      }
+    ]
   },
   {
     name: 'Not Just Coffee',
-    id: 10,
+    id: 8,
     companyId: 8,
-    address: '224 E 7th St',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28202,
     logo: '/images/logos/notjustcoffee-logo.png',
     websiteUrl: 'https://notjust.coffee/',
     facebookLink: '',
@@ -207,121 +230,73 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
-    neighboorhood: ''
-  },
-  {
-    name: 'Not Just Coffee',
-    id: 10,
-    companyId: 8,
-    address: '222 S Church St',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28202,
-    logo: '/images/logos/notjustcoffee-logo.png',
-    websiteUrl: 'https://notjust.coffee/',
-    facebookLink: '',
-    instagramLink: 'https://www.instagram.com/notjustcoffee/',
-    twitterLink: 'https://twitter.com/NotJCoffeeClt',
-    roaster: 'Counter Culture Coffee',
-    roasterId: 8,
-    about: '',
-    shopInfo: '',
-    currentFavoriteDrink: '',
-    infoFromShop: 0,
-    neighboorhood: ''
-  },
-  {
-    name: 'Not Just Coffee',
-    id: 11,
-    companyId: 8,
-    address: '2000 South Blvd',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28203,
-    logo: '/images/logos/notjustcoffee-logo.png',
-    websiteUrl: 'https://notjust.coffee/',
-    facebookLink: '',
-    instagramLink: 'https://www.instagram.com/notjustcoffee/',
-    twitterLink: 'https://twitter.com/NotJCoffeeClt',
-    roaster: 'Counter Culture Coffee',
-    roasterId: 8,
-    about: '',
-    shopInfo: '',
-    currentFavoriteDrink: '',
-    infoFromShop: 0,
-    neighboorhood: ''
-  },
-  {
-    name: 'Not Just Coffee',
-    id: 12,
-    companyId: 8,
-    address: '421 Providence Rd',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28207,
-    logo: '/images/logos/notjustcoffee-logo.png',
-    websiteUrl: 'https://notjust.coffee/',
-    facebookLink: '',
-    instagramLink: 'https://www.instagram.com/notjustcoffee/',
-    twitterLink: 'https://twitter.com/NotJCoffeeClt',
-    roaster: 'Counter Culture Coffee',
-    roasterId: 8,
-    about: '',
-    shopInfo: '',
-    currentFavoriteDrink: '',
-    infoFromShop: 0,
-    neighboorhood: ''
-  },
-  {
-    name: 'Not Just Coffee',
-    id: 13,
-    companyId: 8,
-    address: '2230 Park Rd',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28203,
-    logo: '/images/logos/notjustcoffee-logo.png',
-    websiteUrl: 'https://notjust.coffee/',
-    facebookLink: '',
-    instagramLink: 'https://www.instagram.com/notjustcoffee/',
-    twitterLink: 'https://twitter.com/NotJCoffeeClt',
-    roaster: 'Counter Culture Coffee',
-    roasterId: 8,
-    about: '',
-    shopInfo: '',
-    currentFavoriteDrink: '',
-    infoFromShop: 0,
-    neighboorhood: ''
-  },
-  {
-    name: 'Not Just Coffee',
-    id: 14,
-    companyId: 8,
-    address: '1026 Jay St',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28208,
-    logo: '/images/logos/notjustcoffee-logo.png',
-    websiteUrl: 'https://notjust.coffee/',
-    facebookLink: '',
-    instagramLink: 'https://www.instagram.com/notjustcoffee/',
-    twitterLink: 'https://twitter.com/NotJCoffeeClt',
-    roaster: 'Counter Culture Coffee',
-    roasterId: 8,
-    about: '',
-    shopInfo: '',
-    currentFavoriteDrink: '',
-    infoFromShop: 0,
-    neighboorhood: ''
+    locations: [
+      {
+        address: '224 E 7th St',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28202,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      },
+      {
+        address: '222 S Church St',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28202,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      },
+      {
+        address: '2000 South Blvd',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28203,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      },
+      {
+        address: '421 Providence Rd',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28207,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      },
+      {
+        address: '2230 Park Rd',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28203,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      },
+      {
+        address: '1026 Jay St',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28208,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      }
+    ]
   },
   {
     name: 'Queen City Grounds',
-    id: 15,
+    id: 9,
     companyId: 9,
-    address: '644 N Church St',
-    city: 'Charlotte',
-    state: 'NC',
-    zipCode: 28202,
     logo: '/images/logos/qcgrounds-logo.png',
     websiteUrl: 'https://queencitygrounds.com/',
     facebookLink: 'https://www.facebook.com/qcgrounds/',
@@ -333,17 +308,156 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
-    neighboorhood: ''
+    locations: [
+      {
+        address: '644 N Church St',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28202,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      }
+    ]
+  },
+  {
+    name: 'Dilworth Coffee',
+    id: 10,
+    companyId: 10,
+    logo: '/images/logos/',
+    websiteUrl: 'https://www.dilworthcoffee.com/',
+    facebookLink: 'https://www.facebook.com/DilworthCoffee/',
+    instagramLink: 'https://www.instagram.com/dilworthcoffee/',
+    twitterLink: 'https://twitter.com/dilworthcoffee',
+    roaster: 'Dilworth Coffee',
+    roasterId: 10,
+    review: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 1,
+    locations: [
+      {
+        address: '3016 Weddington Rd #600',
+        city: 'Matthews',
+        state: 'NC',
+        zipCode: 28105,
+        lat: '',
+        long: '',
+        mapImage: '',
+        neighborhood: 'Matthews'
+      },
+      {
+        address: '201 N. Tryon St',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28202,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: ''
+      },
+      {
+        address: 'SouthPark Mall @ Belk',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28211,
+        lat: '',
+        long: '',
+        neighborhood: 'South Park',
+        mapImage: ''
+      }
+    ]
+  },
+  {
+    name: 'Okra Charlotte',
+    id: 11,
+    companyId: 11,
+    logo: '/images/logos/',
+    websiteUrl: 'https://www.okracharlotte.com/tea-coffee/',
+    facebookLink: 'https://www.facebook.com/OkraCharlotte/',
+    instagramLink: 'https://www.instagram.com/okracharlotte/',
+    twitterLink: 'https://twitter.com/OkraCharlotte',
+    roaster: 'Pure Intentions Coffee Roasting Co',
+    roasterId: 11,
+    review: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    locations: [
+      {
+        address: '1912 Commonwealth Ave,',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28205,
+        lat: '',
+        long: '',
+        mapImage: '',
+        neighborhood: 'Plaza Midwood'
+      }
+    ]
+  },
+  {
+    name: 'Julia\'s Cafe & Books',
+    id: 12,
+    companyId: 12,
+    logo: '/images/logos/',
+    websiteUrl: 'https://www.juliascafe.org/',
+    facebookLink: 'https://www.facebook.com/JuliasCoffee',
+    instagramLink: 'https://www.instagram.com/juliascafeandbooks/',
+    twitterLink: 'https://twitter.com/JuliasCoffee',
+    roaster: 'Magnolia Coffee',
+    roasterId: 7,
+    review: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    locations: [
+      {
+        address: '1133 N Wendover Rd',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28211,
+        lat: '',
+        long: '',
+        mapImage: '',
+        neighborhood: ''
+      }
+    ]
+  },
+  {
+    name: 'Cafe Moka',
+    id: 13,
+    companyId: 13,
+    logo: '/images/logos/',
+    websiteUrl: 'https://www.cafemoka.us/',
+    facebookLink: 'https://www.facebook.com/CafeMokaVA/',
+    instagramLink: 'https://www.instagram.com/cafemokava/',
+    twitterLink: 'https://twitter.com/CafeMokaVa',
+    roaster: '',
+    roasterId: null,
+    review: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    locations: [
+      {
+        address: '416 Waverly Walk Ave h3',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28277,
+        lat: '',
+        long: '',
+        mapImage: '',
+        neighborhood: 'Waverly'
+      }
+    ]
   }
 
   // {
   //   name: '',
   //   id: ,
   //   companyId: ,
-  //   address: '',
-  //   city: '',
-  //   state: '',
-  //   zipCode: ,
   //   logo: '/images/logos/',
   //   websiteUrl: '',
   //   facebookLink: '',
@@ -355,24 +469,30 @@ export const coffeeShops = [
   //   shopInfo: '',
   //   currentFavoriteDrink: '',
   //   infoFromShop: 0,
-  //   neighboorhood: '',
+  //   locations: [
+  //     {
+  //       address: '',
+  //       city: '',
+  //       state: '',
+  //       zipCode: ,
+  //       lat: '',
+  //       long: '',
+  //       mapImage: '',
+  //       neighborhood: ''
+  //     }
+  //   ]
   // }
 
   /**
    * Still need:
-   *  Cafe Moka
    *  Amelie's French Bakery & Cafe
    *  Rhino Market
    *  Uptown Coffee Co
-   *  Queen City Grounds
    *  Dunx
    *  Coco and the Director
    *  Smelly Cat Coffee House & Roastery
    *  Trade and Lore Coffee
    *  South End Grind
-   *  Dilworth Coffee
-   *  Okra
-   *  Julia's Cafe & Books
    *  The Hobbyist
    *  Parliament Espresso & Coffee
    *  Crema Espresso Bar and Cafe
