@@ -3,6 +3,7 @@
 .filters {
   display: flex;
   margin: 5px 10px;
+  justify-content: center;
 
   &__roaster, &__company {
     display: flex;
