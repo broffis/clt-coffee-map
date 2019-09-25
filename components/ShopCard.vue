@@ -1,21 +1,24 @@
 <template>
   <div class="shop-card">
     <div class="shop-card__upper">
-      <img
-        v-if="logo"
-        class="shop-card__upper--logo"
-        :src="logo"
-      >
+      <div class="shop-card__upper--header">
+        <img
+          v-if="logo"
+          class="shop-card__upper--logo"
+          :src="logo"
+        >
 
-      <div
-        v-else
-        class="title"
-      >
-        {{ name }}
-      </div><!-- /.title -->
+        <div
+          v-else
+          class="title"
+        >
+          {{ name }}
+        </div><!-- /.title -->
+      </div>
       <div class="shop-card__upper--text">
         <div class="roaster">
-          Roaster: {{ roaster }}
+          <span class="roaster--label">Roaster:&nbsp;</span>
+          <span class="roaster--value">{{ roaster }}</span>
         </div><!-- /.roaster -->
       </div><!-- /.shop-card__upper--text -->
     </div><!-- /.shop-card__upper -->
@@ -31,7 +34,10 @@
           v-if="currentFavoriteDrink != ''"
           class="about"
         >
-          Favorite Offering: {{ currentFavoriteDrink }}
+          <div class="about__drink">
+            <span class="about__drink--label">Favorite Offering:</span>
+            <span clas="about__drink--value">{{ currentFavoriteDrink }}</span>
+          </div><!-- /.about__drink -->
         </div><!-- /.about -->
       </div><!-- /.shop-card__lower--text -->
     </div><!-- /.shop-card__lower -->
