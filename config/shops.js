@@ -1,6 +1,6 @@
 export const coffeeShops = [
   {
-    name: 'Enderly Coffee Company',
+    name: 'Enderly Coffee Co',
     id: 1,
     companyId: 1,
     address: '2620 Tuckaseegee Rd',
@@ -14,7 +14,11 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/enderlycoffeeco',
     roaster: 'Enderly Coffee Company',
     roasterId: 1,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: 'We are chill.  You will get to know our baristas, it is important to us.  Our Tagline is, "People First.  Coffee Always."  Open Monday-Saturday 7am-2pm. See you soon!',
+    shopInfo: 'Parking lot is limited, but extra parking on State Street is available.  We do Cinnamon Roll Saturdays.  We have a Point System in our register, it\'s pretty darn generous.',
+    currentFavoriteDrink: 'Cortado',
+    infoFromShop: 1,
+    neighboorhood: ''
   },
   {
     name: 'The Percantile and Creamery',
@@ -24,14 +28,18 @@ export const coffeeShops = [
     city: 'Concord',
     state: 'NC',
     zipCode: 28027,
-    logo: '/images/logos/percantile-logo.png',
+    logo: '/images/logos/percantile-logo.jpg',
     websiteUrl: 'http://www.thepercantileandcreamery.com/',
     twitterLink: '',
     facebookLink: 'https://www.facebook.com/thepercantileandcreamery/',
     instagramLink: 'https://www.instagram.com/the.percantile/',
     roaster: 'Lexington Coffee Roasters',
     roasterId: 2,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '1920\'s themed Coffee and Ice Cream Shop nestled next to Concord Mills Mall.The Perc offers locally roasted coffee and couples it with the freshest ingredients and organic syrups to make a delicious cup, every time.  We offer premium ice cream made by Gifford\'s of Maine, a 5th generation ice cream maker that uses real fruit and milk from locally owned farms.  Check out our baked goods and chocolates too! Ask about our Birthday Parties and room rentals.',
+    shopInfo: 'Tuesday-Family Board Game Night. Wednesday-Bingo Night. Friday-Open Mic. Sunday-Movie Matinee',
+    currentFavoriteDrink: 'Bee\'s Knees',
+    infoFromShop: 1,
+    neighboorhood: ''
   },
   {
     name: 'Brakeman\'s Coffee & Supply',
@@ -48,7 +56,11 @@ export const coffeeShops = [
     twitterLink: '',
     roaster: 'Haerfest Coffee',
     roasterId: 3,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: 'We are committed to Keeping Matthews Slow. On the railroad, the Brakeman\'s job is to be aware as the train speeds down the tracks, making every passenger feel safe by slowing down at just the right moment. We are here to take care of you with efficiency and quality, all wrapped in a calming, hospitable environment. In a fast food world, we seek to offer slow culture coffee, with a chance to consider that \'faster, harder, more\' isn\'t always better. Brakeman\'s Coffee and Supply is a place where you can hit the brakes, and enjoy a cup of coffee in the midst of a busy week.',
+    shopInfo: 'We have limited parking space behind our shop. Just a 1 minute walk away, the surrounding block has several parking spaces free for 2 hours. Parking is also available by the train tracks nearby, with 2 hour or unlimited time slots available.',
+    currentFavoriteDrink: 'Rosemary\'s Brown Sugar',
+    infoFromShop: 1,
+    neighboorhood: ''
   },
   {
     name: 'Undercurrent Coffee',
@@ -65,7 +77,11 @@ export const coffeeShops = [
     instagramLink: 'https://www.instagram.com/undercurrentcoffee/',
     roaster: 'Onyx Coffee Lab',
     roasterId: 4,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   },
   {
     name: 'Central Coffee Co',
@@ -82,7 +98,11 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/CentralCoffee',
     roaster: 'Joe Van Gogh',
     roasterId: 5,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   },
   {
     name: 'Central Coffee Co',
@@ -99,7 +119,11 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/CentralCoffee',
     roaster: 'Joe Van Gogh',
     roasterId: 5,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   },
   {
     name: 'Hex Espresso Bar',
@@ -116,7 +140,11 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/hexcoffee',
     roaster: 'Hex Coffee',
     roasterId: 6,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   },
   {
     name: 'Hex: The Roastery',
@@ -133,7 +161,11 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/hexcoffee',
     roaster: 'Hex Coffee',
     roasterId: 6,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   },
   {
     name: 'Mugs Coffee',
@@ -150,7 +182,11 @@ export const coffeeShops = [
     twitterLink: '',
     roaster: 'Magnolia Coffee',
     roasterId: 7,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   },
   {
     name: 'Not Just Coffee',
@@ -167,7 +203,11 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/NotJCoffeeClt',
     roaster: 'Counter Culture Coffee',
     roasterId: 8,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   },
   {
     name: 'Not Just Coffee',
@@ -184,7 +224,11 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/NotJCoffeeClt',
     roaster: 'Counter Culture Coffee',
     roasterId: 8,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   },
   {
     name: 'Not Just Coffee',
@@ -201,7 +245,11 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/NotJCoffeeClt',
     roaster: 'Counter Culture Coffee',
     roasterId: 8,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   },
   {
     name: 'Not Just Coffee',
@@ -218,7 +266,11 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/NotJCoffeeClt',
     roaster: 'Counter Culture Coffee',
     roasterId: 8,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   },
   {
     name: 'Not Just Coffee',
@@ -235,7 +287,11 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/NotJCoffeeClt',
     roaster: 'Counter Culture Coffee',
     roasterId: 8,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   },
   {
     name: 'Not Just Coffee',
@@ -252,7 +308,11 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/NotJCoffeeClt',
     roaster: 'Counter Culture Coffee',
     roasterId: 8,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   },
   {
     name: 'Queen City Grounds',
@@ -269,7 +329,11 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/qcgrounds',
     roaster: 'Nightflyer Roastworks',
     roasterId: 9,
-    review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    neighboorhood: ''
   }
 
   // {
@@ -287,7 +351,11 @@ export const coffeeShops = [
   //   twitterLink: '',
   //   roaster: '',
   //   roasterId: ,
-  //   review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullam'
+  //   review: '',
+  //   shopInfo: '',
+  //   currentFavoriteDrink: '',
+  //   infoFromShop: 0,
+  //   neighboorhood: '',
   // }
 
   /**
@@ -302,17 +370,18 @@ export const coffeeShops = [
    *  Smelly Cat Coffee House & Roastery
    *  Trade and Lore Coffee
    *  South End Grind
-   *  The People's Market
-   *  Parliament Espresso & Coffee
-   *  Earl's Grocery
-   *  The Hobbyist
+   *  Dilworth Coffee
    *  Okra
    *  Julia's Cafe & Books
+   *  The Hobbyist
+   *  Parliament Espresso & Coffee
    *  Crema Espresso Bar and Cafe
    *  Joe and Nosh
-   *  Suffolk Punch
+   *  Earl's Grocery
    *  Rush Espresso Cafe and Wine Bar
    *  Waterbean Coffee
+   *  The People's Market
+   *  Suffolk Punch
    *  Nova's Bakery
    *  Sunflour Baking Company
    *  Mayobird

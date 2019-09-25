@@ -1,19 +1,24 @@
 <template>
   <div class="shop-card">
     <div class="shop-card__upper">
-      <div class="shop-card__upper--text">
+      <div class="shop-card__upper--header">
         <img
           v-if="logo"
-          class="logo"
+          class="shop-card__upper--logo"
           :src="logo"
         >
+
         <div
+          v-else
           class="title"
         >
           {{ name }}
         </div><!-- /.title -->
+      </div>
+      <div class="shop-card__upper--text">
         <div class="roaster">
-          Roaster: {{ roaster }}
+          <span class="roaster--label">Roaster:&nbsp;</span>
+          <span class="roaster--value">{{ roaster }}</span>
         </div><!-- /.roaster -->
       </div><!-- /.shop-card__upper--text -->
     </div><!-- /.shop-card__upper -->
@@ -25,43 +30,49 @@
       </div><!-- /.shop-card__lower--location -->
 
       <div class="shop-card__lower--text">
-        <div class="blurb">
-          {{ review }}
-        </div><!-- /.blurb -->
-        <div class="contact-info">
-          <span
-            v-if="hasWebsite"
-            class="website"
-          >
-            <a :href="socialMediaLinks.websiteUrl">website</a>
-          </span><!-- /.website -->
-
-          <a
-            v-if="hasTwitter"
-            class="twitter"
-            :href="socialMediaLinks.twitterLink"
-          >
-            <img src="/images/icons/twitter-icon.png">
-          </a>
-
-          <a
-            v-if="hasFacebook"
-            class="facebook"
-            :href="socialMediaLinks.facebookLink"
-          >
-            <img src="/images/icons/facebook-icon.png">
-          </a>
-
-          <a
-            v-if="hasInstagram"
-            class="instagram"
-            :href="socialMediaLinks.instagramLink"
-          >
-            <img src="/images/icons/instagram-icon.png">
-          </a>
-        </div><!-- /.contact-info -->
+        <div
+          v-if="currentFavoriteDrink != ''"
+          class="about"
+        >
+          <div class="about__drink">
+            <span class="about__drink--label">Favorite Offering:</span>
+            <span clas="about__drink--value">{{ currentFavoriteDrink }}</span>
+          </div><!-- /.about__drink -->
+        </div><!-- /.about -->
       </div><!-- /.shop-card__lower--text -->
     </div><!-- /.shop-card__lower -->
+    <div class="shop-card__contact-info">
+      <span
+        v-if="hasWebsite"
+        class="website"
+      >
+        <a :href="socialMediaLinks.websiteUrl">website</a>
+      </span><!-- /.website -->
+
+      <a
+        v-if="hasTwitter"
+        class="twitter"
+        :href="socialMediaLinks.twitterLink"
+      >
+        <img src="/images/icons/twitter-icon.png">
+      </a>
+
+      <a
+        v-if="hasFacebook"
+        class="facebook"
+        :href="socialMediaLinks.facebookLink"
+      >
+        <img src="/images/icons/facebook-icon.png">
+      </a>
+
+      <a
+        v-if="hasInstagram"
+        class="instagram"
+        :href="socialMediaLinks.instagramLink"
+      >
+        <img src="/images/icons/instagram-icon.png">
+      </a>
+    </div><!-- /.shop-card__contact-info -->
   </div><!-- /.shop-card -->
 </template>
 <script>
@@ -98,15 +109,15 @@ export default {
       type: Number,
       default: null
     },
-    review: {
-      type: String,
-      default: ''
-    },
     socialMediaLinks: {
       type: Object,
       default: () => {
         return {}
       }
+    },
+    currentFavoriteDrink: {
+      type: String,
+      default: ''
     }
   },
 
