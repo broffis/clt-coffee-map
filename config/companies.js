@@ -50,5 +50,9 @@ export const companies = [
   {
     name: 'Cafe Moka',
     id: 13
+  },
+  {
+    name: 'Dunx Coffee',
+    id: 14
   }
 ]

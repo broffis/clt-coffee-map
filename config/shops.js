@@ -332,7 +332,7 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/dilworthcoffee',
     roaster: 'Dilworth Coffee',
     roasterId: 10,
-    review: '',
+    about: '',
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 1,
@@ -380,7 +380,7 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/OkraCharlotte',
     roaster: 'Pure Intentions Coffee Roasting Co',
     roasterId: 11,
-    review: '',
+    about: '',
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
@@ -408,7 +408,7 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/JuliasCoffee',
     roaster: 'Magnolia Coffee',
     roasterId: 7,
-    review: '',
+    about: '',
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
@@ -436,7 +436,7 @@ export const coffeeShops = [
     twitterLink: 'https://twitter.com/CafeMokaVa',
     roaster: '',
     roasterId: null,
-    review: '',
+    about: '',
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
@@ -452,6 +452,44 @@ export const coffeeShops = [
         neighborhood: 'Waverly'
       }
     ]
+  },
+  {
+    name: 'Dunx Coffee',
+    id: 14,
+    companyId: 14,
+    logo: '/images/logos/dunx-logo.jpg',
+    websiteUrl: 'www.dunxcoffee.com',
+    facebookLink: '',
+    instagramLink: 'https://www.instagram.com/dunxcoffee/',
+    twitterLink: '',
+    roaster: 'Duncan St. Clair',
+    roasterId: 12,
+    about: 'Specializing in a large selection of fine coffees - we offer light to dark, custom and fresh roasted beans, and boast an incredible variety among our house and reserve selections of heirloom, washed, natural, wet-hulled, and honey processed coffees. We also make incredible Nitro.',
+    shopInfo: ' You have to go inside Blackhawk Hardware to find us - adjacent to greeting cards. We are in Building B at Charlotte Regional Farmer Market.',
+    currentFavoriteDrink: 'Yemen Natura',
+    infoFromShop: 1,
+    locations: [
+      {
+        address: '4225 Park Rd',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28209,
+        lat: '',
+        long: '',
+        mapImage: '',
+        neighborhood: ''
+      },
+      {
+        address: '1801 Yorkmont Rd, Building B',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28217,
+        lat: '',
+        long: '',
+        mapImage: '',
+        neighborhood: ''
+      }
+    ]
   }
 
   // {
@@ -465,7 +503,7 @@ export const coffeeShops = [
   //   twitterLink: '',
   //   roaster: '',
   //   roasterId: ,
-  //   review: '',
+  //   about: '',
   //   shopInfo: '',
   //   currentFavoriteDrink: '',
   //   infoFromShop: 0,

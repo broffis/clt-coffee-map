@@ -42,6 +42,10 @@ export const roasters = [
   {
     name: 'Pure Intentions Coffee Roasting Co',
     id: 11
+  },
+  {
+    name: 'Duncan St. Clair',
+    id: 12
   }
 ]
 
