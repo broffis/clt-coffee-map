@@ -1,25 +1,35 @@
 <template>
   <div class="single-shop">
-    <div class="single-shop__upper">
-      <div class="single-shop__upper--header">
-        <img
-          v-if="logo"
-          class="logo"
-          :src="logo"
-        ><!-- /.logo -->
-        <div
-          v-else
-          class="title"
-        >
-          {{ name }}
-        </div><!-- /.title -->
-      </div><!-- /.single-shop__upper--header -->
-    </div><!-- /.single-shop__upper -->
+
   </div><!-- /.single-shop -->
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  name: 'SingleShop'
+  name: 'SingleShop',
+
+  data () {
+    return {
+      shop: {}
+    }
+  },
+
+  computed: {
+    getShopId () {
+      return this.$route.params.id
+    }
+  },
+
+  methods: {
+    ...mapActions({
+      singleShop: 'shops/getSingleShop'
+    })
+  },
+
+  beforeMount () {
+    this.shop = this.singleShop(this.getShopId)
+  }
 }
 </script>

@@ -9,7 +9,7 @@
   flex-direction: column;
   padding: 5px;
 
-  @include breakpoint-sm {
+  @include breakpoint-xs {
     width: 32%;
     justify-content: space-between;
   }
@@ -26,6 +26,16 @@
       justify-content: center;
       height: 150px;
       align-items: center;
+
+      .title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+
+        @include breakpoint-sm {
+          font-size: 2rem;
+        }
+      }
     }
 
     &--logo {
@@ -39,22 +49,6 @@
 
       @include breakpoint-sm {
         width: 70%;
-      }
-
-      .logo {
-        max-height: 150px;
-        width: auto;
-        max-width: 90%;    
-      }
-
-      .title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 5px;
-
-        @include breakpoint-sm {
-          font-size: 2rem;
-        }
       }
 
       .roaster {
