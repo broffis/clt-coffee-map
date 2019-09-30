@@ -76,6 +76,14 @@
         <img src="/images/icons/instagram-icon.png">
       </a>
     </div><!-- /.shop-card__contact-info -->
+    <div class="shop-card__more-info">
+      <a
+        :href="shopUrl"
+        :singleShop="shop"
+      >
+        Learn More
+      </a>
+    </div>
   </div><!-- /.shop-card -->
 </template>
 <script>
@@ -108,6 +116,9 @@ export default {
     hasLogo () {
       const logoTitle = this.shop.logo.replace('/images/logos/', '')
       return this.shop.logo && logoTitle.length > 0
+    },
+    shopUrl () {
+      return `/shops/${this.shop.id}/`
     }
   }
 }

@@ -20,6 +20,7 @@
 import { mapGetters } from 'vuex'
 import ShopCard from '@/components/ShopCard'
 import Filters from '@/components/Filters'
+// import shops from '../../store/shops'
 
 export default {
   components: {

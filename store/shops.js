@@ -61,13 +61,7 @@ export const actions = {
   getSingleShop: ({ state }, id) => {
     let singleShop = JSON.parse(JSON.stringify(state.shops))
 
-    console.log('Pre', singleShop)
-
-    console.log('State id: ', id)
-
-    singleShop = singleShop.filter(f => f.id === id)
-
-    console.log('Post: ', singleShop)
+    singleShop = singleShop.filter(f => f.id === parseInt(id))
 
     return singleShop
   }
