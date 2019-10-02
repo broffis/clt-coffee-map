@@ -9,7 +9,8 @@ export const state = () => ({
   companies,
   filteredShops: [],
   roasterFilter: null,
-  companyFilter: null
+  companyFilter: null,
+  singleShopId: null
 })
 
 export const getters = {
@@ -48,6 +49,15 @@ export const getters = {
     })
 
     return sortedShops
+  },
+  getSingleShopId: state => state.singleShopId,
+  getSingleShop: (state) => {
+    const shopId = state.singleShopId
+
+    const allShops = JSON.parse(JSON.stringify(state.shops))
+    const singleShop = allShops.filter(s => s.id === shopId)
+
+    return singleShop[0]
   }
 }
 
@@ -58,12 +68,8 @@ export const actions = {
   updateRoasterFilter ({ commit }, roasterId) {
     commit('updateRoasterFilter', roasterId)
   },
-  getSingleShop: ({ state }, id) => {
-    let singleShop = JSON.parse(JSON.stringify(state.shops))
-
-    singleShop = singleShop.filter(f => f.id === parseInt(id))
-
-    return singleShop
+  setSingleShopId ({ commit }, shopId) {
+    commit('updateSingleShopId', shopId)
   }
 }
 
@@ -73,6 +79,9 @@ export const mutations = {
   },
   updateCompanyFilter (state, companyId) {
     state.companyFilter = companyId
+  },
+  updateSingleShopId (state, shopId) {
+    state.singleShopId = shopId
   }
 }
 

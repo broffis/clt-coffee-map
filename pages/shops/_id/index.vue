@@ -1,81 +1,46 @@
 <template>
-  <div class="single-shop">
-    <div class="shop-card__upper--header">
-      <img
-        v-if="hasLogo"
-        class="shop-card__upper--logo"
-        :src="singleShop.logo"
-      >
-
-      <div
-        v-else
-        class="title"
-      >
-        {{ shop.name }}
-      </div><!-- /.title -->
-    </div>
-  </div><!-- /.single-shop -->
+  <ShopPage :shop="singleShop" />
 </template>
 
 <script>
-// import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import ShopPage from '@/components/ShopPage'
 
 export default {
   name: 'SingleShop',
 
-  // data () {
-  //   return {
-  //     shop: {}
-  //   }
-  // },
+  components: {
+    ShopPage
+  },
 
-  props: {
-    singleShop: {
-      type: Object,
-      default: () => {
-        return {}
-      }
+  data () {
+    return {
+      win: null,
+      d: null
     }
   },
 
   computed: {
-    getShopId () {
-      return this.$route.params.id
-    },
-    hasWebsite () {
-      return this.singleShop.websiteUrl && this.singleShop.websiteUrl !== undefined
-    },
-    hasFacebook () {
-      return this.singleShop.facebookLink && this.singleShop.facebookLink !== undefined
-    },
-    hasTwitter () {
-      return this.singleShop.twitterLink && this.singleShop.twitterLink !== undefined
-    },
-    hasInstagram () {
-      return this.singleShop.instagramLink && this.singleShop.instagramLink !== undefined
-    },
-    hasLogo () {
-      console.log(this.singleShop)
-      // const logoTitle = this.singleShop.logo.replace('/images/logos/', '')
-      // return this.singleShop.logo && logoTitle.length > 0
-      return true
-    }
+    ...mapGetters({
+      singleShopId: 'shops/getSingleShopId',
+      singleShop: 'shops/getSingleShop'
+    })
   },
 
-  mounted () {
-    console.log(this.singleShop)
+  beforeMount () {
+    this.win = window
+    this.d = document
+
+    const shopId = parseInt(this.win.location.pathname.replace('/shops/', ''))
+    console.log('Shop Id: ', shopId)
+
+    this.setSingleShopId(shopId)
+  },
+
+  methods: {
+    ...mapActions({
+      setSingleShopId: 'shops/setSingleShopId'
+    })
   }
-
-  // methods: {
-  //   ...mapActions({
-  //     singleShop: 'shops/getSingleShop'
-  //   })
-  // }
-
-  // async beforeMount () {
-  //   console.log('Shop Id', this.getShopId)
-  //   this.shop = await this.singleShop(this.getShopId)
-  //   console.log(this.shop)
-  // }
 }
 </script>

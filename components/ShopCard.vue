@@ -79,7 +79,7 @@
     <div class="shop-card__more-info">
       <a
         :href="shopUrl"
-        :singleShop="shop"
+        :shopId="shop.id"
       >
         Learn More
       </a>
