@@ -526,7 +526,6 @@ export const coffeeShops = [
    *  Amelie's French Bakery & Cafe
    *  Rhino Market
    *  Uptown Coffee Co
-   *  Dunx
    *  Coco and the Director
    *  Smelly Cat Coffee House & Roastery
    *  Trade and Lore Coffee
@@ -534,7 +533,6 @@ export const coffeeShops = [
    *  The Hobbyist
    *  Parliament Espresso & Coffee
    *  Crema Espresso Bar and Cafe
-   *  Joe and Nosh
    *  Earl's Grocery
    *  Rush Espresso Cafe and Wine Bar
    *  Waterbean Coffee
