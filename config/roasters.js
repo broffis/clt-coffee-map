@@ -46,7 +46,7 @@ export const roasters = [
   {
     name: 'Duncan St. Clair',
     id: 12
-  }
+  },
 ]
 
 export default {

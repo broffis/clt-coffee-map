@@ -54,5 +54,9 @@ export const companies = [
   {
     name: 'Dunx Coffee',
     id: 14
+  },
+  {
+    name: 'Lincoln\'s Haberdashery',
+    id: 15
   }
 ]

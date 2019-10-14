@@ -14,6 +14,7 @@ export const coffeeShops = [
     shopInfo: 'Parking lot is limited, but extra parking on State Street is available.  We do Cinnamon Roll Saturdays.  We have a Point System in our register, it\'s pretty darn generous.',
     currentFavoriteDrink: 'Cortado',
     infoFromShop: 1,
+    ready: 1,
     locations: [
       {
         address: '2620 Tuckaseegee Rd',
@@ -42,6 +43,7 @@ export const coffeeShops = [
     shopInfo: 'Tuesday-Family Board Game Night. Wednesday-Bingo Night. Friday-Open Mic. Sunday-Movie Matinee',
     currentFavoriteDrink: 'Bee\'s Knees',
     infoFromShop: 1,
+    ready: 1,
     locations: [
       {
         address: '8635 Concord Mills Boulevard',
@@ -70,6 +72,7 @@ export const coffeeShops = [
     shopInfo: 'We have limited parking space behind our shop. Just a 1 minute walk away, the surrounding block has several parking spaces free for 2 hours. Parking is also available by the train tracks nearby, with 2 hour or unlimited time slots available.',
     currentFavoriteDrink: 'Rosemary\'s Brown Sugar',
     infoFromShop: 1,
+    ready: 1,
     locations: [
       {
         address: '225 N. Trade St',
@@ -98,6 +101,7 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
+    ready: 0,
     locations: [
       {
         address: '2012 Commonwealth Ave',
@@ -126,6 +130,7 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
+    ready: 0,
     locations: [
       {
         address: '719 Louise Ave',
@@ -164,6 +169,7 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
+    ready: 0,
     locations: [
       {
         address: '125 Remount Rd',
@@ -202,6 +208,7 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
+    ready: 0,
     locations: [
       {
         address: '5126 Park Rd #1',
@@ -230,6 +237,7 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
+    ready: 0,
     locations: [
       {
         address: '224 E 7th St',
@@ -308,6 +316,7 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
+    ready: 0,
     locations: [
       {
         address: '644 N Church St',
@@ -336,6 +345,7 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 1,
+    ready: 0,
     locations: [
       {
         address: '3016 Weddington Rd #600',
@@ -384,6 +394,7 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
+    ready: 0,
     locations: [
       {
         address: '1912 Commonwealth Ave,',
@@ -412,6 +423,7 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
+    ready: 0,
     locations: [
       {
         address: '1133 N Wendover Rd',
@@ -440,6 +452,7 @@ export const coffeeShops = [
     shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
+    ready: 0,
     locations: [
       {
         address: '416 Waverly Walk Ave h3',
@@ -468,6 +481,7 @@ export const coffeeShops = [
     shopInfo: ' You have to go inside Blackhawk Hardware to find us - adjacent to greeting cards. We are in Building B at Charlotte Regional Farmer Market.',
     currentFavoriteDrink: 'Yemen Natura',
     infoFromShop: 1,
+    ready: 1,
     locations: [
       {
         address: '4225 Park Rd',
@@ -477,7 +491,7 @@ export const coffeeShops = [
         lat: '',
         long: '',
         mapImage: '',
-        neighborhood: ''
+        neighborhood: 'South Park'
       },
       {
         address: '1801 Yorkmont Rd, Building B',
@@ -488,6 +502,35 @@ export const coffeeShops = [
         long: '',
         mapImage: '',
         neighborhood: ''
+      }
+    ]
+  },
+  {
+    name: 'Lincoln\'s Haberdashery',
+    id: 15,
+    companyId: 15,
+    logo: '/images/logos/lincolns-logo.png',
+    websiteUrl: 'https://www.lincolnshaberdashery.com/',
+    facebookLink: 'https://www.facebook.com/LincolnsHaberdashery/',
+    instagramLink: 'https://www.instagram.com/lincolnshaberdashery/',
+    twitterLink: '',
+    roaster: 'Pure Intentions Coffee Roasting Co',
+    roasterId: 11,
+    about: 'Quaint space nestled in the old Lance Factory. Fresh food made by Michael Shortino (Futo Buta), with a selection of wine and coffee, as well as products from local retailers. Bread baked fresh daily',
+    shopInfo: 'Parking found around back of the building and in a lot at the side entrance',
+    currentFavoriteDrink: 'Vanilla Bourbon Latte',
+    infoFromShop: 0,
+    ready: 1,
+    locations: [
+      {
+        address: '1300 South Blvd, Suite S',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28203,
+        lat: '',
+        long: '',
+        mapImage: '',
+        neighborhood: 'South End'
       }
     ]
   }
@@ -507,6 +550,7 @@ export const coffeeShops = [
   //   shopInfo: '',
   //   currentFavoriteDrink: '',
   //   infoFromShop: 0,
+  //   ready: ,
   //   locations: [
   //     {
   //       address: '',
@@ -541,7 +585,6 @@ export const coffeeShops = [
    *  Nova's Bakery
    *  Sunflour Baking Company
    *  Mayobird
-   *  Lincoln's Haberdashery
    *  Common Market
    */
 ]
