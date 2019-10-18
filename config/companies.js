@@ -34,5 +34,29 @@ export const companies = [
   {
     name: 'Queen City Grounds',
     id: 9
+  },
+  {
+    name: 'Dilworth Coffee',
+    id: 10
+  },
+  {
+    name: 'Okra Charlotte',
+    id: 11
+  },
+  {
+    name: 'Julia\'s Cafe & Books',
+    id: 12
+  },
+  {
+    name: 'Cafe Moka',
+    id: 13
+  },
+  {
+    name: 'Dunx Coffee',
+    id: 14
+  },
+  {
+    name: 'Lincoln\'s Haberdashery',
+    id: 15
   }
 ]

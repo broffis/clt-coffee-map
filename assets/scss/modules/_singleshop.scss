@@ -1,47 +1,52 @@
 /* SHOP CARD */
 
-.shop-card {
-  background-color: #fff;
+.single-shop-page {
+  background-color: $clr-white-cream;
   border: 5px solid black;
-  margin: 20px 5px;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  padding: 5px;
+  justify-content: space-between;
+  min-height: 100vh;
 
-  @include breakpoint-xs {
-    width: 32%;
-    justify-content: space-between;
-  }
 
   &__upper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 15px 10px 0;
+
+    @include breakpoint-sm {
+      padding: 30px 10px 0;
+      flex-direction: row;
+    }
 
     &--header {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      height: 150px;
       align-items: center;
-
-      .title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 5px;
-
-        @include breakpoint-sm {
-          font-size: 2rem;
-        }
-      }
     }
 
     &--logo {
       max-height: 150px;
       width: auto;
       max-width: 90%;
+      margin-bottom: 10px;
+
+      @include breakpoint-sm {
+        margin-bottom: 25px;
+      }
+    }
+
+    &--title {
+      font-size: 1.5rem;
+      font-weight: bold;
+
+      @include breakpoint-sm {
+        font-size: 3rem;
+      }
     }
 
     &--text {
@@ -55,7 +60,7 @@
         font-size: 1rem;
         width: 100%;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         
 
         @include breakpoint-sm {
@@ -70,7 +75,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 10px 5px;
+    margin: 10px 15px;
 
     &--location {
       display: flex;
@@ -84,6 +89,27 @@
 
       .about {
         margin: 10px 0;
+
+        &__drink, &__info, &__special-info {
+          margin-bottom: 10px;
+          display: flex;
+          flex-direction: column;
+
+          &--label {
+            font-weight: 600;
+          }
+
+          &--text {
+          }
+        }
+
+        &__drink {
+          flex-direction: row;
+
+          &--label {
+            margin-right: 5px;
+          }
+        }
       }
     }
   }
@@ -92,10 +118,21 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    margin: 10px 5px 0;
+    width: 100%;
+    padding: 10px 0;
+    height: 60px;
+
   
     img {
-      height: 20px;
+      max-height: 25px;
+    }
+
+    .website {
+      border: 1px solid black;
+      border-radius: 5px;
+      padding: 5px 10px;
+      text-decoration: none;
+      background: $clr-white;
     }
   }
 }

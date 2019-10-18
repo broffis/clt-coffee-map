@@ -3,40 +3,43 @@
     <div class="shop-card__upper">
       <div class="shop-card__upper--header">
         <img
-          v-if="logo"
+          v-if="hasLogo"
           class="shop-card__upper--logo"
-          :src="logo"
+          :src="shop.logo"
         >
 
         <div
           v-else
           class="title"
         >
-          {{ name }}
+          {{ shop.name }}
         </div><!-- /.title -->
       </div>
       <div class="shop-card__upper--text">
-        <div class="roaster">
+        <div
+          v-if="shop.roaster !== ''"
+          class="roaster"
+        >
           <span class="roaster--label">Roaster:&nbsp;</span>
-          <span class="roaster--value">{{ roaster }}</span>
+          <span class="roaster--value">{{ shop.roaster }}</span>
         </div><!-- /.roaster -->
       </div><!-- /.shop-card__upper--text -->
     </div><!-- /.shop-card__upper -->
 
     <div class="shop-card__lower">
       <div class="shop-card__lower--location">
-        <span class="street">{{ streetAddress }}</span>
-        <span class="city">{{ city }}, {{ state }} {{ zipCode }}</span>
-      </div><!-- /.shop-card__lower--location -->
+        <!-- <span class="street">{{ streetAddress }}</span>
+        <span class="city">{{ city }}, {{ state }} {{ zipCode }}</span> -->
+      </div><!--/.shop-card__lower--location -->
 
       <div class="shop-card__lower--text">
         <div
-          v-if="currentFavoriteDrink != ''"
+          v-if="shop.currentFavoriteDrink != ''"
           class="about"
         >
           <div class="about__drink">
             <span class="about__drink--label">Favorite Offering:</span>
-            <span clas="about__drink--value">{{ currentFavoriteDrink }}</span>
+            <span clas="about__drink--value">{{ shop.currentFavoriteDrink }}</span>
           </div><!-- /.about__drink -->
         </div><!-- /.about -->
       </div><!-- /.shop-card__lower--text -->
@@ -46,13 +49,13 @@
         v-if="hasWebsite"
         class="website"
       >
-        <a :href="socialMediaLinks.websiteUrl">website</a>
+        <a :href="shop.websiteUrl">website</a>
       </span><!-- /.website -->
 
       <a
         v-if="hasTwitter"
         class="twitter"
-        :href="socialMediaLinks.twitterLink"
+        :href="shop.twitterLink"
       >
         <img src="/images/icons/twitter-icon.png">
       </a>
@@ -60,7 +63,7 @@
       <a
         v-if="hasFacebook"
         class="facebook"
-        :href="socialMediaLinks.facebookLink"
+        :href="shop.facebookLink"
       >
         <img src="/images/icons/facebook-icon.png">
       </a>
@@ -68,11 +71,19 @@
       <a
         v-if="hasInstagram"
         class="instagram"
-        :href="socialMediaLinks.instagramLink"
+        :href="shop.instagramLink"
       >
         <img src="/images/icons/instagram-icon.png">
       </a>
     </div><!-- /.shop-card__contact-info -->
+    <div class="shop-card__more-info">
+      <a
+        :href="shopUrl"
+        :shopId="shop.id"
+      >
+        Learn More
+      </a>
+    </div>
   </div><!-- /.shop-card -->
 </template>
 <script>
@@ -81,58 +92,33 @@ export default {
   name: 'ShopCard',
 
   props: {
-    name: {
-      type: String,
-      default: ''
-    },
-    logo: {
-      type: String,
-      default: 'LOGO'
-    },
-    roaster: {
-      type: String,
-      default: ''
-    },
-    streetAddress: {
-      type: String,
-      default: ''
-    },
-    city: {
-      type: String,
-      default: ''
-    },
-    state: {
-      type: String,
-      default: ''
-    },
-    zipCode: {
-      type: Number,
-      default: null
-    },
-    socialMediaLinks: {
+    shop: {
       type: Object,
       default: () => {
         return {}
       }
-    },
-    currentFavoriteDrink: {
-      type: String,
-      default: ''
     }
   },
 
   computed: {
     hasWebsite () {
-      return this.socialMediaLinks && this.socialMediaLinks.websiteUrl !== undefined
+      return this.shop.websiteUrl && this.shop.websiteUrl !== undefined
     },
     hasFacebook () {
-      return this.socialMediaLinks && this.socialMediaLinks.facebookLink !== undefined
+      return this.shop.facebookLink && this.shop.facebookLink !== undefined
     },
     hasTwitter () {
-      return this.socialMediaLinks && this.socialMediaLinks.twitterLink !== undefined
+      return this.shop.twitterLink && this.shop.twitterLink !== undefined
     },
     hasInstagram () {
-      return this.socialMediaLinks && this.socialMediaLinks.instagramLink !== undefined
+      return this.shop.instagramLink && this.shop.instagramLink !== undefined
+    },
+    hasLogo () {
+      const logoTitle = this.shop.logo.replace('/images/logos/', '')
+      return this.shop.logo && logoTitle.length > 0
+    },
+    shopUrl () {
+      return `/shops/${this.shop.id}/`
     }
   }
 }
