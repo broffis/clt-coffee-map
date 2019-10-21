@@ -47,6 +47,26 @@ export const roasters = [
     name: 'Duncan St. Clair',
     id: 12
   },
+  {
+    name: 'Smelly Cat Roastery',
+    id: 13
+  },
+  {
+    name: 'Parliament Coffee',
+    id: 14
+  },
+  {
+    name: 'Mountain Air Roasting',
+    id: 15
+  },
+  {
+    name: 'Crossroads Coffee House',
+    id: 16
+  },
+  {
+    name: 'Stumptown Coffee Roasters',
+    id: 17
+  }
 ]
 
 export default {

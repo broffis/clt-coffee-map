@@ -58,5 +58,37 @@ export const companies = [
   {
     name: 'Lincoln\'s Haberdashery',
     id: 15
+  },
+  {
+    name: 'Smelly Cat Coffee House & Roastery',
+    id: 16
+  },
+  {
+    name: 'The Hobbyist',
+    id: 17
+  },
+  {
+    name: 'Parliament Espresso & Coffee Bar',
+    id: 18
+  },
+  {
+    name: 'Trade and Lore Coffee',
+    id: 19
+  },
+  {
+    name: 'Ritual Coffee, Tea, and Oddities',
+    id: 20
+  },
+  {
+    name: 'Coco and the Director',
+    id: 21
+  },
+  {
+    name: 'Good Cup Coffee Company',
+    id: 22
+  },
+  {
+    name: 'CupLux Coffee Drive-Thru',
+    id: 23
   }
 ]
