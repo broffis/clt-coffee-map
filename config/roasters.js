@@ -66,6 +66,10 @@ export const roasters = [
   {
     name: 'Stumptown Coffee Roasters',
     id: 17
+  },
+  {
+    name: 'Mountain Grounds Coffee Roaster',
+    id: 18
   }
 ]
 
