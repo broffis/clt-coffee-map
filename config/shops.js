@@ -766,6 +766,45 @@ export const coffeeShops = [
         mapImage: ''
       }
     ]
+  },
+  {
+    name: 'Mugshots Coffee + Tea',
+    id: 24,
+    companyId: 24,
+    logo: '/images/logos/',
+    websiteUrl: 'https://www.mugshotscoffeeandtea.com/',
+    facebookLink: 'https://www.facebook.com/MugshotsSouthend/',
+    instagramLink: 'https://www.instagram.com/mugshotsouthend/',
+    twitterLink: '',
+    roaster: 'Mountain Grounds Coffee Roaster',
+    roasterId: 18,
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    ready: 0,
+    locations: [
+      {
+        address: '255 Clanton Rd',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28217,
+        lat: '',
+        long: '',
+        neighborhood: 'South End',
+        mapImage: ''
+      },
+      {
+        address: '4 N Main St',
+        city: 'Belmont',
+        state: 'NC',
+        zipCode: 28012,
+        lat: '',
+        long: '',
+        neighborhood: 'Belmont',
+        mapImage: ''
+      }
+    ]
   }
 
   // {

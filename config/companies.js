@@ -90,5 +90,9 @@ export const companies = [
   {
     name: 'CupLux Coffee Drive-Thru',
     id: 23
+  },
+  {
+    name: 'Mugshots Coffee + Tea',
+    id: 24
   }
 ]
