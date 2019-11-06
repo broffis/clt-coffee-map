@@ -23,7 +23,7 @@ export const coffeeShops = [
         zipCode: 28208,
         lat: '',
         long: '',
-        neighborhood: '',
+        neighborhood: 'Enderly Park',
         mapImage: ''
       }
     ]
@@ -139,7 +139,7 @@ export const coffeeShops = [
         zipCode: 28204,
         lat: '',
         long: '',
-        neighborhood: '',
+        neighborhood: 'Elizabeth',
         mapImage: ''
       },
       {
@@ -149,7 +149,7 @@ export const coffeeShops = [
         zipCode: 28203,
         lat: '',
         long: '',
-        neighborhood: '',
+        neighborhood: 'South End',
         mapImage: ''
       }
     ]
@@ -179,7 +179,7 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: '',
-        mapImage: ''
+        mapImage: 'Sedgefield'
       },
       {
         address: '1824 Statesville Ave. 101',
@@ -188,7 +188,7 @@ export const coffeeShops = [
         zipCode: 28206,
         lat: '',
         long: '',
-        neighborhood: '',
+        neighborhood: 'Druid Hills South',
         mapImage: ''
       }
     ]
@@ -217,7 +217,7 @@ export const coffeeShops = [
         zipCode: 28209,
         lat: '',
         long: '',
-        neighborhood: '',
+        neighborhood: 'Madison Park',
         mapImage: ''
       }
     ]
@@ -256,7 +256,7 @@ export const coffeeShops = [
         zipCode: 28202,
         lat: '',
         long: '',
-        neighborhood: '',
+        neighborhood: 'First Ward',
         mapImage: ''
       },
       {
@@ -266,7 +266,7 @@ export const coffeeShops = [
         zipCode: 28203,
         lat: '',
         long: '',
-        neighborhood: '',
+        neighborhood: 'South End',
         mapImage: ''
       },
       {
@@ -276,7 +276,7 @@ export const coffeeShops = [
         zipCode: 28207,
         lat: '',
         long: '',
-        neighborhood: '',
+        neighborhood: 'Elizabeth',
         mapImage: ''
       },
       {
@@ -286,7 +286,7 @@ export const coffeeShops = [
         zipCode: 28203,
         lat: '',
         long: '',
-        neighborhood: '',
+        neighborhood: 'Dilworth',
         mapImage: ''
       },
       {
@@ -296,7 +296,7 @@ export const coffeeShops = [
         zipCode: 28208,
         lat: '',
         long: '',
-        neighborhood: '',
+        neighborhood: 'Wesley Heights',
         mapImage: ''
       }
     ]
@@ -325,7 +325,7 @@ export const coffeeShops = [
         zipCode: 28202,
         lat: '',
         long: '',
-        neighborhood: '',
+        neighborhood: 'Fourth Ward',
         mapImage: ''
       }
     ]
@@ -354,8 +354,8 @@ export const coffeeShops = [
         zipCode: 28105,
         lat: '',
         long: '',
-        mapImage: '',
-        neighborhood: 'Matthews'
+        neighborhood: 'Matthews',
+        mapImage: ''
       },
       {
         address: '201 N. Tryon St',
@@ -364,7 +364,7 @@ export const coffeeShops = [
         zipCode: 28202,
         lat: '',
         long: '',
-        neighborhood: '',
+        neighborhood: 'Fourth Ward',
         mapImage: ''
       },
       {
@@ -403,8 +403,8 @@ export const coffeeShops = [
         zipCode: 28205,
         lat: '',
         long: '',
-        mapImage: '',
-        neighborhood: 'Plaza Midwood'
+        neighborhood: 'Plaza Midwood',
+        mapImage: ''
       }
     ]
   },
@@ -432,8 +432,8 @@ export const coffeeShops = [
         zipCode: 28211,
         lat: '',
         long: '',
-        mapImage: '',
-        neighborhood: ''
+        neighborhood: 'Grier Heights',
+        mapImage: ''
       }
     ]
   },
@@ -461,8 +461,8 @@ export const coffeeShops = [
         zipCode: 28277,
         lat: '',
         long: '',
-        mapImage: '',
-        neighborhood: 'Waverly'
+        neighborhood: 'Waverly',
+        mapImage: ''
       }
     ]
   },
@@ -500,8 +500,8 @@ export const coffeeShops = [
         zipCode: 28217,
         lat: '',
         long: '',
-        mapImage: '',
-        neighborhood: ''
+        neighborhood: 'Charlotte Regional Farmers Market',
+        mapImage: ''
       }
     ]
   },
@@ -529,63 +529,334 @@ export const coffeeShops = [
         zipCode: 28203,
         lat: '',
         long: '',
+        neighborhood: 'South End',
+        mapImage: ''
+      }
+    ]
+  },
+
+  {
+    name: 'Smelly Cat Coffee House & Roastery',
+    id: 16,
+    companyId: 16,
+    logo: '/images/logos/smelly-cat-logo.jpg',
+    websiteUrl: 'https://smellycatcoffee.com/',
+    facebookLink: 'https://www.facebook.com/SmellyCatCoffeehouse',
+    instagramLink: 'https://www.instagram.com/smellycatcoffee/',
+    twitterLink: 'https://twitter.com/SmellyCatCoffee',
+    roaster: 'Smelly Cat Roastery',
+    roasterId: 13,
+    about: 'In house roaster, with both single origin and blended coffees from ethical sources. Fully stocked bar with seasonal treats. Syrups made in-house',
+    shopInfo: 'OUR MISSION: To inspire value in coworkers & customers every day through the medium of quality crafted coffee.',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    ready: 1,
+    locations: [
+      {
+        address: '514 E 36th St',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28205,
+        lat: '',
+        long: '',
+        neighborhood: 'Noda',
+        mapImage: ''
+      }
+    ]
+  },
+  {
+    name: 'The Hobbyist',
+    id: 17,
+    companyId: 17,
+    logo: '/images/logos/hobbyist-logo.png',
+    websiteUrl: 'https://www.thehobbyistclt.com/',
+    facebookLink: 'https://www.facebook.com/thehobbyistclt/',
+    instagramLink: 'https://www.instagram.com/thehobbyistclt/',
+    twitterLink: '',
+    roaster: 'Counter Culture Coffee',
+    roasterId: 8,
+    about: 'Cafe and bottle shop with 17 taps pouring prosecco, wine, cider, and beer. Syrups made in-house. Daily selection of baked goods',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    ready: 1,
+    locations: [
+      {
+        address: '2100 N Davidson St',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28205,
+        lat: '',
+        long: '',
+        neighborhood: 'Villa Heights',
+        mapImage: ''
+      }
+    ]
+  },
+  {
+    name: 'Parliament Espresso & Coffee Bar',
+    id: 18,
+    companyId: 18,
+    logo: '/images/logos/',
+    websiteUrl: 'https://parliamentespresso.com/',
+    facebookLink: 'https://www.facebook.com/ParliamentEspresso/',
+    instagramLink: 'https://www.instagram.com/parliament_coffee/',
+    twitterLink: '',
+    roaster: 'Parliament Coffee',
+    roasterId: 14,
+    about: 'National franchise with locations in NYC, Miami, and CLT. Focus on serving 100% Arabica beans sourced directly from a family farm in Nicaragua.',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    ready: 1,
+    locations: [
+      {
+        address: '300 S Tryon St, Charlotte, NC',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28202,
+        lat: '',
+        long: '',
+        neighborhood: 'Uptown',
+        mapImage: ''
+      }
+    ]
+  },
+  {
+    name: 'Trade and Lore Coffee',
+    id: 19,
+    companyId: 19,
+    logo: '/images/logos/trade-lore.webp',
+    websiteUrl: 'https://www.tradeandlore.com/coffee-beer-charlotte-nc',
+    facebookLink: 'https://www.facebook.com/tradeandlore/',
+    instagramLink: 'https://www.instagram.com/tradeandlore/',
+    twitterLink: 'https://twitter.com/TradeandLore',
+    roaster: 'Mountain Air Roasting',
+    roasterId: 15,
+    about: 'From the site: Trade and Lore offers experimental coffee while working to fuel and empower our community as well as our industry. We support inclusiveness, equality and awareness. We work with local purveyors, and host pop-up events and educational classes.',
+    shopInfo: 'Above Salud, in the Cerveceria',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    ready: 1,
+    locations: [
+      {
+        address: '3306 N Davidson St',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28205,
+        lat: '',
+        long: '',
+        neighborhood: 'Noda',
+        mapImage: ''
+      }
+    ]
+  },
+  {
+    name: 'Ritual Coffee, Tea, and Oddities',
+    id: 20,
+    companyId: 20,
+    logo: '/images/logos/ritual-logo.png',
+    websiteUrl: 'http://ritualcoffeeteaoddities.com/',
+    facebookLink: 'https://www.facebook.com/Ritualcoffeeteaoddities',
+    instagramLink: 'https://www.instagram.com/ritualcoffeeteaoddities/',
+    twitterLink: 'https://twitter.com/ritualclt',
+    roaster: 'Crossroads Coffee House',
+    roasterId: 16,
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    ready: 1,
+    locations: [
+      {
+        address: '1224 Commercial Ave',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28205,
+        lat: '',
+        long: '',
         mapImage: '',
-        neighborhood: 'South End'
+        neighborhood: 'Plaza-Shamrock'
+      }
+    ]
+  },
+  {
+    name: 'Coco and the Director',
+    id: 21,
+    companyId: 21,
+    logo: '/images/logos/',
+    websiteUrl: 'http://cocoandthedirector.com/',
+    facebookLink: 'https://www.facebook.com/CocoandtheDirector/',
+    instagramLink: 'https://www.instagram.com/cocoandthedirector/',
+    twitterLink: 'https://twitter.com/CATDCLT',
+    roaster: '',
+    roasterId: null,
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    ready: 0,
+    locations: [
+      {
+        address: '100 W Trade St',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28202,
+        lat: '',
+        long: '',
+        neighborhood: 'Fourth Ward',
+        mapImage: ''
+      }
+    ]
+  },
+  {
+    name: 'Good Cup Coffee Company',
+    id: 22,
+    companyId: 22,
+    logo: '/images/logos/',
+    websiteUrl: 'https://www.thegoodcup.rocks/',
+    facebookLink: 'https://www.facebook.com/goodcupcoffee.matthewsnc/',
+    instagramLink: 'https://www.instagram.com/goodcup/',
+    twitterLink: '',
+    roaster: '',
+    roasterId: null,
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    ready: 0,
+    locations: [
+      {
+        address: '105 N Trade St',
+        city: 'Matthews',
+        state: 'NC',
+        zipCode: 28105,
+        lat: '',
+        long: '',
+        neighborhood: 'Matthews',
+        mapImage: ''
+      }
+    ]
+  },
+  {
+    name: 'CupLux Coffee Drive-Thru',
+    id: 23,
+    companyId: 23,
+    logo: '/images/logos/',
+    websiteUrl: 'https://www.cuplux.com/home',
+    facebookLink: '',
+    instagramLink: 'https://www.instagram.com/cuplux/',
+    twitterLink: '',
+    roaster: 'Stumptown Coffee Roasters',
+    roasterId: 17,
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    ready: 0,
+    locations: [
+      {
+        address: '3115 Freedom Dr',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28208,
+        lat: '',
+        long: '',
+        neighborhood: 'Ashley Park',
+        mapImage: ''
+      }
+    ]
+  },
+  {
+    name: 'Mugshots Coffee + Tea',
+    id: 24,
+    companyId: 24,
+    logo: '/images/logos/',
+    websiteUrl: 'https://www.mugshotscoffeeandtea.com/',
+    facebookLink: 'https://www.facebook.com/MugshotsSouthend/',
+    instagramLink: 'https://www.instagram.com/mugshotsouthend/',
+    twitterLink: '',
+    roaster: 'Mountain Grounds Coffee Roaster',
+    roasterId: 18,
+    about: '',
+    shopInfo: '',
+    currentFavoriteDrink: '',
+    infoFromShop: 0,
+    ready: 0,
+    locations: [
+      {
+        address: '255 Clanton Rd',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28217,
+        lat: '',
+        long: '',
+        neighborhood: 'South End',
+        mapImage: ''
+      },
+      {
+        address: '4 N Main St',
+        city: 'Belmont',
+        state: 'NC',
+        zipCode: 28012,
+        lat: '',
+        long: '',
+        neighborhood: 'Belmont',
+        mapImage: ''
       }
     ]
   }
 
   // {
   //   name: '',
-  //   id: ,
-  //   companyId: ,
+  //   id: null,
+  //   companyId: null,
   //   logo: '/images/logos/',
   //   websiteUrl: '',
   //   facebookLink: '',
   //   instagramLink: '',
   //   twitterLink: '',
   //   roaster: '',
-  //   roasterId: ,
+  //   roasterId: null,
   //   about: '',
   //   shopInfo: '',
   //   currentFavoriteDrink: '',
   //   infoFromShop: 0,
-  //   ready: ,
+  //   ready: 0,
   //   locations: [
   //     {
   //       address: '',
   //       city: '',
   //       state: '',
-  //       zipCode: ,
+  //       zipCode: null,
   //       lat: '',
   //       long: '',
-  //       mapImage: '',
-  //       neighborhood: ''
+  //       neighborhood: '',
+  //       mapImage: ''
   //     }
   //   ]
   // }
 
   /**
    * Still need:
-   *  Amelie's French Bakery & Cafe
-   *  Rhino Market
-   *  Uptown Coffee Co
-   *  Coco and the Director
-   *  Smelly Cat Coffee House & Roastery
-   *  Trade and Lore Coffee
-   *  South End Grind
-   *  The Hobbyist
-   *  Parliament Espresso & Coffee
-   *  Crema Espresso Bar and Cafe
-   *  Earl's Grocery
-   *  Rush Espresso Cafe and Wine Bar
-   *  Waterbean Coffee
-   *  The People's Market
-   *  Suffolk Punch
-   *  Nova's Bakery
-   *  Sunflour Baking Company
-   *  Mayobird
-   *  Common Market
+   *  Pure Shops:
+   *    Uptown Coffee Co
+   *    Burr & Berry
+   *    Crema Espresso Bar and Cafe
+   *    Fior Ballantyne
+   *    Waterbean Coffee
+   * 
+   *  Mixed Use:
+   *    Amelie's French Bakery & Cafe
+   *    Earl's Grocery
+   *    ROOTS Cafe
+   *    The People's Market
+   *    Suffolk Punch
+   *    Rhino Market
+   *    Nova's Bakery
+   *    Sunflour Baking Company
+   *    Mayobird
+   *    Common Market
    */
 ]
 
