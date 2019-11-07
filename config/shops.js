@@ -626,7 +626,7 @@ export const coffeeShops = [
     name: 'Trade and Lore Coffee',
     id: 19,
     companyId: 19,
-    logo: '/images/logos/trade-lore.webp',
+    logo: '/images/logos/trade-lore-logo.webp',
     websiteUrl: 'https://www.tradeandlore.com/coffee-beer-charlotte-nc',
     facebookLink: 'https://www.facebook.com/tradeandlore/',
     instagramLink: 'https://www.instagram.com/tradeandlore/',
@@ -637,7 +637,7 @@ export const coffeeShops = [
     shopInfo: 'Above Salud, in the Cerveceria',
     currentFavoriteDrink: '',
     infoFromShop: 0,
-    ready: 1,
+    ready: 0,
     locations: [
       {
         address: '3306 N Davidson St',
@@ -845,7 +845,7 @@ export const coffeeShops = [
    *    Crema Espresso Bar and Cafe
    *    Fior Ballantyne
    *    Waterbean Coffee
-   * 
+   *
    *  Mixed Use:
    *    Amelie's French Bakery & Cafe
    *    Earl's Grocery
