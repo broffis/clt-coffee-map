@@ -1,0 +1,25 @@
+.shop-coming-soon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 15px;
+  margin: 10px 0;
+  border: 2px solid $clr-black;
+  border-radius: 5px;
+  min-height: 50px;
+  background-color: $clr-white;
+  
+  @include breakpoint-sm {
+    width: calc(33% + -10px);
+    margin: 5px;
+  }
+
+  &__logo {
+    width: 40px;
+  }
+
+  &__website,
+  &__neighborhood {
+    max-width: 25%;
+  }
+}

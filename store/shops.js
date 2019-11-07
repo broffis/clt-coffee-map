@@ -23,6 +23,8 @@ export const getters = {
 
     let filteredShops = JSON.parse(JSON.stringify(getters.getSortedShops))
 
+    filteredShops = filteredShops.filter(s => s.ready === 1)
+
     if (roasterFilter !== null) {
       filteredShops = filteredShops.filter(s => s.roasterId === roasterFilter)
     }
@@ -58,6 +60,25 @@ export const getters = {
     const singleShop = allShops.filter(s => s.id === shopId)
 
     return singleShop[0]
+  },
+  getShopsComingSoon: (state) => {
+    let comingSoon = JSON.parse(JSON.stringify(state.shops))
+
+    comingSoon = comingSoon.filter(s => s.ready === 0)
+
+    comingSoon.sort((a, b) => {
+      if (a.name > b.name) return 1
+      if (a.name < b.name) return -1
+      return 0
+    })
+
+    comingSoon.sort((a, b) => {
+      if (a.infoFromShop < b.infoFromShop) return 1
+      if (a.infoFromShop > b.infoFromShop) return -1
+      return 0
+    })
+
+    return comingSoon
   }
 }
 

@@ -13,23 +13,33 @@
         :shop="shop"
       />
     </div>
+    <div class="shops-soon">
+      <shop-coming-soon
+        v-for="shop in comingSoon"
+        :key="shop.id"
+        :shop="shop"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import ShopCard from '@/components/ShopCard'
+import ShopComingSoon from '@/components/ShopComingSoon'
 import Filters from '@/components/Filters'
 
 export default {
   components: {
     ShopCard,
+    ShopComingSoon,
     Filters
   },
 
   computed: {
     ...mapGetters({
-      shops: 'shops/getFilteredShops'
+      shops: 'shops/getFilteredShops',
+      comingSoon: 'shops/getShopsComingSoon'
     })
   }
 }

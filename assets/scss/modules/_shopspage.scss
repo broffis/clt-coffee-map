@@ -30,4 +30,14 @@
       margin: 0 25px;
     }
   }
+
+  .shops-soon {
+    display: flex;
+    flex-direction: column;
+
+    @include breakpoint-sm {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
 }
