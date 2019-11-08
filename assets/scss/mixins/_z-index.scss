@@ -1,0 +1,40 @@
+/* Z-INDEX */
+
+/* USAGE
+$z-layers lives in variables file
+
+$z-layers: (
+  'wallpaper',
+  'page-content',
+  'modal-window'
+);
+
+.class { z-index: z-index('modal-window'); }  //  =>  z-index: 3
+.class { @include z-index('modal-window'); }  //  =>  z-index: 3
+*/
+
+@function z-index($name) {
+  $z: null;
+
+  @if type-of($z-layers) == map {
+    $z: map-get($z-layers, $name);
+  }
+
+  @if type-of($z-layers) == list {
+    @for $i from 1 through length($z-layers) {
+      @if nth($z-layers, $i) == $name {
+        $z: $i;
+      }
+    }
+  }
+
+  @if $z {
+    @return $z;
+  } @else {
+    @error('Could not find a z-index for `#{$name}`');
+  }
+}
+
+@mixin z-index($name) {
+  z-index: z-index($name);
+}

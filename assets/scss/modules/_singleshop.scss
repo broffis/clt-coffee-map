@@ -67,6 +67,10 @@
         @include breakpoint-sm {
           font-size: 1.25rem;
         }
+
+        &--label {
+          font-weight: 600;
+        }
       }
     }
   }

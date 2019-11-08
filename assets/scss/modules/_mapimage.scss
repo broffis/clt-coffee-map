@@ -1,0 +1,15 @@
+.map-image {
+
+  &__address {
+    margin-bottom: 5px;
+  }
+
+  &__map {
+    border-radius: 5px;
+    width: 100%;
+
+    @include breakpoint-sm {
+      width: 50%;
+    }
+  }
+}

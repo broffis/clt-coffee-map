@@ -24,7 +24,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Enderly Park',
-        mapImage: ''
+        mapImage: 'map-enderly.png',
+        mapUrl: 'https://www.google.com/maps/place/Enderly+Coffee+Company/@35.2392952,-80.876519,18.14z/data=!4m5!3m4!1s0x8856a124c82a8aa7:0x221f23a66b242557!8m2!3d35.2391401!4d-80.8754614'
       }
     ]
   },
@@ -53,7 +54,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Concord',
-        mapImage: ''
+        mapImage: 'map-percantile.png',
+        mapUrl: 'https://www.google.com/maps/place/The+Percantile+and+Creamery/@35.3735841,-80.7289117,17.88z/data=!4m5!3m4!1s0x88541caf5826c2bd:0x6466d676b5e63c97!8m2!3d35.3734013!4d-80.7276921'
       }
     ]
   },
@@ -82,7 +84,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Matthews',
-        mapImage: ''
+        mapImage: 'map-brakemans.png',
+        mapUrl: "https://www.google.com/maps/place/Brakeman's+Coffee+%26+Supply/@35.1178377,-80.721528,19.45z/data=!4m5!3m4!1s0x88542401e6a37e53:0x6179d9efd287140c!8m2!3d35.1178871!4d-80.7210297"
       }
     ]
   },
@@ -111,7 +114,19 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Plaza Midwood',
-        mapImage: ''
+        mapImage: 'map-undercurrent-comm.png',
+        mapUrl: 'https://www.google.com/maps/place/Undercurrent+Coffee/@35.2183712,-80.8117973,19.49z/data=!4m5!3m4!1s0x8856a17b02e82269:0xce62e3841b081b7c!8m2!3d35.2183421!4d-80.8117551'
+      },
+      {
+        address: '1115 N Brevard St Stall #7',
+        city: 'Charlotte',
+        state: 'NC',
+        zipCode: 28206,
+        lat: '',
+        long: '',
+        neighborhood: '',
+        mapImage: 'map-undercurrent-optimist.png',
+        mapUrl: 'https://www.google.com/maps/place/Undercurrent+Coffee/@35.2341016,-80.8282199,18.49z/data=!4m5!3m4!1s0x8856a19d11433ddd:0xb8b43d67abd35998!8m2!3d35.233888!4d-80.8275767'
       }
     ]
   },
@@ -140,7 +155,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Elizabeth',
-        mapImage: ''
+        mapImage: 'map-central-louise.png',
+        mapUrl: 'https://www.google.com/maps/place/Central+Coffee+Co/@35.2215206,-80.8221712,19.27z/data=!4m5!3m4!1s0x8856a01cc7854467:0xe574b9fab3ff114!8m2!3d35.2215128!4d-80.8219148'
       },
       {
         address: '1700 Camden Rd #101',
@@ -150,7 +166,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'South End',
-        mapImage: ''
+        mapImage: 'map-central-camden.png',
+        mapUrl: 'https://www.google.com/maps/place/Central+Coffee+Co./@35.2137431,-80.8586056,18.8z/data=!4m5!3m4!1s0x88569f793ba8df9f:0x804f3b2a65e82254!8m2!3d35.2136402!4d-80.858111'
       }
     ]
   },
@@ -178,8 +195,9 @@ export const coffeeShops = [
         zipCode: 28203,
         lat: '',
         long: '',
-        neighborhood: '',
-        mapImage: 'Sedgefield'
+        neighborhood: 'Sedgefield',
+        mapImage: 'map-hex-remount.png',
+        mapUrl: 'https://www.google.com/maps/place/HEX+Espresso+Bar/@35.2026824,-80.8665928,18.59z/data=!4m5!3m4!1s0x88569f6d8dcfffff:0xa3b4f69a418904a5!8m2!3d35.2025612!4d-80.8660154'
       },
       {
         address: '1824 Statesville Ave. 101',
@@ -189,7 +207,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Druid Hills South',
-        mapImage: ''
+        mapImage: 'map-hex-statesville.png',
+        mapUrl: 'https://www.google.com/maps/place/Hex+Coffee+Roasters/@35.2479524,-80.8354906,17.45z/data=!4m5!3m4!1s0x8856a0426401cc97:0x419456b888386a1d!8m2!3d35.247695!4d-80.833277'
       }
     ]
   },
@@ -218,7 +237,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Madison Park',
-        mapImage: ''
+        mapImage: 'map-mugs.png',
+        mapUrl: 'https://www.google.com/maps/place/Mugs/@35.160621,-80.8500327,18.8z/data=!4m5!3m4!1s0x88569e5940e5813d:0x455cb6d5cce25cfb!8m2!3d35.160473!4d-80.850047'
       }
     ]
   },
@@ -247,7 +267,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: '',
-        mapImage: ''
+        mapImage: 'map-njc-7-st.png',
+        mapUrl: 'https://www.google.com/maps/place/Not+Just+Coffee/@35.2275268,-80.838585,18.76z/data=!4m5!3m4!1s0x8856a01140ec724f:0xff7ebe5ac7a74af0!8m2!3d35.227439!4d-80.8382392'
       },
       {
         address: '222 S Church St',
@@ -257,7 +278,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'First Ward',
-        mapImage: ''
+        mapImage: 'map-njc-church.png',
+        mapUrl: 'https://www.google.com/maps/place/Not+Just+Coffee/@35.2269382,-80.8465952,19.16z/data=!4m5!3m4!1s0x8856a02f01fafb57:0xb6baddb4325fd5fe!8m2!3d35.2269951!4d-80.8459703'
       },
       {
         address: '2000 South Blvd',
@@ -267,7 +289,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'South End',
-        mapImage: ''
+        mapImage: 'map-njc-south.png',
+        mapUrl: 'https://www.google.com/maps/place/Not+Just+Coffee/@35.2093596,-80.8613117,19.34z/data=!3m1!5s0x88569f70a78989d7:0xe8c76fea39cc7900!4m5!3m4!1s0x88569f7099b49cd5:0x50a69c6409e3223f!8m2!3d35.2093117!4d-80.8608755'
       },
       {
         address: '421 Providence Rd',
@@ -277,7 +300,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Elizabeth',
-        mapImage: ''
+        mapImage: 'map-njc-providence.png',
+        mapUrl: 'https://www.google.com/maps/place/Not+Just+Coffee/@35.2041514,-80.8249857,18.57z/data=!4m5!3m4!1s0x88569fee53e89713:0x76b72dcb81c3926c!8m2!3d35.2041856!4d-80.8242377'
       },
       {
         address: '2230 Park Rd',
@@ -287,7 +311,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Dilworth',
-        mapImage: ''
+        mapImage: 'map-njc-park.png',
+        mapUrl: 'https://www.google.com/maps/place/Not+Just+Coffee/@35.1991391,-80.854709,17z/data=!3m1!4b1!4m5!3m4!1s0x88569f9f989a0b99:0x33c6774c564a5545!8m2!3d35.1991347!4d-80.8525203'
       },
       {
         address: '1026 Jay St',
@@ -297,7 +322,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Wesley Heights',
-        mapImage: ''
+        mapImage: 'map-njc-jay.png',
+        mapUrl: 'https://www.google.com/maps/place/Not+Just+Coffee/@35.2351139,-80.8732249,18.63z/data=!4m5!3m4!1s0x8856a187444583cb:0x377d0ded303c2bb0!8m2!3d35.23526!4d-80.8726955'
       }
     ]
   },
@@ -326,7 +352,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Fourth Ward',
-        mapImage: ''
+        mapImage: 'map-qcgrounds-church.png',
+        mapUrl: 'https://www.google.com/maps/place/Queen+City+Grounds/@35.2327022,-80.8379666,19.37z/data=!4m5!3m4!1s0x8856a03c7bfce283:0x323d3d3fbbf6b751!8m2!3d35.232641!4d-80.837547'
       }
     ]
   },
@@ -355,7 +382,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Matthews',
-        mapImage: ''
+        mapImage: 'map-dilworth-weddington.png',
+        mapUrl: 'https://www.google.com/maps/place/Dilworth+Coffee+at+Plantation+Market/@35.0835141,-80.7337222,19z/data=!3m1!4b1!4m5!3m4!1s0x8854268898326f85:0x6ce309acfd678a62!8m2!3d35.083513!4d-80.733175'
       },
       {
         address: '201 N. Tryon St',
@@ -365,7 +393,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Fourth Ward',
-        mapImage: ''
+        mapImage: '.png',
+        mapUrl: ''
       },
       {
         address: 'SouthPark Mall @ Belk',
@@ -375,7 +404,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'South Park',
-        mapImage: ''
+        mapImage: 'map-dilworth-southpark.png',
+        mapUrl: 'https://www.google.com/maps/place/Dilworth+Coffee/@35.1514128,-80.8329222,17z/data=!3m2!4b1!5s0x88569e15371a004d:0xb43516d726600c65!4m5!3m4!1s0x88569e15489d3267:0x8e25c8acd7af8723!8m2!3d35.1514102!4d-80.8316049'
       }
     ]
   },
@@ -404,7 +434,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Plaza Midwood',
-        mapImage: ''
+        mapImage: 'map-okra.png',
+        mapUrl: 'https://www.google.com/maps/place/Okra/@35.2185983,-80.8150069,17z/data=!3m1!4b1!4m5!3m4!1s0x8856a001afa08835:0xe31d24aebcc12b96!8m2!3d35.2185939!4d-80.8128182'
       }
     ]
   },
@@ -433,7 +464,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Grier Heights',
-        mapImage: ''
+        mapImage: 'map-julias.png',
+        mapUrl: "https://www.google.com/maps/place/Julia's+Caf%C3%A9+%26+Books/@35.1945761,-80.7976182,17z/data=!3m1!4b1!4m5!3m4!1s0x885420133ec3e93d:0x4840a2a8593bf844!8m2!3d35.1945717!4d-80.7954295"
       }
     ]
   },
@@ -462,7 +494,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Waverly',
-        mapImage: ''
+        mapImage: 'map-cafemoka.png',
+        mapUrl: 'https://www.google.com/maps/place/Cafe+Moka/@35.0510193,-80.7691664,17z/data=!3m1!4b1!4m5!3m4!1s0x88542701c36ef0f7:0xcb6a35f9dac852c5!8m2!3d35.0510149!4d-80.7669777'
       }
     ]
   },
@@ -490,8 +523,9 @@ export const coffeeShops = [
         zipCode: 28209,
         lat: '',
         long: '',
-        mapImage: '',
-        neighborhood: 'South Park'
+        mapImage: 'map-dunx-blackhawk.png',
+        neighborhood: 'South Park',
+        mapUrl: 'https://www.google.com/maps/place/Dunx+Coffee+at+Blackhawk+Hardware/@35.17433,-80.8505016,17z/data=!3m1!4b1!4m5!3m4!1s0x88569e535eb0c495:0xb1b5e8888305632d!8m2!3d35.1743256!4d-80.8483129'
       },
       {
         address: '1801 Yorkmont Rd, Building B',
@@ -501,7 +535,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Charlotte Regional Farmers Market',
-        mapImage: ''
+        mapImage: 'map-dunx-market.png',
+        mapUrl: 'https://www.google.com/maps/place/Charlotte+Regional+Farmers+Market/@35.1867729,-80.9122471,17z/data=!3m1!4b1!4m5!3m4!1s0x885698d0bc1d9e19:0xab4c283ea0d83ddd!8m2!3d35.1867685!4d-80.9100584'
       }
     ]
   },
@@ -530,7 +565,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'South End',
-        mapImage: ''
+        mapImage: 'map-lincolns.png',
+        mapUrl: 'https://www.google.com/maps/place/Lincolns+Haberdashery/@35.216143,-80.8549122,17z/data=!3m1!4b1!4m5!3m4!1s0x88569f81c12ac707:0x6e085f943874a107!8m2!3d35.2161386!4d-80.8527235'
       }
     ]
   },
@@ -560,7 +596,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Noda',
-        mapImage: ''
+        mapImage: 'map-smellycat.png',
+        mapUrl: 'https://www.google.com/maps/place/Smelly+Cat+Coffee+House+%26+Roastery/@35.2471814,-80.8065127,17z/data=!3m1!4b1!4m5!3m4!1s0x88541fda21dbea15:0x7b322c07165692ef!8m2!3d35.247177!4d-80.804324'
       }
     ]
   },
@@ -589,7 +626,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Villa Heights',
-        mapImage: ''
+        mapImage: 'map-hobbyist.png',
+        mapUrl: 'https://www.google.com/maps/place/The+Hobbyist/@35.2386168,-80.8183097,17z/data=!3m1!4b1!4m5!3m4!1s0x8856a1f06b1f9883:0xe7f16500fa094235!8m2!3d35.2386124!4d-80.816121'
       }
     ]
   },
@@ -618,7 +656,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Uptown',
-        mapImage: ''
+        mapImage: 'map-parliament.png',
+        mapUrl: 'https://www.google.com/maps/place/Parliament+Espresso+%26+Coffee+Bar/@35.2256129,-80.8479549,17z/data=!3m1!4b1!4m5!3m4!1s0x8856a02f1f757235:0x962f4e796dd53c90!8m2!3d35.2256085!4d-80.8457662'
       }
     ]
   },
@@ -634,20 +673,21 @@ export const coffeeShops = [
     roaster: 'Mountain Air Roasting',
     roasterId: 15,
     about: 'From the site: Trade and Lore offers experimental coffee while working to fuel and empower our community as well as our industry. We support inclusiveness, equality and awareness. We work with local purveyors, and host pop-up events and educational classes.',
-    shopInfo: 'Above Salud, in the Cerveceria',
+    shopInfo: '',
     currentFavoriteDrink: '',
     infoFromShop: 0,
     ready: 0,
     locations: [
       {
-        address: '3306 N Davidson St',
+        address: '933 Louise Ave Suite 301',
         city: 'Charlotte',
         state: 'NC',
-        zipCode: 28205,
+        zipCode: 28204,
         lat: '',
         long: '',
-        neighborhood: 'Noda',
-        mapImage: ''
+        neighborhood: 'Belmont',
+        mapImage: 'map-tradelore-belmont.png',
+        mapUrl: 'https://www.google.com/maps/place/Trade+and+Lore+-+Belmont+Neighborhood/@35.2247117,-80.8229257,17z/data=!3m1!4b1!4m5!3m4!1s0x8856a1e7009751a9:0x6c617c187694a826!8m2!3d35.2247073!4d-80.820737'
       }
     ]
   },
@@ -675,8 +715,9 @@ export const coffeeShops = [
         zipCode: 28205,
         lat: '',
         long: '',
-        mapImage: '',
-        neighborhood: 'Plaza-Shamrock'
+        neighborhood: 'Plaza-Shamrock',
+        mapImage: 'map-ritual.png',
+        mapUrl: 'https://www.google.com/maps/place/Ritual+Coffee+Tea+%26+Oddities/@35.2458303,-80.7848712,17z/data=!3m1!4b1!4m5!3m4!1s0x88541f075d062921:0x4af59df2920914e0!8m2!3d35.2458259!4d-80.7826825'
       }
     ]
   },
@@ -705,7 +746,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Fourth Ward',
-        mapImage: ''
+        mapImage: 'map-coco.png',
+        mapUrl: 'https://www.google.com/maps/place/Coco+and+the+Director/@35.2276365,-80.8455398,17z/data=!3m1!4b1!4m5!3m4!1s0x8856a025623f7e03:0xfd47172b8945ded7!8m2!3d35.2276321!4d-80.8433511'
       }
     ]
   },
@@ -734,7 +776,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Matthews',
-        mapImage: ''
+        mapImage: 'map-goodcup-market.png',
+        mapUrl: 'https://www.google.com/maps/place/105+N+Trade+St,+Matthews,+NC+28105/@35.1162992,-80.7218861,18.31z/data=!4m5!3m4!1s0x885426a9e246e053:0x24877b0d963be55a!8m2!3d35.1159462!4d-80.721556'
       }
     ]
   },
@@ -763,7 +806,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'Ashley Park',
-        mapImage: ''
+        mapImage: 'map-cuplux.png',
+        mapUrl: 'https://www.google.com/maps/place/CupLux+Coffee+Drive-Thru/@35.2420564,-80.8916207,17z/data=!3m1!4b1!4m5!3m4!1s0x8856a1f2f1db2479:0x239137608d2ba840!8m2!3d35.242052!4d-80.889432'
       }
     ]
   },
@@ -792,7 +836,8 @@ export const coffeeShops = [
         lat: '',
         long: '',
         neighborhood: 'South End',
-        mapImage: ''
+        mapImage: 'map-mugshots-clanton.png',
+        mapUrl: 'https://www.google.com/maps/place/Mugshots+Coffee+%26+Tea/@35.1945731,-80.8773692,17z/data=!3m1!4b1!4m5!3m4!1s0x88569f15e7924785:0xbf5784f706458ba8!8m2!3d35.1945687!4d-80.8751805'
       },
       {
         address: '4 N Main St',
@@ -801,8 +846,9 @@ export const coffeeShops = [
         zipCode: 28012,
         lat: '',
         long: '',
-        neighborhood: 'Belmont',
-        mapImage: ''
+        neighborhood: '',
+        mapImage: 'map-mugshots-belmont.png',
+        mapUrl: 'https://www.google.com/maps/place/Mugshots+Coffee+and+Tea/@35.242667,-81.0398079,17z/data=!3m1!4b1!4m5!3m4!1s0x8856bd846a081349:0xe0b4a501edb67f8f!8m2!3d35.2426626!4d-81.0376192'
       }
     ]
   }
@@ -832,7 +878,8 @@ export const coffeeShops = [
   //       lat: '',
   //       long: '',
   //       neighborhood: '',
-  //       mapImage: ''
+  //       mapImage: '',
+  //       mapUrl: ''
   //     }
   //   ]
   // }
