@@ -3,77 +3,74 @@
 .filters {
   display: flex;
   margin: 5px 10px;
-  justify-content: center;
+  justify-content: space-around;
+  transition: 0.5s;
 
   &__roaster, &__company {
     display: flex;
     flex-direction: column;
     width: 45%;
     margin: 0 5px;
+    transition: 0.5s;
   }
-  
-  /* Dropdown Button */
-  .dropbtn {
-    background-color: #f1f1f1;
-    color: black;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-  }
+}
 
-  /* The container <div> - needed to position the dropdown content */
-  .dropdown {
+
+.filters-dropdown {
+  @include z-index('filters_dropdown');
+  display: inline-flex;
+  position: relative;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 5px;
+
+  &__label {
+    display: flex;
     position: relative;
-    display: inline-block;
-  }
-
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
+    border-bottom: 1px solid brown;
+    background-color: $clr-white;
+    white-space: nowrap;
 
-    &.--is-active {
-      display: flex;
-      flex-direction: column;
-
-      @include breakpoint-sm {
-        align-self: flex-end;
-      }
-    }
-
-    a {
-      color: black;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-    }
-
-    a:hover {
-      background-color: #ddd;
+    &:hover { 
+      cursor: pointer;
     }
   }
 
-  &--dropdown {
-  
-    &__label {
-      display: flex;
-      flex-direction: column;
+  &__menu {
+    position: absolute;
+    top: 23px;
+    left: 0;
+    width: 100%;
+    max-height: 0;
+    padding: 0;
+    overflow: auto;
+    transition: max-height 0.4s linear;
+    background-color: $clr-white;
+    // box-shadow: 0 2px 8px 0 $clr-grey;
+    list-style: none;
+  }
 
-      @include breakpoint-sm {
-        flex-direction: row;
-      }
+  .menu-item {
+    padding: 4px 0;
 
-      &--value {
-        border-bottom: 1px solid brown;
+    &:first-child {
+      padding-top: 14px;
+    }
 
-        @include breakpoint-sm {
-          min-width: 50%;
-          margin-left: 5px;
-        }
-      }
+    &:last-child {
+      padding-bottom: 14px;
+    }
+  }
+
+  &--open {
+    .svg-icon {
+      transform: rotate(0deg);
+      transition-delay: 0s;
+    }
+
+    .filters-dropdown__menu {
+      max-height: 300px;
     }
   }
 }

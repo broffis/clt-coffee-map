@@ -1,0 +1,17 @@
+@mixin animation ($delay, $duration, $animation, $fillMode) {
+  -moz-animation-name: $animation;
+  -webkit-animation-name: $animation;
+  animation-name: $animation;
+
+  -moz-animation-duration: $duration;
+  -webkit-animation-duration: $duration;
+  animation-duration: $duration;
+
+  -moz-animation-delay: $delay;
+  -webkit-animation-delay: $delay;
+  animation-delay: $delay;
+
+  -moz-animation-fill-mode: $fillMode;
+  -webkit-animation-fill-mode: $fillMode;
+  animation-fill-mode: $fillMode;
+}

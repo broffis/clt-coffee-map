@@ -3,19 +3,12 @@
     v-if="hasMapImage"
     class="map-image">
     <a :href="mapUrl">
-      <div
-        v-if="hasNeighborhood"
-        class="map-image__neighborhood">
-        Neighborhood: {{ neighborhood }}
-      </div>
-      <div
-        v-else
-        class="map-image__city">
-        City: {{ city }}
-      </div>
-      <div class="map-image__map">
-        <img :src="'/images/map/' + mapImage" />
-      </div>
+      <p class="map-image__address">
+        {{ address }}
+      </p>
+      <img
+        class="map-image__map"
+        :src="'/images/map/' + mapImage" />
     </a>
   </div>
 </template>

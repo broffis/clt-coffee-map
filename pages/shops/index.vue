@@ -4,7 +4,20 @@
       <h1 class="title">
         Charlotte Coffee Map
       </h1>
-      <Filters />
+      <!-- <Filters /> -->
+      <div class="filters">
+        <filters-test
+          sortType="shop"
+          label="Filter by Shop:"
+          :sortOptions="companies"
+        />
+        <filters-test
+          sortType="roaster"
+          label="Filter by Roaster:"
+          :sortOptions="roasters"
+        />
+      </div>
+
     </div><!-- /.header -->
     <div class="cards">
       <shop-card
@@ -27,19 +40,23 @@
 import { mapGetters } from 'vuex'
 import ShopCard from '@/components/ShopCard'
 import ShopComingSoon from '@/components/ShopComingSoon'
-import Filters from '@/components/Filters'
+// import Filters from '@/components/Filters'
+import FiltersTest from '@/components/FiltersTest'
 
 export default {
   components: {
     ShopCard,
     ShopComingSoon,
-    Filters
+    // Filters,
+    FiltersTest
   },
 
   computed: {
     ...mapGetters({
       shops: 'shops/getFilteredShops',
-      comingSoon: 'shops/getShopsComingSoon'
+      comingSoon: 'shops/getShopsComingSoon',
+      companies: 'shops/getCompanies',
+      roasters: 'shops/getRoasters'
     })
   }
 }
