@@ -10,7 +10,9 @@ export const state = () => ({
   filteredShops: [],
   roasterFilter: null,
   companyFilter: null,
-  singleShopId: null
+  singleShopId: null,
+  activeShopLabel: 'All',
+  activeRoasterLabel: 'All'
 })
 
 export const getters = {
@@ -79,7 +81,9 @@ export const getters = {
     })
 
     return comingSoon
-  }
+  },
+  getActiveShopLabel: state => state.activeShopLabel,
+  getActiveRoasterLabel: state => state.activeRoasterLabel
 }
 
 export const actions = {
@@ -91,6 +95,13 @@ export const actions = {
   },
   setSingleShopId ({ commit }, shopId) {
     commit('updateSingleShopId', shopId)
+  },
+  updateActiveCompanyLabel ({ commit }, shopName) {
+    commit('updateActiveCompanyLabel', shopName)
+  },
+  updateActiveRoasterLabel ({ commit }, roasterName) {
+    console.log('updateActiveRoasterLabel called')
+    commit('updateActiveRoasterLabel', roasterName)
   }
 }
 
@@ -103,6 +114,12 @@ export const mutations = {
   },
   updateSingleShopId (state, shopId) {
     state.singleShopId = shopId
+  },
+  updateActiveCompanyLabel (state, shopName) {
+    state.activeShopLabel = shopName
+  },
+  updateActiveRoasterLabel (state, roasterName) {
+    state.activeRoasterLabel = roasterName
   }
 }
 
