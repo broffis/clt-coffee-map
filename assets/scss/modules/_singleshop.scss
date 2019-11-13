@@ -10,6 +10,11 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    max-width: 865px;
+
+    @include breakpoint-sm {
+      margin: 0 auto;
+    }
   }
 
 
@@ -44,7 +49,8 @@
     }
 
     &--title {
-      font-size: 1.5rem;
+      margin-bottom: 10px;
+      font-size: 2rem;
       font-weight: bold;
       text-align: center;
 
@@ -62,14 +68,14 @@
       }
 
       .roaster {
-        font-size: 1rem;
+        font-size: 1.25rem;
         width: 100%;
         display: flex;
         flex-direction: row;
         
 
         @include breakpoint-sm {
-          font-size: 1.25rem;
+          font-size: 1.5rem;
           justify-content: center;
         }
 
@@ -106,8 +112,14 @@
           flex-direction: column;
 
           &--label {
-            font-weight: 600;
             margin-bottom: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+
+            @include breakpoint-sm {
+              margin-right: 20px;
+              font-size: 1.25rem;
+            }
           }
 
           &--text {
@@ -115,8 +127,22 @@
             transition: 0.3s ease-in;
             overflow: hidden;
 
+            @include breakpoint-sm {
+              margin-left: 25px;
+            }
+
             &.active {
               max-height: 500px;
+            }
+          }
+
+          &--action {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin: -5px 0 5px;
+
+            @include breakpoint-sm {
+              font-size: 1.5rem;
             }
           }
         }
@@ -125,16 +151,24 @@
           flex-direction: row;
 
           &--label {
-            margin-right: 5px;
+            margin-right: 5px;            
           }
         }
       }
     }
 
     .accordion-section {
-      display: flex;
-      justify-content: space-between;
-      padding-right: 15px;
+      &__label {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 15px;
+        border-bottom: 1px solid $clr-gray;
+
+        @include breakpoint-sm {
+         max-width: 200px;
+        }
+      }
     }
   }
 

@@ -45,8 +45,10 @@
                   class="accordion-section"
                   @click="toggleAbout()"
                 >
-                  <span class="about__info--label">About:&nbsp;</span>
-                  <span class="about__info--action">{{ aboutAction }}</span>
+                  <div class="accordion-section__label">
+                    <span class="about__info--label">About:&nbsp;</span>
+                    <span class="about__info--action">{{ aboutAction }}</span>
+                  </div>
                 </div>
                 <span
                   class="about__info--text"
@@ -61,8 +63,10 @@
                   class="accordion-section"
                   @click="toggleShopInfo()"
                 >
-                  <span class="about__special-info--label">Shop Info:&nbsp;</span>
-                  <span class="about__info--action">{{ shopInfoAction }}</span>
+                  <div class="accordion-section__label">
+                    <span class="about__special-info--label">Shop Info:&nbsp;</span>
+                    <span class="about__info--action">{{ shopInfoAction }}</span>
+                  </div>
                 </div>
                 <span
                   class="about__special-info--text"
