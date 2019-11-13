@@ -93,7 +93,7 @@ export const coffeeShops = [
     name: 'Undercurrent Coffee',
     id: 4,
     companyId: 4,
-    logo: '/images/logos/undercurrent-logo.png',
+    logo: '/images/logos/', // => Not approved yet
     websiteUrl: 'http://undercurrentcoffee.com/',
     facebookLink: 'https://www.facebook.com/undercurrent.coffee.clt/',
     twitterLink: 'https://twitter.com/undercurrentCLT',
@@ -134,7 +134,7 @@ export const coffeeShops = [
     name: 'Central Coffee Co',
     id: 5,
     companyId: 5,
-    logo: '/images/logos/centralcc-logo.png',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'http://www.centralcoffeeco.com/',
     facebookLink: 'https://www.facebook.com/CentralCoffeeCo/',
     instagramLink: 'https://www.instagram.com/centralcoffee/',
@@ -175,7 +175,7 @@ export const coffeeShops = [
     name: 'Hex Espresso Bar',
     id: 6,
     companyId: 6,
-    logo: '/images/logos/hex-logo.png',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://hex.coffee/',
     facebookLink: 'https://www.instagram.com/hexcoffee/',
     instagramLink: 'https://www.facebook.com/HEXcoffeeclt/',
@@ -216,7 +216,7 @@ export const coffeeShops = [
     name: 'Mugs Coffee',
     id: 7,
     companyId: 7,
-    logo: '/images/logos/mugs-logo.png',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'http://mugsofcharlotte.com/',
     facebookLink: 'https://www.facebook.com/Mugs-Coffee-188668647824076/',
     instagramLink: '',
@@ -246,7 +246,7 @@ export const coffeeShops = [
     name: 'Not Just Coffee',
     id: 8,
     companyId: 8,
-    logo: '/images/logos/notjustcoffee-logo.png',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://notjust.coffee/',
     facebookLink: '',
     instagramLink: 'https://www.instagram.com/notjustcoffee/',
@@ -361,7 +361,7 @@ export const coffeeShops = [
     name: 'Dilworth Coffee',
     id: 10,
     companyId: 10,
-    logo: '/images/logos/',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://www.dilworthcoffee.com/',
     facebookLink: 'https://www.facebook.com/DilworthCoffee/',
     instagramLink: 'https://www.instagram.com/dilworthcoffee/',
@@ -413,7 +413,7 @@ export const coffeeShops = [
     name: 'Okra Charlotte',
     id: 11,
     companyId: 11,
-    logo: '/images/logos/',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://www.okracharlotte.com/tea-coffee/',
     facebookLink: 'https://www.facebook.com/OkraCharlotte/',
     instagramLink: 'https://www.instagram.com/okracharlotte/',
@@ -443,7 +443,7 @@ export const coffeeShops = [
     name: 'Julia\'s Cafe & Books',
     id: 12,
     companyId: 12,
-    logo: '/images/logos/',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://www.juliascafe.org/',
     facebookLink: 'https://www.facebook.com/JuliasCoffee',
     instagramLink: 'https://www.instagram.com/juliascafeandbooks/',
@@ -473,7 +473,7 @@ export const coffeeShops = [
     name: 'Cafe Moka',
     id: 13,
     companyId: 13,
-    logo: '/images/logos/',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://www.cafemoka.us/',
     facebookLink: 'https://www.facebook.com/CafeMokaVA/',
     instagramLink: 'https://www.instagram.com/cafemokava/',
@@ -544,7 +544,7 @@ export const coffeeShops = [
     name: 'Lincoln\'s Haberdashery',
     id: 15,
     companyId: 15,
-    logo: '/images/logos/lincolns-logo.png',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://www.lincolnshaberdashery.com/',
     facebookLink: 'https://www.facebook.com/LincolnsHaberdashery/',
     instagramLink: 'https://www.instagram.com/lincolnshaberdashery/',
@@ -575,7 +575,7 @@ export const coffeeShops = [
     name: 'Smelly Cat Coffee House & Roastery',
     id: 16,
     companyId: 16,
-    logo: '/images/logos/smelly-cat-logo.jpg',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://smellycatcoffee.com/',
     facebookLink: 'https://www.facebook.com/SmellyCatCoffeehouse',
     instagramLink: 'https://www.instagram.com/smellycatcoffee/',
@@ -605,7 +605,7 @@ export const coffeeShops = [
     name: 'The Hobbyist',
     id: 17,
     companyId: 17,
-    logo: '/images/logos/hobbyist-logo.png',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://www.thehobbyistclt.com/',
     facebookLink: 'https://www.facebook.com/thehobbyistclt/',
     instagramLink: 'https://www.instagram.com/thehobbyistclt/',
@@ -635,7 +635,7 @@ export const coffeeShops = [
     name: 'Parliament Espresso & Coffee Bar',
     id: 18,
     companyId: 18,
-    logo: '/images/logos/',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://parliamentespresso.com/',
     facebookLink: 'https://www.facebook.com/ParliamentEspresso/',
     instagramLink: 'https://www.instagram.com/parliament_coffee/',
@@ -665,7 +665,7 @@ export const coffeeShops = [
     name: 'Trade and Lore Coffee',
     id: 19,
     companyId: 19,
-    logo: '/images/logos/trade-lore-logo.webp',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://www.tradeandlore.com/coffee-beer-charlotte-nc',
     facebookLink: 'https://www.facebook.com/tradeandlore/',
     instagramLink: 'https://www.instagram.com/tradeandlore/',
@@ -695,7 +695,7 @@ export const coffeeShops = [
     name: 'Ritual Coffee, Tea, and Oddities',
     id: 20,
     companyId: 20,
-    logo: '/images/logos/ritual-logo.png',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'http://ritualcoffeeteaoddities.com/',
     facebookLink: 'https://www.facebook.com/Ritualcoffeeteaoddities',
     instagramLink: 'https://www.instagram.com/ritualcoffeeteaoddities/',
@@ -725,7 +725,7 @@ export const coffeeShops = [
     name: 'Coco and the Director',
     id: 21,
     companyId: 21,
-    logo: '/images/logos/',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'http://cocoandthedirector.com/',
     facebookLink: 'https://www.facebook.com/CocoandtheDirector/',
     instagramLink: 'https://www.instagram.com/cocoandthedirector/',
@@ -755,7 +755,7 @@ export const coffeeShops = [
     name: 'Good Cup Coffee Company',
     id: 22,
     companyId: 22,
-    logo: '/images/logos/',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://www.thegoodcup.rocks/',
     facebookLink: 'https://www.facebook.com/goodcupcoffee.matthewsnc/',
     instagramLink: 'https://www.instagram.com/goodcup/',
@@ -785,7 +785,7 @@ export const coffeeShops = [
     name: 'CupLux Coffee Drive-Thru',
     id: 23,
     companyId: 23,
-    logo: '/images/logos/',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://www.cuplux.com/home',
     facebookLink: '',
     instagramLink: 'https://www.instagram.com/cuplux/',
@@ -815,7 +815,7 @@ export const coffeeShops = [
     name: 'Mugshots Coffee + Tea',
     id: 24,
     companyId: 24,
-    logo: '/images/logos/',
+    logo: '/images/logos/', // => Not approved
     websiteUrl: 'https://www.mugshotscoffeeandtea.com/',
     facebookLink: 'https://www.facebook.com/MugshotsSouthend/',
     instagramLink: 'https://www.instagram.com/mugshotsouthend/',
