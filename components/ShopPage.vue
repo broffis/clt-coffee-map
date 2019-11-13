@@ -1,68 +1,89 @@
 <template>
   <div class="single-shop-page">
-    <div class="single-shop-page__upper">
-      <div class="single-shop-page__upper--header">
+    <div class="single-shop-page__body">
+      <div class="single-shop-page__upper">
         <img
           v-if="hasLogo"
           class="single-shop-page__upper--logo"
           :src="logo"
         >
-      </div><!-- /.single-shop-page__upper--header -->
-      <div
-          class="single-shop-page__upper--title"
-        >
-          {{ name }}
-        </div><!-- /.single-shop-page__upper--title -->
-      <div class="single-shop-page__upper--text">
-        <div
-          v-if="roaster !== ''"
-          class="roaster"
-        >
-          <span class="roaster--label">Roaster:&nbsp;</span>
-          <span class="roaster--value">{{ roaster }}</span>
-        </div><!-- /.roaster -->
-      </div><!-- /.single-shop-page__upper--text -->
-    </div><!-- /.single-shop-page__upper -->
 
-    <div class="single-shop-page__lower">
-      <div class="single-shop-page__lower--location">
-        <!-- <span class="street">{{ streetAddress }}</span>
-        <span class="city">{{ city }}, {{ state }} {{ zipCode }}</span> -->
-      </div><!--/.single-shop-page__lower--location -->
+        <div class="single-shop-page__upper--text">
+          <div
+            class="single-shop-page__upper--title"
+          >
+            {{ name }}
+          </div><!-- /.single-shop-page__upper--title -->
+          <div
+            v-if="roaster !== ''"
+            class="roaster"
+          >
+            <span class="roaster--label">Roaster:&nbsp;</span>
+            <span class="roaster--value">{{ roaster }}</span>
+          </div><!-- /.roaster -->
+        </div><!-- /.single-shop-page__upper--text -->
+      </div><!-- /.single-shop-page__upper -->
 
-      <div class="single-shop-page__lower--text">
-        <map-image
-         v-for="(location, index) in locationData"
-         :key="index"
-         :location="location"
-        />
-        <div
-          class="about"
-        >
+      <div class="single-shop-page__lower">
+        <div class="single-shop-page__lower--text">
           <div
-            v-if="currentFavoriteDrink !== ''"
-            class="about__drink"
+            class="about"
           >
-            <span class="about__drink--label">Favorite Offering:</span>
-            <span clas="about__drink--text">{{ currentFavoriteDrink }}</span>
-          </div><!-- /.about__drink -->
-          <div
-            v-if="about !== ''"
-            class="about__info"
-          >
-            <span class="about__info--label">About:&nbsp;</span>
-            <span class="about__info--text">{{ about }}</span>
-          </div><!-- /.about__info -->
-          <div
-            v-if="shopInfo !== ''"
-            class="about__special-info"
-          >
-            <span class="about__special-info--label">Shop Info:&nbsp;</span>
-            <span class="about__special-info--text">{{ shopInfo }}</span>
-          </div><!-- /.about__special-info -->
-        </div><!-- /.about -->
-      </div><!-- /.single-shop-page__lower--text -->
-    </div><!-- /.single-shop-page__lower -->
+            <div
+              v-if="currentFavoriteDrink !== ''"
+              class="about__drink"
+            >
+              <span class="about__drink--label">Favorite Offering:</span>
+              <span clas="about__drink--text">{{ currentFavoriteDrink }}</span>
+            </div><!-- /.about__drink -->
+            <div class="about__info-section">
+              <div
+                v-if="about !== ''"
+                class="about__info"
+              >
+                <div
+                  class="accordion-section"
+                  @click="toggleAbout()"
+                >
+                  <span class="about__info--label">About:&nbsp;</span>
+                  <span class="about__info--action">{{ aboutAction }}</span>
+                </div>
+                <span
+                  class="about__info--text"
+                  :class="{ 'active' : aboutToggle }"
+                  >{{ about }}</span>
+              </div><!-- /.about__info -->
+              <div
+                v-if="shopInfo !== ''"
+                class="about__special-info"
+              >
+                <div
+                  class="accordion-section"
+                  @click="toggleShopInfo()"
+                >
+                  <span class="about__special-info--label">Shop Info:&nbsp;</span>
+                  <span class="about__info--action">{{ shopInfoAction }}</span>
+                </div>
+                <span
+                  class="about__special-info--text"
+                  :class="{ 'active' : shopInfoToggle }"
+                  >{{ shopInfo }}</span>
+              </div><!-- /.about__special-info -->
+
+            </div>
+            <p class="about__locations--label">
+              Locations:
+            </p>
+            <map-image
+              v-for="(location, index) in locationData"
+              :key="index"
+              :location="location"
+            />
+          </div><!-- /.about -->
+        </div><!-- /.single-shop-page__lower--text -->
+      </div><!-- /.single-shop-page__lower -->
+    </div><!-- /.single-shop-page__body -->
+
     <div class="single-shop-page__contact-info">
       <a
         v-if="hasWebsite"
@@ -127,7 +148,12 @@ export default {
       twitterLink: this.shop.twitterLink,
       facebookLink: this.shop.facebookLink,
       instagramLink: this.shop.instagramLink,
-      locationData: this.shop.locations
+      locationData: this.shop.locations,
+
+      aboutToggle: false,
+      aboutAction: '+',
+      shopInfoToggle: false,
+      shopInfoAction: '+'
     }
   },
 
@@ -146,6 +172,17 @@ export default {
     },
     hasLogo () {
       return this.logo && this.logo.length > 14
+    }
+  },
+
+  methods: {
+    toggleAbout () {
+      this.aboutToggle = !this.aboutToggle
+      this.aboutAction = this.aboutToggle ? '-' : '+'
+    },
+    toggleShopInfo () {
+      this.shopInfoToggle = !this.shopInfoToggle
+      this.shopInfoAction = this.shopInfoToggle ? '-' : '+'
     }
   }
 }

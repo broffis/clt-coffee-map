@@ -33,7 +33,7 @@
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'FiltersTest',
+  name: 'FilterDropDown',
 
   props: {
     sortType: {
@@ -66,22 +66,23 @@ export default {
   methods: {
     ...mapActions({
       setCompanyFilter: 'shops/updateCompanyFilter',
-      setRoasterFilter: 'shops/updateRoasterFilter'
+      setRoasterFilter: 'shops/updateRoasterFilter',
+      setCompanyFilterLabel: 'shops/updateActiveCompanyLabel',
+      setRoasterFilterLabel: 'shops/updateActiveRoasterLabel'
     }),
     changeSort (name, id) {
       this.toggleMenu = false
 
-      console.log('name', name)
-      console.log('id', id)
-
       if (this.sortType === 'roaster') {
-        this.activeLabel = name
+        // this.activeLabel = name
         this.setRoasterFilter(id)
+        this.setRoasterFilterLabel(name)
       }
 
       if (this.sortType === 'shop') {
-        this.selectedCompany = name
+        // this.selectedCompany = name
         this.setCompanyFilter(id)
+        this.setCompanyFilterLabel(name)
       }
     }
   }

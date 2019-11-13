@@ -1,13 +1,16 @@
 /* SHOP CARD */
 
 .single-shop-page {
-  background-color: $clr-white-cream;
-  border: 5px solid black;
   border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   min-height: 100vh;
+  overflow: auto;
+
+  &__body {
+    min-height: calc(100vh + -60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
 
 
   &__upper {
@@ -47,6 +50,7 @@
 
       @include breakpoint-sm {
         font-size: 3rem;
+        margin-bottom: 15px;
       }
     }
 
@@ -54,7 +58,7 @@
       margin: 10px 0;
 
       @include breakpoint-sm {
-        width: 70%;
+        max-width: 1100px;
       }
 
       .roaster {
@@ -66,6 +70,7 @@
 
         @include breakpoint-sm {
           font-size: 1.25rem;
+          justify-content: center;
         }
 
         &--label {
@@ -89,22 +94,30 @@
 
     &--text {
       @include breakpoint-sm {
-        width: 70%;
+        max-width: 1100px;
       }
 
       .about {
         margin: 10px 0;
 
-        &__drink, &__info, &__special-info {
+        &__drink, &__info, &__special-info, &__locations {
           margin-bottom: 10px;
           display: flex;
           flex-direction: column;
 
           &--label {
             font-weight: 600;
+            margin-bottom: 5px;
           }
 
           &--text {
+            max-height: 0px;
+            transition: 0.3s ease-in;
+            overflow: hidden;
+
+            &.active {
+              max-height: 500px;
+            }
           }
         }
 
@@ -116,6 +129,12 @@
           }
         }
       }
+    }
+
+    .accordion-section {
+      display: flex;
+      justify-content: space-between;
+      padding-right: 15px;
     }
   }
 

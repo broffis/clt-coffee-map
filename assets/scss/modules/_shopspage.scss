@@ -7,10 +7,31 @@
   flex-direction: column;
 
   @include breakpoint-xs {
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin: 0 auto;
+    // flex-direction: row;
+    // flex-wrap: wrap;
+    display: block;
+    margin: 0 25px;
     max-width: 1100px;
+  }
+
+  .filters {
+    display: flex;
+    flex-direction: column;
+    margin: 5px 10px;
+    justify-content: space-around;
+    transition: 0.5s;
+
+    @include breakpoint-sm {
+      flex-direction: row;
+    }
+  
+    &__roaster, &__company {
+      display: flex;
+      flex-direction: column;
+      width: 45%;
+      margin: 0 5px;
+      transition: 0.5s;
+    }
   }
 
   .header {
@@ -27,7 +48,6 @@
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: center;
-      margin: 0 25px;
       width: 100%;
     }
   }

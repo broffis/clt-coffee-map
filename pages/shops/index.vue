@@ -6,15 +6,17 @@
       </h1>
       <!-- <Filters /> -->
       <div class="filters">
-        <filters-test
+        <filter-drop-down
           sortType="shop"
           label="Filter by Shop:"
           :sortOptions="companies"
+          :activeLable="shopFilterLabel"
         />
-        <filters-test
+        <filter-drop-down
           sortType="roaster"
           label="Filter by Roaster:"
           :sortOptions="roasters"
+          :activeLabel="roasterFilterLabel"
         />
       </div>
 
@@ -40,15 +42,13 @@
 import { mapGetters } from 'vuex'
 import ShopCard from '@/components/ShopCard'
 import ShopComingSoon from '@/components/ShopComingSoon'
-// import Filters from '@/components/Filters'
-import FiltersTest from '@/components/FiltersTest'
+import FilterDropDown from '@/components/FilterDropDown'
 
 export default {
   components: {
     ShopCard,
     ShopComingSoon,
-    // Filters,
-    FiltersTest
+    FilterDropDown
   },
 
   computed: {
@@ -56,7 +56,9 @@ export default {
       shops: 'shops/getFilteredShops',
       comingSoon: 'shops/getShopsComingSoon',
       companies: 'shops/getCompanies',
-      roasters: 'shops/getRoasters'
+      roasters: 'shops/getRoasters',
+      roasterFilterLabel: 'shops/getActiveRoasterLabel',
+      shopFilterLabel: 'shops/getActiveShopLabel'
     })
   }
 }

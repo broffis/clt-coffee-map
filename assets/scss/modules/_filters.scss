@@ -1,28 +1,11 @@
-/* FILTERS */
-
-.filters {
-  display: flex;
-  margin: 5px 10px;
-  justify-content: space-around;
-  transition: 0.5s;
-
-  &__roaster, &__company {
-    display: flex;
-    flex-direction: column;
-    width: 45%;
-    margin: 0 5px;
-    transition: 0.5s;
-  }
-}
-
-
 .filters-dropdown {
-  @include z-index('filters_dropdown');
+  // @include z-index('filters_dropdown');
   display: inline-flex;
   position: relative;
   flex-direction: column;
   width: 100%;
   padding: 0 5px;
+  margin: 5px 0;
 
   &__label {
     display: flex;
@@ -49,6 +32,7 @@
     background-color: $clr-white;
     // box-shadow: 0 2px 8px 0 $clr-grey;
     list-style: none;
+    z-index: 4;
   }
 
   .menu-item {
