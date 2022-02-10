@@ -17,7 +17,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "firebase": "^6.6.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "nuxt": "^2.14.0",
     "sass-loader": "^8.0.0",
     "vuefire": "^2.1.2"
