@@ -35,6 +35,11 @@ Build a public, account-free directory that makes it easy to find local spots.
   optional.
 - Make the map and shop information usable on mobile and desktop. Provide a
   list-based way to find shops as an alternative to interacting with the map.
+- Deliver a server-rendered web app with a manifest, branded icons, and
+  home-screen presentation where supported. No native app is required; offline
+  support, service-worker caching, and notifications are deferred.
+- Prioritize fast access, quick loading, and availability. Keep the directory
+  usable when the map is slow or unavailable.
 
 **How to get there**
 
@@ -90,6 +95,10 @@ delete their own visits, notes, and favorites across sessions.
 Extend discovery to other cities without rebuilding the experience for each one.
 
 - Add city selection and city-specific shop discovery.
+- Require visitors to switch cities or regions explicitly rather than mixing
+  their shop results.
+- Support both a multi-region app and separately branded city or region apps
+  using the same platform.
 - Organize neighborhoods and shop locations under their respective cities.
 - Establish a repeatable process for researching, verifying, and maintaining
   each new city's curated data.
@@ -107,69 +116,95 @@ Extend discovery to other cities without rebuilding the experience for each one.
 **This stage is ready when** visitors can select between at least two cities
 and find the correct shops and neighborhoods in each.
 
-## Technical approach: options to evaluate
+## Technical approach
 
-Decisions remain open; select tools based on the desired experience, operating
-cost, maintenance effort, and terms of use.
+Use TanStack Start for the public PWA, Clerk for admin authentication, and a
+document database for shop data. The database provider and hosting remain
+undecided; "document database" does not mean Amazon DocumentDB specifically.
 
 Prioritize low ongoing cost, easy non-technical content editing, flexibility for
 future features, and data ownership and portability. The project owner has
 experience with React, TypeScript, Vue, and WordPress.
 
-| Area | Options to consider | Decision factors |
+| Area | Direction | Remaining considerations |
 | --- | --- | --- |
-| Web app | Static site or client-rendered app; a full-stack web framework | MVP simplicity, future accounts, hosting, and developer experience |
+| Public web app | TanStack Start with server-side rendering and lightweight PWA presentation | Hosting compatibility, caching, accessibility, and load performance |
+| Admin app | Separate private app for creating and editing shops | Editing workflow, framework, and deployment |
+| Admin authentication | Clerk | Sign-in method, admin authorization, recovery, and future MFA |
 | Map | A map library with OpenStreetMap-compatible data and tile services; a commercial map platform | Cost, usage limits, attribution, accessibility, styling, and provider terms |
-| MVP shop data | Managed content management system; hosted database with an admin interface | Non-code editing, access control, cost, backups, and migration as the directory grows |
-| Accounts and storage | Managed authentication and database; a custom backend and database | Security, operational overhead, portability, cost, and data ownership |
-| Hosting | Static hosting for the MVP; a platform supporting server-side functions or a backend later | Deployment simplicity, future requirements, and cost |
+| MVP shop data | Document database; provider undecided | Cost, access control, backups, and portability |
+| Hosting | SSR-capable hosting and CDN caching | Availability, cold starts, deployment simplicity, and cost |
 
-### Content management comparison
+### Application boundaries and availability
 
-Evaluate headless WordPress first, with a separate frontend consuming its REST
-API. This is a direction to validate, not a final CMS decision. Compare it with
-a hosted CMS if it does not meet the project's needs.
+Keep the public discovery app separate from the admin editing app. The public
+app's server-side data access must be read-only and expose only published shop
+data. Admin writes must verify the Clerk session and explicitly authorize the
+admin account on the server; being signed in alone does not grant edit access.
+Keep database credentials out of browser code.
 
-Use Local (formerly Local by Flywheel) to develop and evaluate WordPress on a
-computer. Local is a development environment, not the live hosting decision;
-production hosting remains open.
+Visitor suggestions use a separate submission path. Do not expose submissions
+or visitor contact details through public shop reads.
 
-| | WordPress | Hosted CMS with a separate frontend |
-| --- | --- | --- |
-| Editing | Familiar admin interface; structured shop fields may need configuration or plugins | Typically provides a structured content editor; capabilities vary by provider |
-| Operations | Self-hosting provides control but requires hosting, updates, and backups; managed hosting reduces that work | Provider manages the CMS, while the frontend still needs hosting |
-| Cost and portability | Hosting and plugins may cost money; evaluate export of structured fields and images | Pricing, usage limits, export formats, and media portability depend on the provider |
-| Future features | Evaluate integration with user accounts, visits, and favorites separately from content editing | A separate frontend can integrate account and journal services; CMS and service compatibility still need review |
+Render useful shop content on the server and load the interactive map
+separately. Evaluate CDN caching and cache refresh after edits so most public
+requests do not need a database query. SSR alone does not guarantee speed or
+availability; assess hosting reliability, cold starts, and behavior during
+dependency outages. Do not cache authenticated admin responses as public data.
 
-Evaluate real providers and plans against the project's budget, admin workflow,
-data export, backups, access control, and future account needs before deciding.
-For WordPress, prototype a structured shop entry and verify how administrators
-edit fields and photos, how the frontend reads them, and how both structured
-data and media can be exported. Compare managed and self-hosted options,
-including hosting, plugin, maintenance, and backup costs. A modest recurring
-cost is acceptable. Keep private user journals and visitor contact details out
-of public shop data.
+### White-label reuse
+
+Keep branding, including name, logo, colors, and enabled regions, configurable
+rather than hard-coded into the platform. Give shops a stable region ID while
+retaining city and neighborhood information. Launch Charlotte first; defer the
+multi-region interface and management workflow until expansion.
+
+Allow future reuse for both a multi-region app with a manual region switcher
+and separately branded regional deployments. Licensing to independent operators
+is a future possibility, not MVP scope. An operator may manage multiple regions;
+a region is not itself an authorization boundary. Defer the choice between
+isolated operator deployments and shared infrastructure with enforced operator
+isolation, along with licensing, billing, and self-service setup.
+
+### Shop data direction
+
+WordPress is not planned for the MVP because of cost concerns; reevaluate it
+later if the project's needs change. See [WP_EVALUATION.md](WP_EVALUATION.md)
+for the closed evaluation.
+
+Evaluate document database providers and plans that fit the project's budget.
+No database provider has been selected. Confirm the
+approach supports a private editor for authorized administrators, data and
+media export, backups, and access control. A modest recurring cost is
+acceptable. Keep visitor contact details out of public shop data.
+
+Use Clerk for managed authentication in the admin editor. Operating without
+multi-factor authentication (MFA) is acceptable for
+now, but increases the risk of an admin account compromise and unauthorized
+shop edits. Reevaluate MFA as the project grows or its security needs change,
+and verify the chosen provider's available sign-in methods, MFA support, and
+cost before launch.
 
 Keep the shop data separate from map presentation, and use stable location
-IDs from the start. Include an explicit city relationship in the data model so
+IDs from the start. Include an explicit region relationship in the data model so
 future expansion does not depend on Charlotte-specific assumptions. Avoid
-building account infrastructure or a multi-city management system before those
-stages need it.
+designing journal storage or building account infrastructure or a multi-city
+management system before those stages need them.
 
-## Open decisions
+## Open MVP decisions
 
 - Which official neighborhood dataset should be used, and how should locations
   be labeled where it does not provide suitable coverage?
-- Does headless WordPress meet the admin editor, cost, maintenance, and
-  portability requirements, and should it be managed or self-hosted?
-- Which production host should run WordPress after local development?
+- Which document database provider, photo storage, and admin editing workflow
+  best meet the cost, maintenance, access control, and portability requirements?
 - How should opening hours be maintained, and how often should other details be
   verified?
 - How should suggestion submissions reach administrators?
-- Which map provider, application stack, and hosting option best fit the
-  project's budget and maintenance preferences?
-- What rating scale should the journal use?
-- Which city should be added next, and what criteria make a city ready to launch?
+- Which map provider and SSR hosting/caching approach best fit the project's
+  budget, availability goals, and maintenance preferences?
+
+Journal and expansion decisions, including the rating scale and next city, are
+deferred until those stages.
 
 ## Project assets
 

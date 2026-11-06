@@ -1,8 +1,16 @@
-# Next Steps: Evaluate WordPress
+# WordPress Evaluation
 
-Use Local to test whether WordPress is a good fit for managing the coffee shop
-directory before choosing production hosting or building the frontend. The
-broader product plan and open decisions are in [ROADMAP.md](ROADMAP.md).
+**Status: Not for MVP. Reevaluate later.**
+
+Cost concerns make WordPress a less attractive approach for the MVP. The
+project will evaluate a NoSQL approach for coffee shop data instead; a database
+and provider have not yet been selected. Journaling is a later stage and does
+not need an implementation decision for the MVP. See [ROADMAP.md](ROADMAP.md)
+for the current direction.
+
+The following checklist records the previously proposed WordPress proof of
+concept. It is not required for the MVP and does not imply these checks were
+completed.
 
 ## 1. Create a local WordPress site
 
