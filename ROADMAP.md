@@ -152,6 +152,14 @@ requests do not need a database query. SSR alone does not guarantee speed or
 availability; assess hosting reliability, cold starts, and behavior during
 dependency outages. Do not cache authenticated admin responses as public data.
 
+### Delivery and releases
+
+Use Release Please as part of the CI pipeline once application development
+begins. The release workflow should use the repository's Conventional Commits
+to prepare release pull requests, update changelogs and versions, and create
+GitHub releases. Do not configure or enable the workflow until the application
+and deployment targets exist.
+
 ### White-label reuse
 
 Keep branding, including name, logo, colors, and enabled regions, configurable
