@@ -188,6 +188,14 @@ Justify new dependencies and review maintenance, license compatibility,
 security, browser bundle and runtime impact, and ongoing cost before adding
 them. Dependency-update automation still needs to be configured.
 
+Avoid Vercel-specific dependencies where practical. When introducing one,
+document it in deployment documentation and explain it in the PR, including
+its purpose, why a portable alternative was not chosen, affected boundaries,
+cost or limits, and replacement/removal steps. This includes host adapters,
+configuration, deployment hooks, and caching integrations, not just packages.
+Use an ADR for significant provider lock-in or a change to the hosting
+decision in [ADR 0006](../docs/decisions/0006-vercel-prerendered-hosting.md).
+
 ## Architecture decisions
 
 Record significant technical choices in short, numbered Architecture
