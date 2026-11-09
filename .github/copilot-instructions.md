@@ -2,14 +2,29 @@
 
 ## Repository status and commands
 
-This repository is currently in the planning stage. It contains the product
-roadmap, the historical WordPress evaluation, and the logo asset; there is no
-application source, package manifest, or configured build, test, or lint
-command yet.
+This repository has a pnpm workspace with separate TanStack Start shells in
+`apps/public` and `apps/admin`. Use Node 24 LTS and the pinned pnpm 12.15.0.
+There is no shop directory, live service integration, authorization, CI, or
+production deployment yet. See [README.md](../README.md) for setup and limits.
 
-Do not invent commands or claim that validation has run. When implementation
-begins, document the actual package-manager scripts here, including the
-targeted command for running one test.
+Run from the root: `pnpm install --frozen-lockfile`, `pnpm format:check`,
+`pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:coverage`, and `pnpm build`.
+Run one file with `pnpm test apps/public/tests/app.test.tsx`, or one named test
+with `pnpm test apps/public/tests/app.test.tsx -t "account-free"`.
+Use `pnpm dev:public` (port 3000) or `pnpm dev:admin` (port 3001) locally.
+
+Biome checks source/configuration, not Markdown, generated route trees, or the
+lockfile. Commit generated `routeTree.gen.ts` updates from Start dev/build,
+but do not edit them manually. Vitest covers all application source including
+unimported files, excluding only generated trees/declarations, with a combined
+90% branch threshold. Test files live outside `src`; tests use memory routers
+and isolated jsdom setup, with no service credentials. Keep app TypeScript
+projects separate because each registers its own router types.
+
+Only the public homepage is prerendered, into `apps/public/dist/client`.
+The admin shell exposes no private operations and is not an implemented
+authentication boundary. Do not claim that shell tests or a successful local
+build establish production authorization, deployment, or accessibility.
 
 ## Architecture
 
