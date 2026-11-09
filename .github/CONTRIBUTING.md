@@ -164,10 +164,15 @@ Use a supported Node.js LTS release, pinned at the major version level rather
 than to a specific minor or patch. Keep the selected major consistent across
 local development, CI, and deployment.
 
-Enable TypeScript strict mode. CI must check formatting, linting, types,
-tests and coverage, and production builds. Select the Node.js major, pnpm
-version, formatter, and linter during scaffolding after confirming TanStack
-Start compatibility.
+Use Node.js 24 LTS and pnpm 12.15.0 as declared in `.node-version` and the root
+package manifest. Strict TypeScript, Biome formatting/linting, and
+Vitest/Testing Library tests are configured for the separate public/admin
+workspace apps. See [README.md](../README.md) for the actual local commands,
+including one-test execution, generated files, and scaffold limitations.
+
+CI must check formatting, linting, types, tests and coverage, and production
+builds. Those local commands now exist; wiring workflows, critical E2E and
+accessibility checks, and every-commit enforcement remains separate CI work.
 
 ## Secrets and environments
 
