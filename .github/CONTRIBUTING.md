@@ -88,9 +88,10 @@ it pass in the commit body. Continue with further test/code increments as the
 feature develops. Keep independent refactoring in separate passing commits.
 Do not fabricate TDD evidence or commit deliberately failing checkpoints.
 
-Every commit must pass the required CI checks, not just the final PR head.
-When CI is configured, validate each commit in the PR rather than relying
-solely on a passing check for the latest commit.
+Keep each commit locally passing. CI validates the latest PR update's proposed
+merge snapshot, not each intermediate commit separately. New PR updates cancel
+superseded runs for that PR; the latest update must pass all required checks.
+Merge groups are checked separately.
 
 Squash merging preserves this progression in the PR history, not as separate
 commits on `main`; summarize the completed behavior in the squash commit.
@@ -174,10 +175,10 @@ workspace apps. See [README.md](../README.md) for the actual local commands,
 including one-test execution, generated files, and scaffold limitations.
 
 CI must check formatting, linting, types, tests and coverage, and production
-builds. Branch and main workflows run those commands, but GitHub execution,
-required-check configuration, and every-commit enforcement still need
-verification or implementation. Critical E2E and accessibility checks remain
-feature-time work.
+builds. Branch and main workflows run those commands, but GitHub execution and
+required-check configuration still need verification or implementation.
+Main and release runs are not canceled by newer pushes, to avoid interrupting
+release operations. Critical E2E and accessibility checks remain feature-time work.
 
 ## Secrets and environments
 
@@ -196,7 +197,10 @@ Include corresponding lockfile updates when package dependencies change.
 
 Justify new dependencies and review maintenance, license compatibility,
 security, browser bundle and runtime impact, and ongoing cost before adding
-them. Dependency-update automation still needs to be configured.
+them. Dependabot is configured for weekly workspace-package and GitHub Action
+version-update PRs; GitHub execution still needs verification. See
+[README.md](../README.md#dependency-updates) for the pnpm 12 dependency-graph
+limitation, review requirements, and replacement steps.
 
 Avoid Vercel-specific dependencies where practical. When introducing one,
 document it in deployment documentation and explain it in the PR, including

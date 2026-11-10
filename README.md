@@ -71,6 +71,9 @@ Biome currently formats/lints source and configuration, not Markdown or assets.
 
 Branch CI is being implemented in #53. `branch.yml` runs formatting, lint, types,
 coverage tests, and both production builds for pull requests and merge groups.
+It checks the latest PR update's proposed merge snapshot, not each intermediate
+commit. New updates cancel superseded runs for the same PR; other PRs and
+merge-group refs have separate concurrency groups.
 Its PR-only `PR title` job checks Conventional Commit syntax, including optional
 scopes and breaking-change
 `!` markers, and reruns when a PR title is edited. The MIT-licensed
@@ -81,14 +84,39 @@ validator. Actions use mutable major-version tags.
 
 `main.yml` repeats validation, coverage tests, and both production builds for
 the merged commit on pushes to `main`. Only after all three jobs succeed does
-it call `release.yml`. Neither workflow deploys the applications.
+it call `release.yml`. Main and release runs are not canceled by newer pushes,
+to avoid interrupting release operations. Neither workflow deploys the applications.
 
-Workflow execution still needs verification on GitHub. Every-commit validation,
-dependency-update automation, and E2E/browser accessibility tests are not
-implemented yet. #50 must require verified checks and enforce use of
+Workflow execution still needs verification on GitHub. E2E/browser accessibility
+tests are not implemented yet. #50 must require verified checks and enforce use of
 the PR title as the squash commit subject; a title check alone does not ensure
 the merged commit uses it. Unit/integration DOM checks do not replace production,
 keyboard, screen-reader, or critical-flow validation.
+
+## Dependency updates
+
+`.github/dependabot.yml` schedules weekly version-update checks for the pnpm
+workspace and GitHub Actions. The `npm` ecosystem entry at `/` covers the root
+and both workspace apps with their shared lockfile; the `github-actions` entry
+at `/` covers workflow Action references. Package PRs use `chore(deps)` and
+Action PRs use `ci(deps)` Conventional Commit prefixes. Keep Action references
+on major tags. Update PRs require normal independent review, CI, and squash
+merging; no auto-merge, bot bypass, or release App credentials are configured.
+Review related package versions together and retain Node 24 and frozen-lockfile
+compatibility rather than bypassing failed checks or pnpm's release-age policy.
+
+[GitHub documents pnpm 12 version-update support](https://docs.github.com/en/code-security/reference/supply-chain-security/supported-ecosystems-and-repositories#pnpm),
+but the current two-document `pnpm-lock.yaml` is not detected by its dependency
+graph. Dependabot alerts and security-update PRs are therefore not created for
+those lockfile dependencies. Weekly version updates do not replace vulnerability
+checks; use `pnpm audit` and review advisories.
+
+Dependabot is GitHub-hosted and adds no application package or paid service;
+runner usage and platform limits still apply. The configuration takes effect
+on the default branch, and the first update job/PR must verify workspace
+discovery, lockfile regeneration, title validation, and CI on GitHub. To remove
+or replace it, remove `.github/dependabot.yml` and configure the replacement
+updater; manifests and lockfiles remain standard pnpm files.
 
 ## Releases
 
