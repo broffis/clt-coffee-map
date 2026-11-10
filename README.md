@@ -69,10 +69,22 @@ work immediately after installation. Start regenerates them during dev/build; do
 edit them by hand. Biome ignores generated trees and the package-manager lockfile.
 Biome currently formats/lints source and configuration, not Markdown or assets.
 
-There are no CI workflows, E2E/browser accessibility tests, or release automation
-yet. #53 will wire verified local commands into CI; #50 will require the actual
-check names. Unit/integration DOM checks do not replace production, keyboard,
-screen-reader, or critical-flow validation.
+Branch CI is being implemented in #53. `branch.yml` runs formatting, lint, types,
+coverage tests, and both production builds for pull requests and merge groups.
+Its PR-only `PR title` job checks Conventional Commit syntax, including optional
+scopes and breaking-change
+`!` markers, and reruns when a PR title is edited. The MIT-licensed
+`amannn/action-semantic-pull-request@v6` provides the parser without adding an
+application dependency; it reads current PR metadata with a read-only token and
+does not check out source. It can be replaced by another Conventional Commits
+validator. Actions use mutable major-version tags.
+
+Workflow execution still needs verification on GitHub. Every-commit validation,
+the remaining checks, E2E/browser accessibility tests, and release automation
+are not implemented yet. #50 must require verified checks and enforce use of
+the PR title as the squash commit subject; a title check alone does not ensure
+the merged commit uses it. Unit/integration DOM checks do not replace production,
+keyboard, screen-reader, or critical-flow validation.
 
 ## Builds and portability
 
