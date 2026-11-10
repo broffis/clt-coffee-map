@@ -79,6 +79,9 @@ application dependency; it reads current PR metadata with a read-only token and
 does not check out source. It can be replaced by another Conventional Commits
 validator. Actions use mutable major-version tags.
 
+`main.yml` repeats validation, coverage tests, and both production builds for
+the merged commit on pushes to `main`. It does not deploy or create releases.
+
 Workflow execution still needs verification on GitHub. Every-commit validation,
 the remaining checks, E2E/browser accessibility tests, and release automation
 are not implemented yet. #50 must require verified checks and enforce use of
