@@ -80,3 +80,10 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build applications
         run: pnpm build
+
+  release:
+    name: Release
+    needs: [validation, tests, build]
+    uses: ./.github/workflows/release.yml
+    secrets:
+      app-private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}

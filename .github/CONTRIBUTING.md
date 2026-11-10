@@ -97,9 +97,12 @@ commits on `main`; summarize the completed behavior in the squash commit.
 
 ## Releases
 
-Release Please is planned for the CI pipeline. Keep commit types and breaking
-change annotations accurate so it can later prepare release pull requests,
-changelogs, versions, and GitHub releases automatically.
+Release Please is configured to run after successful main validation, tests,
+and builds, using a dedicated GitHub App. Public and admin versions/changelogs
+are independent, with first intended releases of 0.1.0. Keep commit types and
+breaking-change annotations accurate for release PRs and GitHub releases.
+Authentication and workflow execution must still be verified on GitHub;
+release automation does not deploy the applications.
 
 Release Please pull requests follow the same independent approval, required
 CI, and squash-merge rules as all other pull requests. There is no bot or
@@ -171,8 +174,10 @@ workspace apps. See [README.md](../README.md) for the actual local commands,
 including one-test execution, generated files, and scaffold limitations.
 
 CI must check formatting, linting, types, tests and coverage, and production
-builds. Those local commands now exist; wiring workflows, critical E2E and
-accessibility checks, and every-commit enforcement remains separate CI work.
+builds. Branch and main workflows run those commands, but GitHub execution,
+required-check configuration, and every-commit enforcement still need
+verification or implementation. Critical E2E and accessibility checks remain
+feature-time work.
 
 ## Secrets and environments
 

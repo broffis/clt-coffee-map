@@ -4,8 +4,12 @@
 
 This repository has a pnpm workspace with separate TanStack Start shells in
 `apps/public` and `apps/admin`. Use Node 24 LTS and the pinned pnpm 12.15.0.
-There is no shop directory, live service integration, authorization, CI, or
-production deployment yet. See [README.md](../README.md) for setup and limits.
+There is no shop directory, live service integration, authorization, or
+production deployment yet. Branch/main workflows run validation, coverage tests,
+and builds; main then calls App-authenticated Release Please. GitHub execution,
+release authentication, every-commit validation, and required-check enforcement
+still need verification or implementation. See [README.md](../README.md) for
+setup and limits.
 
 Run from the root: `pnpm install --frozen-lockfile`, `pnpm format:check`,
 `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:coverage`, and `pnpm build`.
