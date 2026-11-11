@@ -32,10 +32,17 @@ jobs:
           permission-contents: write
           permission-issues: write
           permission-pull-requests: write
-      - name: Prepare release PRs and publish merged releases
+      - name: Prepare public release PR and publish merged release
         uses: googleapis/release-please-action@v5
         with:
           token: ${{ steps.app-token.outputs.token }}
           target-branch: main
-          config-file: release-please-config.json
-          manifest-file: .release-please-manifest.json
+          config-file: apps/public/release-please-config.json
+          manifest-file: apps/public/.release-please-manifest.json
+      - name: Prepare admin release PR and publish merged release
+        uses: googleapis/release-please-action@v5
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          target-branch: main
+          config-file: apps/admin/release-please-config.json
+          manifest-file: apps/admin/.release-please-manifest.json
