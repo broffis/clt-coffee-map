@@ -69,10 +69,97 @@ work immediately after installation. Start regenerates them during dev/build; do
 edit them by hand. Biome ignores generated trees and the package-manager lockfile.
 Biome currently formats/lints source and configuration, not Markdown or assets.
 
-There are no CI workflows, E2E/browser accessibility tests, or release automation
-yet. #53 will wire verified local commands into CI; #50 will require the actual
-check names. Unit/integration DOM checks do not replace production, keyboard,
-screen-reader, or critical-flow validation.
+Branch CI is being implemented in #53. `branch.yml` runs formatting, lint, types,
+coverage tests, and both production builds for pull requests and merge groups.
+It checks the latest PR update's proposed merge snapshot, not each intermediate
+commit. New updates cancel superseded runs for the same PR; other PRs and
+merge-group refs have separate concurrency groups.
+Its PR-only `PR title` job checks Conventional Commit syntax, including optional
+scopes and breaking-change
+`!` markers, and reruns when a PR title is edited. The MIT-licensed
+`amannn/action-semantic-pull-request@v6` provides the parser without adding an
+application dependency; it reads current PR metadata with a read-only token and
+does not check out source. It can be replaced by another Conventional Commits
+validator. Actions use mutable major-version tags.
+
+`main.yml` repeats validation, coverage tests, and both production builds for
+the merged commit on pushes to `main`. Only after all three jobs succeed does
+it call `release.yml`. Main and release runs are not canceled by newer pushes,
+to avoid interrupting release operations. Neither workflow deploys the applications.
+
+Workflow execution still needs verification on GitHub. E2E/browser accessibility
+tests are not implemented yet. #50 must require verified checks and enforce use of
+the PR title as the squash commit subject; a title check alone does not ensure
+the merged commit uses it. Unit/integration DOM checks do not replace production,
+keyboard, screen-reader, or critical-flow validation.
+
+## Dependency updates
+
+`.github/dependabot.yml` schedules weekly version-update checks for the pnpm
+workspace and GitHub Actions. The `npm` ecosystem entry at `/` covers the root
+and both workspace apps with their shared lockfile; the `github-actions` entry
+at `/` covers workflow Action references. Package PRs use `chore(deps)` and
+Action PRs use `ci(deps)` Conventional Commit prefixes. Keep Action references
+on major tags. Update PRs require normal independent review, CI, and squash
+merging; no auto-merge, bot bypass, or release App credentials are configured.
+Review related package versions together and retain Node 24 and frozen-lockfile
+compatibility rather than bypassing failed checks or pnpm's release-age policy.
+
+[GitHub documents pnpm 12 version-update support](https://docs.github.com/en/code-security/reference/supply-chain-security/supported-ecosystems-and-repositories#pnpm),
+but the current two-document `pnpm-lock.yaml` is not detected by its dependency
+graph. Dependabot alerts and security-update PRs are therefore not created for
+those lockfile dependencies. Weekly version updates do not replace vulnerability
+checks; use `pnpm audit` and review advisories.
+
+Dependabot is GitHub-hosted and adds no application package or paid service;
+runner usage and platform limits still apply. The configuration takes effect
+on the default branch, and the first update job/PR must verify workspace
+discovery, lockfile regeneration, title validation, and CI on GitHub. To remove
+or replace it, remove `.github/dependabot.yml` and configure the replacement
+updater; manifests and lockfiles remain standard pnpm files.
+
+## Releases
+
+Release Please prepares independent release PRs, versions, and app-local
+`CHANGELOG.md` files for `apps/public` and `apps/admin`. Each app's first
+intended release is **0.1.0**, with distinct tags such as `public-v0.1.0` and
+`admin-v0.1.0`. The empty initial `.release-please-manifest.json` means neither
+app has a recorded release. The Node release strategy adds package versions
+and changelogs in the release PRs; these private apps are not published to npm.
+Root-only tooling changes do not automatically release both apps.
+
+`release.yml` is reusable-only and is called after successful main validation,
+tests, and builds. It prepares release PRs from Conventional Commits and creates
+tags/GitHub releases after release PRs merge. Release PRs still need independent
+approval, normal CI, and squash merging without bypass. Review the initial
+changelog contents before the first release.
+
+The workflow uses a dedicated GitHub App, installed only on this repository,
+with **Contents**, **Issues**, and **Pull requests** read/write permissions.
+Store its non-secret Client ID in the Actions repository variable
+`RELEASE_APP_CLIENT_ID` and its PEM private key in the Actions repository secret
+`RELEASE_APP_PRIVATE_KEY`. These are CI settings, not application environment
+variables; never put the key in `.env.example`, source, logs, or PR workflows.
+
+The MIT-licensed `actions/create-github-app-token@v3` mints a short-lived token,
+explicitly limited to this repository and those three permissions, and revokes
+it after the job. The `client-id` input uses the App's Client ID, not its numeric
+App ID. The Apache-2.0
+`googleapis/release-please-action@v5` uses the token so its PRs trigger normal CI,
+unlike PRs created using the default `GITHUB_TOKEN`. The default workflow token
+remains read-only, and release automation never checks out application source.
+
+App registration/token generation does not require a paid release service;
+workflow runner usage and GitHub API limits still apply. Protect and rotate the
+private key, remove superseded App keys, and revoke the installation/key if
+compromised. Do not grant the App ruleset bypass rights. To disable automation,
+remove the main workflow's release call and revoke its credentials. The versions,
+changelogs, and tags remain usable with replacement release tooling.
+
+These workflows take effect only after review and merge. Credential presence
+does not prove authentication or correct installation permissions; the first
+GitHub execution must verify token creation, normal release-PR CI, and release
+behavior. No deployment or successful release is claimed by local checks.
 
 ## Builds and portability
 

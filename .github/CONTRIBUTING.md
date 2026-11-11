@@ -88,18 +88,22 @@ it pass in the commit body. Continue with further test/code increments as the
 feature develops. Keep independent refactoring in separate passing commits.
 Do not fabricate TDD evidence or commit deliberately failing checkpoints.
 
-Every commit must pass the required CI checks, not just the final PR head.
-When CI is configured, validate each commit in the PR rather than relying
-solely on a passing check for the latest commit.
+Keep each commit locally passing. CI validates the latest PR update's proposed
+merge snapshot, not each intermediate commit separately. New PR updates cancel
+superseded runs for that PR; the latest update must pass all required checks.
+Merge groups are checked separately.
 
 Squash merging preserves this progression in the PR history, not as separate
 commits on `main`; summarize the completed behavior in the squash commit.
 
 ## Releases
 
-Release Please is planned for the CI pipeline. Keep commit types and breaking
-change annotations accurate so it can later prepare release pull requests,
-changelogs, versions, and GitHub releases automatically.
+Release Please is configured to run after successful main validation, tests,
+and builds, using a dedicated GitHub App. Public and admin versions/changelogs
+are independent, with first intended releases of 0.1.0. Keep commit types and
+breaking-change annotations accurate for release PRs and GitHub releases.
+Authentication and workflow execution must still be verified on GitHub;
+release automation does not deploy the applications.
 
 Release Please pull requests follow the same independent approval, required
 CI, and squash-merge rules as all other pull requests. There is no bot or
@@ -171,8 +175,10 @@ workspace apps. See [README.md](../README.md) for the actual local commands,
 including one-test execution, generated files, and scaffold limitations.
 
 CI must check formatting, linting, types, tests and coverage, and production
-builds. Those local commands now exist; wiring workflows, critical E2E and
-accessibility checks, and every-commit enforcement remains separate CI work.
+builds. Branch and main workflows run those commands, but GitHub execution and
+required-check configuration still need verification or implementation.
+Main and release runs are not canceled by newer pushes, to avoid interrupting
+release operations. Critical E2E and accessibility checks remain feature-time work.
 
 ## Secrets and environments
 
@@ -191,7 +197,10 @@ Include corresponding lockfile updates when package dependencies change.
 
 Justify new dependencies and review maintenance, license compatibility,
 security, browser bundle and runtime impact, and ongoing cost before adding
-them. Dependency-update automation still needs to be configured.
+them. Dependabot is configured for weekly workspace-package and GitHub Action
+version-update PRs; GitHub execution still needs verification. See
+[README.md](../README.md#dependency-updates) for the pnpm 12 dependency-graph
+limitation, review requirements, and replacement steps.
 
 Avoid Vercel-specific dependencies where practical. When introducing one,
 document it in deployment documentation and explain it in the PR, including

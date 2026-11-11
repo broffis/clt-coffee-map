@@ -4,8 +4,19 @@
 
 This repository has a pnpm workspace with separate TanStack Start shells in
 `apps/public` and `apps/admin`. Use Node 24 LTS and the pinned pnpm 12.15.0.
-There is no shop directory, live service integration, authorization, CI, or
-production deployment yet. See [README.md](../README.md) for setup and limits.
+There is no shop directory, live service integration, authorization, or
+production deployment yet. Branch/main workflows run validation, coverage tests,
+and builds; main then calls App-authenticated Release Please. Branch CI checks
+the latest PR merge snapshot and cancels superseded runs for that PR, rather
+than checking every intermediate commit. Main/release runs are not canceled.
+GitHub execution, release authentication, and required-check enforcement still
+need verification or implementation. See [README.md](../README.md) for setup
+and limits.
+
+Dependabot checks workspace packages and GitHub Actions weekly. Update PRs need
+normal review and CI, without auto-merge. The pnpm 12 two-document lockfile
+currently prevents dependency-graph alerts/security updates for its dependencies;
+version updates remain supported. See README for validation and limitations.
 
 Run from the root: `pnpm install --frozen-lockfile`, `pnpm format:check`,
 `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:coverage`, and `pnpm build`.
