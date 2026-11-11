@@ -4,11 +4,8 @@
   "initial-version": "0.1.0",
   "include-component-in-tag": true,
   "separate-pull-requests": true,
+  "always-update": true,
   "packages": {
-    "apps/public": {
-      "component": "public",
-      "changelog-path": "CHANGELOG.md"
-    },
     "apps/admin": {
       "component": "admin",
       "changelog-path": "CHANGELOG.md"

@@ -16,6 +16,17 @@
     "indentStyle": "space",
     "indentWidth": 2
   },
+  "overrides": [
+    {
+      "includes": [
+        "apps/public/.release-please-manifest.json",
+        "apps/admin/.release-please-manifest.json"
+      ],
+      "formatter": {
+        "enabled": false
+      }
+    }
+  ],
   "linter": {
     "enabled": true,
     "rules": {

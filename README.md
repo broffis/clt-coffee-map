@@ -68,6 +68,8 @@ Keep generated `src/routeTree.gen.ts` files in version control so types and test
 work immediately after installation. Start regenerates them during dev/build; do not
 edit them by hand. Biome ignores generated trees and the package-manager lockfile.
 Biome currently formats/lints source and configuration, not Markdown or assets.
+The app-specific Release Please manifests are excluded from formatting because
+they are generated; Biome still lints them.
 
 Branch CI is being implemented in #53. `branch.yml` runs formatting, lint, types,
 coverage tests, and both production builds for pull requests and merge groups.
@@ -123,10 +125,18 @@ updater; manifests and lockfiles remain standard pnpm files.
 Release Please prepares independent release PRs, versions, and app-local
 `CHANGELOG.md` files for `apps/public` and `apps/admin`. Each app's first
 intended release is **0.1.0**, with distinct tags such as `public-v0.1.0` and
-`admin-v0.1.0`. The empty initial `.release-please-manifest.json` means neither
-app has a recorded release. The Node release strategy adds package versions
-and changelogs in the release PRs; these private apps are not published to npm.
+`admin-v0.1.0`. Each app has its own `release-please-config.json` and
+`.release-please-manifest.json`; empty initial manifests mean neither app has
+a recorded release. The Node release strategy adds package versions and
+changelogs in the release PRs; these private apps are not published to npm.
 Root-only tooling changes do not automatically release both apps.
+
+The workflow processes the apps sequentially. `always-update` ensures existing
+release PRs are regenerated when their configuration or manifest path changes,
+even if their release notes do not. This may update open release PRs on later
+main pushes; remove it from both configs after verifying the migration if that
+churn is undesirable. Before merging release PRs, verify that each updates
+only its own app-local manifest, not the old shared manifest.
 
 `release.yml` is reusable-only and is called after successful main validation,
 tests, and builds. It prepares release PRs from Conventional Commits and creates
