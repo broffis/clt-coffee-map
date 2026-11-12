@@ -5,36 +5,58 @@ describe("shop details", () => {
   it("creates the first published snapshot from the draft", () => {
     const shop: Shop = {
       id: "shop-1",
-      draft: { name: "Coffee shop" },
+      draft: { name: "Coffee shop", links: null },
       published: null,
     };
 
-    expect(publishShopDetails(shop).published).toEqual({ name: "Coffee shop" });
+    expect(publishShopDetails(shop).published).toEqual({
+      name: "Coffee shop",
+      links: null,
+    });
     expect(shop.published).toBeNull();
   });
 
   it("publishes a snapshot without changing the draft", () => {
     const shop: Shop = {
       id: "shop-1",
-      draft: { name: "New name" },
-      published: { name: "Old name" },
+      draft: { name: "New name", links: null },
+      published: { name: "Old name", links: null },
     };
 
     const result = publishShopDetails(shop);
 
-    expect(result.published).toEqual({ name: "New name" });
+    expect(result.published).toEqual({ name: "New name", links: null });
     expect(result.published).not.toBe(shop.draft);
-    expect(shop.published).toEqual({ name: "Old name" });
+    expect(shop.published).toEqual({ name: "Old name", links: null });
+  });
+
+  it("keeps shared links in the published snapshot separate from the draft", () => {
+    const social = { label: "Instagram", url: "https://example.com/old" };
+    const links = { website: "https://example.com", other: [social] };
+    const shop: Shop = {
+      id: "shop-1",
+      draft: { name: "Coffee shop", links },
+      published: null,
+    };
+
+    const result = publishShopDetails(shop);
+    social.url = "https://example.com/new";
+    links.other.push({ label: "Menu", url: "https://example.com/menu" });
+
+    expect(result.published?.links).toEqual({
+      website: "https://example.com",
+      other: [{ label: "Instagram", url: "https://example.com/old" }],
+    });
   });
 
   it("rejects a blank name without changing the published details", () => {
     const shop: Shop = {
       id: "shop-1",
-      draft: { name: "  " },
-      published: { name: "Existing name" },
+      draft: { name: "  ", links: null },
+      published: { name: "Existing name", links: null },
     };
 
     expect(() => publishShopDetails(shop)).toThrow(RangeError);
-    expect(shop.published).toEqual({ name: "Existing name" });
+    expect(shop.published).toEqual({ name: "Existing name", links: null });
   });
 });

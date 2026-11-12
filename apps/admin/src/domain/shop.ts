@@ -1,5 +1,8 @@
+import { type ContactLinks, copyContactLinks } from "./links";
+
 export interface ShopDetails {
   readonly name: string;
+  readonly links: ContactLinks | null;
 }
 
 export interface Shop {
@@ -13,5 +16,8 @@ export function publishShopDetails(shop: Shop): Shop {
     throw new RangeError("Shop name must not be blank.");
   }
 
-  return { ...shop, published: { ...shop.draft } };
+  return {
+    ...shop,
+    published: { ...shop.draft, links: copyContactLinks(shop.draft.links) },
+  };
 }

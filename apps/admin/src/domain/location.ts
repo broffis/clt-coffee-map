@@ -1,3 +1,5 @@
+import { type ContactLinks, copyContactLinks } from "./links";
+
 export type LocationType =
   | "cafe"
   | "bakery"
@@ -32,6 +34,7 @@ export interface LocationDetails {
     readonly streetLine2: string | null;
     readonly postalCode: string | null;
   } | null;
+  readonly links: ContactLinks | null;
   readonly roasters: readonly string[] | null;
   readonly coffeeOptions: readonly CoffeeOption[] | null;
   readonly nonCoffeeDrinks: boolean | null;
@@ -55,6 +58,7 @@ export function publishLocationDetails(location: ShopLocation): ShopLocation {
       ...draft,
       coordinates: draft.coordinates === null ? null : { ...draft.coordinates },
       address: draft.address === null ? null : { ...draft.address },
+      links: copyContactLinks(draft.links),
       roasters: draft.roasters === null ? null : [...draft.roasters],
       coffeeOptions:
         draft.coffeeOptions === null ? null : [...draft.coffeeOptions],

@@ -281,7 +281,14 @@ shared shop details or published locations remain private drafts until
 explicitly published; unpublishing a location retains its curated data as a
 private draft. When a hidden shop's location is republished, its previously
 published shared details return; newer shared drafts still require explicit
-publication. Shared fields beyond the shop name remain to be decided.
+publication.
+
+Store addresses per location with street lines and postal code alongside the
+existing city and region relationships; an address may be unknown or absent
+for a mobile business. Shops and locations can each have a website and
+additional labeled links. How shared and location-specific links are presented
+together remains to be decided.
+Ownership of other fields remains open.
 
 Use Overture Places as the preferred initial source of shop location candidates;
 see [LOCATION_DATA.md](LOCATION_DATA.md) for the evaluation and licensing

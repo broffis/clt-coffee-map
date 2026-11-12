@@ -18,6 +18,7 @@ function location(shopId = "shop-1"): ShopLocation {
       type: "cafe",
       coordinates: { latitude: 35.2, longitude: -80.8 },
       address: null,
+      links: null,
       roasters: null,
       coffeeOptions: null,
       nonCoffeeDrinks: null,
@@ -31,14 +32,14 @@ describe("shop location lifecycle", () => {
   it("includes the shared details when publishing the first location", () => {
     const shop: Shop = {
       id: "shop-1",
-      draft: { name: "Coffee shop" },
+      draft: { name: "Coffee shop", links: null },
       published: null,
     };
     const draftLocation = location();
 
     const result = publishShopLocation(shop, draftLocation);
 
-    expect(result.shop.published).toEqual({ name: "Coffee shop" });
+    expect(result.shop.published).toEqual({ name: "Coffee shop", links: null });
     expect(result.location.published).toEqual(draftLocation.draft);
     expect(shop.published).toBeNull();
     expect(draftLocation.published).toBeNull();
@@ -48,8 +49,8 @@ describe("shop location lifecycle", () => {
     it("retains the current draft and hides the shop when its last location is unpublished", () => {
       const shop: Shop = {
         id: "shop-1",
-        draft: { name: "New name" },
-        published: { name: "Previous name" },
+        draft: { name: "New name", links: null },
+        published: { name: "Previous name", links: null },
       };
       const original = publishShopLocation(shop, location()).location;
       const edited: ShopLocation = {
@@ -74,8 +75,8 @@ describe("shop location lifecycle", () => {
     it("ignores other shops' locations and requires published shop details", () => {
       const shop: Shop = {
         id: "shop-1",
-        draft: { name: "Coffee shop" },
-        published: { name: "Coffee shop" },
+        draft: { name: "Coffee shop", links: null },
+        published: { name: "Coffee shop", links: null },
       };
       const otherShop = { ...shop, id: "shop-2" };
       const otherLocation = publishShopLocation(
@@ -94,8 +95,8 @@ describe("shop location lifecycle", () => {
     it("stays visible while another location remains published", () => {
       const shop: Shop = {
         id: "shop-1",
-        draft: { name: "Coffee shop" },
-        published: { name: "Coffee shop" },
+        draft: { name: "Coffee shop", links: null },
+        published: { name: "Coffee shop", links: null },
       };
       const first = publishShopLocation(shop, location()).location;
       const second = { ...first, id: "location-2" };
@@ -109,20 +110,23 @@ describe("shop location lifecycle", () => {
   it("keeps later shared edits private when publishing a location", () => {
     const shop: Shop = {
       id: "shop-1",
-      draft: { name: "New name" },
-      published: { name: "Previous name" },
+      draft: { name: "New name", links: null },
+      published: { name: "Previous name", links: null },
     };
 
     const result = publishShopLocation(shop, location());
 
-    expect(result.shop.published).toEqual({ name: "Previous name" });
+    expect(result.shop.published).toEqual({
+      name: "Previous name",
+      links: null,
+    });
     expect(result.location.published).not.toBeNull();
   });
 
   it("rejects a location belonging to another shop", () => {
     const shop: Shop = {
       id: "shop-1",
-      draft: { name: "Coffee shop" },
+      draft: { name: "Coffee shop", links: null },
       published: null,
     };
 
@@ -135,7 +139,7 @@ describe("shop location lifecycle", () => {
   it("rejects the first location if its shared shop name is blank", () => {
     const shop: Shop = {
       id: "shop-1",
-      draft: { name: " " },
+      draft: { name: " ", links: null },
       published: null,
     };
     const draftLocation = location();
