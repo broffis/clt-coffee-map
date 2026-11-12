@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import type { ShopLocation } from "../src/domain/location";
-import { publishShopLocation } from "../src/domain/publication";
+import {
+  isShopVisible,
+  publishShopLocation,
+  unpublishLocation,
+} from "../src/domain/publication";
 import type { Shop } from "../src/domain/shop";
 
 function location(shopId = "shop-1"): ShopLocation {
@@ -22,7 +26,7 @@ function location(shopId = "shop-1"): ShopLocation {
   };
 }
 
-describe("publishing a shop location", () => {
+describe("shop location lifecycle", () => {
   it("includes the shared details when publishing the first location", () => {
     const shop: Shop = {
       id: "shop-1",
@@ -37,6 +41,68 @@ describe("publishing a shop location", () => {
     expect(result.location.published).toEqual(draftLocation.draft);
     expect(shop.published).toBeNull();
     expect(draftLocation.published).toBeNull();
+  });
+
+  describe("unpublishing a shop location", () => {
+    it("retains the current draft and hides the shop when its last location is unpublished", () => {
+      const shop: Shop = {
+        id: "shop-1",
+        draft: { name: "New name" },
+        published: { name: "Previous name" },
+      };
+      const original = publishShopLocation(shop, location()).location;
+      const edited: ShopLocation = {
+        ...original,
+        draft: { ...original.draft, type: "bakery" },
+      };
+
+      const unpublished = unpublishLocation(edited);
+
+      expect(unpublished.published).toBeNull();
+      expect(unpublished.draft.type).toBe("bakery");
+      expect(edited.published?.type).toBe("cafe");
+      expect(isShopVisible(shop, [original])).toBe(true);
+      expect(isShopVisible(shop, [unpublished])).toBe(false);
+
+      const restored = publishShopLocation(shop, unpublished);
+      expect(restored.shop.published?.name).toBe("Previous name");
+      expect(restored.location.published?.type).toBe("bakery");
+      expect(isShopVisible(restored.shop, [restored.location])).toBe(true);
+    });
+
+    it("ignores other shops' locations and requires published shop details", () => {
+      const shop: Shop = {
+        id: "shop-1",
+        draft: { name: "Coffee shop" },
+        published: { name: "Coffee shop" },
+      };
+      const otherShop = { ...shop, id: "shop-2" };
+      const otherLocation = publishShopLocation(
+        otherShop,
+        location("shop-2"),
+      ).location;
+
+      expect(isShopVisible(shop, [location(), otherLocation])).toBe(false);
+      expect(
+        isShopVisible({ ...shop, published: null }, [
+          { ...location(), published: location().draft },
+        ]),
+      ).toBe(false);
+    });
+
+    it("stays visible while another location remains published", () => {
+      const shop: Shop = {
+        id: "shop-1",
+        draft: { name: "Coffee shop" },
+        published: { name: "Coffee shop" },
+      };
+      const first = publishShopLocation(shop, location()).location;
+      const second = { ...first, id: "location-2" };
+
+      expect(isShopVisible(shop, [unpublishLocation(first), second])).toBe(
+        true,
+      );
+    });
   });
 
   it("keeps later shared edits private when publishing a location", () => {

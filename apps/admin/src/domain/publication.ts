@@ -14,3 +14,19 @@ export function publishShopLocation(
     location: publishLocationDetails(location),
   };
 }
+
+export function unpublishLocation(location: ShopLocation): ShopLocation {
+  return { ...location, published: null };
+}
+
+export function isShopVisible(
+  shop: Shop,
+  locations: readonly ShopLocation[],
+): boolean {
+  return (
+    shop.published !== null &&
+    locations.some(
+      (location) => location.shopId === shop.id && location.published !== null,
+    )
+  );
+}
