@@ -1,4 +1,8 @@
-import { copyRegularHours, type RegularHours } from "./hours";
+import {
+  copyRegularHours,
+  type RegularHours,
+  validateRegularHours,
+} from "./hours";
 import { type ContactLinks, copyContactLinks } from "./links";
 import { copySources, type SourceReference } from "./sources";
 
@@ -70,6 +74,7 @@ export interface ShopLocation {
 export function publishLocationDetails(location: ShopLocation): ShopLocation {
   const { draft } = location;
   validateCoordinates(draft.coordinates);
+  validateRegularHours(draft.regularHours);
 
   return {
     ...location,

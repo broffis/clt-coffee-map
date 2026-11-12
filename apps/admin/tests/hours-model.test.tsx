@@ -6,6 +6,46 @@ import {
 } from "../src/domain/location";
 
 describe("regular hours", () => {
+  it("rejects regular hours without a source URL", () => {
+    const unknownDay = { status: "unknown" } as const;
+    const location: ShopLocation = {
+      id: "location-1",
+      shopId: "shop-1",
+      draft: {
+        regionId: "region-1",
+        cityId: "city-1",
+        neighborhoodId: null,
+        type: "cafe",
+        coordinates: null,
+        address: null,
+        links: null,
+        hoursInfoUrl: null,
+        regularHours: {
+          timeZone: "America/New_York",
+          source: { url: "", verifiedOn: "2026-11-12" },
+          days: {
+            monday: unknownDay,
+            tuesday: unknownDay,
+            wednesday: unknownDay,
+            thursday: unknownDay,
+            friday: unknownDay,
+            saturday: unknownDay,
+            sunday: unknownDay,
+          },
+        },
+        roasters: null,
+        coffeeOptions: null,
+        nonCoffeeDrinks: null,
+        food: null,
+        sources: null,
+      },
+      published: null,
+    };
+
+    expect(() => publishLocationDetails(location)).toThrow(RangeError);
+    expect(location.published).toBeNull();
+  });
+
   it("snapshots split and overnight hours and their verification details", () => {
     const periods = [
       { opensAt: "08:00", closesAt: "12:00", closesNextDay: false },

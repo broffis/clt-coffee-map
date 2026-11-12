@@ -285,9 +285,11 @@ publication.
 
 Store addresses per location with street lines and postal code alongside the
 existing city and region relationships; an address may be unknown or absent
-for a mobile business. Shops and locations can each have a website and
-additional labeled links. How shared and location-specific links are presented
-together remains to be decided.
+for a mobile business. A fixed location can be published with an unknown
+address or coordinates; without coordinates it appears in the list, not on
+the map. Shops and locations can each have a website and additional labeled
+links. How shared and location-specific links are presented together remains
+to be decided.
 Ownership of other fields remains open.
 
 Use Overture Places as the preferred initial source of shop location candidates;
