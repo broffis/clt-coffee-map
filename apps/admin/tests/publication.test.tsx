@@ -17,6 +17,7 @@ function location(shopId = "shop-1"): ShopLocation {
       neighborhoodId: null,
       type: "cafe",
       coordinates: { latitude: 35.2, longitude: -80.8 },
+      address: null,
       roasters: null,
       coffeeOptions: null,
       nonCoffeeDrinks: null,

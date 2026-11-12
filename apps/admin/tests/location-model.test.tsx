@@ -9,6 +9,11 @@ describe("location details", () => {
   it("publishes a separate snapshot without changing the existing location", () => {
     const coordinates = { latitude: 35.2, longitude: -80.8 };
     const roasters = ["Roaster"];
+    const address = {
+      streetLine1: "123 Main Street",
+      streetLine2: null,
+      postalCode: "28202",
+    };
     const location: ShopLocation = {
       id: "location-1",
       shopId: "shop-1",
@@ -18,6 +23,7 @@ describe("location details", () => {
         neighborhoodId: null,
         type: "cafe",
         coordinates,
+        address,
         roasters,
         coffeeOptions: ["espresso"],
         nonCoffeeDrinks: true,
@@ -29,10 +35,16 @@ describe("location details", () => {
     const result = publishLocationDetails(location);
     coordinates.latitude = 36;
     roasters.push("Another roaster");
+    address.streetLine1 = "456 Main Street";
 
     expect(result.published).toEqual({
       ...location.draft,
       coordinates: { latitude: 35.2, longitude: -80.8 },
+      address: {
+        streetLine1: "123 Main Street",
+        streetLine2: null,
+        postalCode: "28202",
+      },
       roasters: ["Roaster"],
     });
     expect(result.published?.coffeeOptions).not.toBe(
@@ -52,6 +64,7 @@ describe("location details", () => {
         neighborhoodId: null,
         type: "mobile coffee",
         coordinates: null,
+        address: null,
         roasters: null,
         coffeeOptions: null,
         nonCoffeeDrinks: null,
@@ -63,6 +76,7 @@ describe("location details", () => {
         neighborhoodId: null,
         type: "cafe",
         coordinates: { latitude: 35.2, longitude: -80.8 },
+        address: null,
         roasters: [],
         coffeeOptions: [],
         nonCoffeeDrinks: false,
@@ -84,6 +98,7 @@ describe("location details", () => {
         neighborhoodId: null,
         type: "cafe",
         coordinates: { latitude: 91, longitude: 0 },
+        address: null,
         roasters: null,
         coffeeOptions: null,
         nonCoffeeDrinks: null,

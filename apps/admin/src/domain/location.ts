@@ -27,6 +27,11 @@ export interface LocationDetails {
     readonly latitude: number;
     readonly longitude: number;
   } | null;
+  readonly address: {
+    readonly streetLine1: string | null;
+    readonly streetLine2: string | null;
+    readonly postalCode: string | null;
+  } | null;
   readonly roasters: readonly string[] | null;
   readonly coffeeOptions: readonly CoffeeOption[] | null;
   readonly nonCoffeeDrinks: boolean | null;
@@ -49,6 +54,7 @@ export function publishLocationDetails(location: ShopLocation): ShopLocation {
     published: {
       ...draft,
       coordinates: draft.coordinates === null ? null : { ...draft.coordinates },
+      address: draft.address === null ? null : { ...draft.address },
       roasters: draft.roasters === null ? null : [...draft.roasters],
       coffeeOptions:
         draft.coffeeOptions === null ? null : [...draft.coffeeOptions],
