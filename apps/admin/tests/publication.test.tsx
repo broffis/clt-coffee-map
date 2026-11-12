@@ -25,6 +25,7 @@ function location(shopId = "shop-1"): ShopLocation {
       coffeeOptions: null,
       nonCoffeeDrinks: null,
       food: null,
+      sources: null,
     },
     published: null,
   };
@@ -34,14 +35,18 @@ describe("shop location lifecycle", () => {
   it("includes the shared details when publishing the first location", () => {
     const shop: Shop = {
       id: "shop-1",
-      draft: { name: "Coffee shop", links: null },
+      draft: { name: "Coffee shop", links: null, sources: null },
       published: null,
     };
     const draftLocation = location();
 
     const result = publishShopLocation(shop, draftLocation);
 
-    expect(result.shop.published).toEqual({ name: "Coffee shop", links: null });
+    expect(result.shop.published).toEqual({
+      name: "Coffee shop",
+      links: null,
+      sources: null,
+    });
     expect(result.location.published).toEqual(draftLocation.draft);
     expect(shop.published).toBeNull();
     expect(draftLocation.published).toBeNull();
@@ -51,8 +56,8 @@ describe("shop location lifecycle", () => {
     it("retains the current draft and hides the shop when its last location is unpublished", () => {
       const shop: Shop = {
         id: "shop-1",
-        draft: { name: "New name", links: null },
-        published: { name: "Previous name", links: null },
+        draft: { name: "New name", links: null, sources: null },
+        published: { name: "Previous name", links: null, sources: null },
       };
       const original = publishShopLocation(shop, location()).location;
       const edited: ShopLocation = {
@@ -77,8 +82,8 @@ describe("shop location lifecycle", () => {
     it("ignores other shops' locations and requires published shop details", () => {
       const shop: Shop = {
         id: "shop-1",
-        draft: { name: "Coffee shop", links: null },
-        published: { name: "Coffee shop", links: null },
+        draft: { name: "Coffee shop", links: null, sources: null },
+        published: { name: "Coffee shop", links: null, sources: null },
       };
       const otherShop = { ...shop, id: "shop-2" };
       const otherLocation = publishShopLocation(
@@ -97,8 +102,8 @@ describe("shop location lifecycle", () => {
     it("stays visible while another location remains published", () => {
       const shop: Shop = {
         id: "shop-1",
-        draft: { name: "Coffee shop", links: null },
-        published: { name: "Coffee shop", links: null },
+        draft: { name: "Coffee shop", links: null, sources: null },
+        published: { name: "Coffee shop", links: null, sources: null },
       };
       const first = publishShopLocation(shop, location()).location;
       const second = { ...first, id: "location-2" };
@@ -112,8 +117,8 @@ describe("shop location lifecycle", () => {
   it("keeps later shared edits private when publishing a location", () => {
     const shop: Shop = {
       id: "shop-1",
-      draft: { name: "New name", links: null },
-      published: { name: "Previous name", links: null },
+      draft: { name: "New name", links: null, sources: null },
+      published: { name: "Previous name", links: null, sources: null },
     };
 
     const result = publishShopLocation(shop, location());
@@ -121,6 +126,7 @@ describe("shop location lifecycle", () => {
     expect(result.shop.published).toEqual({
       name: "Previous name",
       links: null,
+      sources: null,
     });
     expect(result.location.published).not.toBeNull();
   });
@@ -128,7 +134,7 @@ describe("shop location lifecycle", () => {
   it("rejects a location belonging to another shop", () => {
     const shop: Shop = {
       id: "shop-1",
-      draft: { name: "Coffee shop", links: null },
+      draft: { name: "Coffee shop", links: null, sources: null },
       published: null,
     };
 
@@ -141,7 +147,7 @@ describe("shop location lifecycle", () => {
   it("rejects the first location if its shared shop name is blank", () => {
     const shop: Shop = {
       id: "shop-1",
-      draft: { name: " ", links: null },
+      draft: { name: " ", links: null, sources: null },
       published: null,
     };
     const draftLocation = location();

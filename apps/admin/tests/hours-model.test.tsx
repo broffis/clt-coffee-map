@@ -45,6 +45,7 @@ describe("regular hours", () => {
         coffeeOptions: null,
         nonCoffeeDrinks: null,
         food: null,
+        sources: null,
       },
       published: null,
     };

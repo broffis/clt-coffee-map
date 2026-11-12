@@ -320,7 +320,13 @@ Maintain regular weekly hours manually from shop-controlled sources, per
 every three months and investigate reported changes sooner. Keep verification
 specific to hours, distinguish unknown hours from closed days, and do not
 present regular schedules as live availability. No automated hours provider,
-scraping, or reminder system is selected.
+scraping, or reminder system is selected. Model each day as unknown, closed,
+or open with one or more periods; support split, overnight, and 24-hour
+periods in the location's time zone.
+
+For other shop and location details, retain source references identifying the
+fields each source supports. Keep an actual verification date separate from
+source release information; an imported record is not automatically verified.
 
 Use Clerk's prebuilt authentication screens for email-code sign-in where
 practical. Do not enable password or social fallback methods without a

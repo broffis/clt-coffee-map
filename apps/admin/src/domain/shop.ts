@@ -1,8 +1,10 @@
 import { type ContactLinks, copyContactLinks } from "./links";
+import { copySources, type SourceReference } from "./sources";
 
 export interface ShopDetails {
   readonly name: string;
   readonly links: ContactLinks | null;
+  readonly sources: readonly SourceReference<"name" | "links">[] | null;
 }
 
 export interface Shop {
@@ -18,6 +20,10 @@ export function publishShopDetails(shop: Shop): Shop {
 
   return {
     ...shop,
-    published: { ...shop.draft, links: copyContactLinks(shop.draft.links) },
+    published: {
+      ...shop.draft,
+      links: copyContactLinks(shop.draft.links),
+      sources: copySources(shop.draft.sources),
+    },
   };
 }

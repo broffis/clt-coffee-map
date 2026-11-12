@@ -1,5 +1,6 @@
 import { copyRegularHours, type RegularHours } from "./hours";
 import { type ContactLinks, copyContactLinks } from "./links";
+import { copySources, type SourceReference } from "./sources";
 
 export type LocationType =
   | "cafe"
@@ -20,6 +21,20 @@ export type FoodOption =
   | "full menu"
   | "breakfast items"
   | "salads";
+
+export type LocationSourceField =
+  | "regionId"
+  | "cityId"
+  | "neighborhoodId"
+  | "type"
+  | "coordinates"
+  | "address"
+  | "links"
+  | "hoursInfoUrl"
+  | "roasters"
+  | "coffeeOptions"
+  | "nonCoffeeDrinks"
+  | "food";
 
 export interface LocationDetails {
   readonly regionId: string;
@@ -42,6 +57,7 @@ export interface LocationDetails {
   readonly coffeeOptions: readonly CoffeeOption[] | null;
   readonly nonCoffeeDrinks: boolean | null;
   readonly food: readonly FoodOption[] | null;
+  readonly sources: readonly SourceReference<LocationSourceField>[] | null;
 }
 
 export interface ShopLocation {
@@ -67,6 +83,7 @@ export function publishLocationDetails(location: ShopLocation): ShopLocation {
       coffeeOptions:
         draft.coffeeOptions === null ? null : [...draft.coffeeOptions],
       food: draft.food === null ? null : [...draft.food],
+      sources: copySources(draft.sources),
     },
   };
 }

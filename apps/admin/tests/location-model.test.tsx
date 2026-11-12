@@ -33,6 +33,7 @@ describe("location details", () => {
         coffeeOptions: ["espresso"],
         nonCoffeeDrinks: true,
         food: ["baked goods"],
+        sources: null,
       },
       published: null,
     };
@@ -82,6 +83,7 @@ describe("location details", () => {
         coffeeOptions: null,
         nonCoffeeDrinks: null,
         food: null,
+        sources: null,
       },
       published: {
         regionId: "region-1",
@@ -97,6 +99,7 @@ describe("location details", () => {
         coffeeOptions: [],
         nonCoffeeDrinks: false,
         food: [],
+        sources: null,
       },
     };
 
@@ -122,6 +125,7 @@ describe("location details", () => {
         coffeeOptions: null,
         nonCoffeeDrinks: null,
         food: null,
+        sources: null,
       },
       published: null,
     };
