@@ -34,7 +34,7 @@ Review completion criteria also remain open.
 | Regular weekly hours | Possible lead from a provider; verify against a shop-controlled source |
 | Roaster supplying the beans | Manually curate and verify |
 | Coffee options | Manually curate: espresso, drip, pour-over, cold brew, and milk drinks |
-| Non-coffee drinks and food | Separate manually curated fields |
+| Non-coffee drinks and food | Separate manually curated fields; food options include baked goods, sandwiches, full menu, breakfast items, and salads |
 | Description, menu link, and photo | Curated when available; verify photo reuse rights |
 | Neighborhood/community | Administrator-reviewed assignment, not a provider-derived boundary |
 

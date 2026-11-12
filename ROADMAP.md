@@ -31,9 +31,10 @@ Build a public, account-free directory that makes it easy to find local spots.
 - Assign each location one primary type: cafe, bakery, mobile coffee, or coffee
   roaster. Revisit the categories as the directory grows.
 - Include the bean roaster, coffee options (espresso, drip, pour-over, cold
-  brew, and milk drinks), non-coffee drinks, and food when known. Administrators
-  curate and verify these details; distinguish unknown information from a
-  confirmed absence.
+  brew, and milk drinks), non-coffee drinks, and food when known. Food options
+  include baked goods, sandwiches, full menu, breakfast items, and salads.
+  Administrators curate and verify these details; distinguish unknown
+  information from a confirmed absence.
 - Provide a form for visitors to suggest shops or corrections. Administrators
   review submissions in a private admin inbox and decide whether to update
   the directory. Store submissions separately in Atlas; administrators check
