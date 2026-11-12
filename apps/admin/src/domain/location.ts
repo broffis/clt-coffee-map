@@ -18,23 +18,47 @@ export type FoodOption =
   | "breakfast items"
   | "salads";
 
+export interface LocationDetails {
+  readonly regionId: string;
+  readonly cityId: string;
+  readonly neighborhoodId: string | null;
+  readonly type: LocationType;
+  readonly coordinates: {
+    readonly latitude: number;
+    readonly longitude: number;
+  } | null;
+  readonly roasters: readonly string[] | null;
+  readonly coffeeOptions: readonly CoffeeOption[] | null;
+  readonly nonCoffeeDrinks: boolean | null;
+  readonly food: readonly FoodOption[] | null;
+}
+
 export interface ShopLocation {
-  id: string;
-  shopId: string;
-  regionId: string;
-  cityId: string;
-  neighborhoodId: string | null;
-  type: LocationType;
-  status: "draft" | "published";
-  coordinates: { latitude: number; longitude: number } | null;
-  roasters: readonly string[] | null;
-  coffeeOptions: readonly CoffeeOption[] | null;
-  nonCoffeeDrinks: boolean | null;
-  food: readonly FoodOption[] | null;
+  readonly id: string;
+  readonly shopId: string;
+  readonly draft: LocationDetails;
+  readonly published: LocationDetails | null;
+}
+
+export function publishLocationDetails(location: ShopLocation): ShopLocation {
+  const { draft } = location;
+  validateCoordinates(draft.coordinates);
+
+  return {
+    ...location,
+    published: {
+      ...draft,
+      coordinates: draft.coordinates === null ? null : { ...draft.coordinates },
+      roasters: draft.roasters === null ? null : [...draft.roasters],
+      coffeeOptions:
+        draft.coffeeOptions === null ? null : [...draft.coffeeOptions],
+      food: draft.food === null ? null : [...draft.food],
+    },
+  };
 }
 
 export function validateCoordinates(
-  coordinates: ShopLocation["coordinates"],
+  coordinates: LocationDetails["coordinates"],
 ): void {
   if (coordinates === null) {
     return;

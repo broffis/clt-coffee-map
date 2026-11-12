@@ -1,5 +1,101 @@
 import { describe, expect, it } from "vitest";
-import { validateCoordinates } from "../src/domain/location";
+import {
+  publishLocationDetails,
+  type ShopLocation,
+  validateCoordinates,
+} from "../src/domain/location";
+
+describe("location details", () => {
+  it("publishes a separate snapshot without changing the existing location", () => {
+    const coordinates = { latitude: 35.2, longitude: -80.8 };
+    const roasters = ["Roaster"];
+    const location: ShopLocation = {
+      id: "location-1",
+      shopId: "shop-1",
+      draft: {
+        regionId: "region-1",
+        cityId: "city-1",
+        neighborhoodId: null,
+        type: "cafe",
+        coordinates,
+        roasters,
+        coffeeOptions: ["espresso"],
+        nonCoffeeDrinks: true,
+        food: ["baked goods"],
+      },
+      published: null,
+    };
+
+    const result = publishLocationDetails(location);
+    coordinates.latitude = 36;
+    roasters.push("Another roaster");
+
+    expect(result.published).toEqual({
+      ...location.draft,
+      coordinates: { latitude: 35.2, longitude: -80.8 },
+      roasters: ["Roaster"],
+    });
+    expect(result.published?.coffeeOptions).not.toBe(
+      location.draft.coffeeOptions,
+    );
+    expect(result.published?.food).not.toBe(location.draft.food);
+    expect(location.published).toBeNull();
+  });
+
+  it("preserves unknown fields when republishing", () => {
+    const location: ShopLocation = {
+      id: "location-1",
+      shopId: "shop-1",
+      draft: {
+        regionId: "region-1",
+        cityId: "city-1",
+        neighborhoodId: null,
+        type: "mobile coffee",
+        coordinates: null,
+        roasters: null,
+        coffeeOptions: null,
+        nonCoffeeDrinks: null,
+        food: null,
+      },
+      published: {
+        regionId: "region-1",
+        cityId: "city-1",
+        neighborhoodId: null,
+        type: "cafe",
+        coordinates: { latitude: 35.2, longitude: -80.8 },
+        roasters: [],
+        coffeeOptions: [],
+        nonCoffeeDrinks: false,
+        food: [],
+      },
+    };
+
+    expect(publishLocationDetails(location).published).toEqual(location.draft);
+    expect(location.published?.type).toBe("cafe");
+  });
+
+  it("rejects invalid coordinates instead of replacing published details", () => {
+    const location: ShopLocation = {
+      id: "location-1",
+      shopId: "shop-1",
+      draft: {
+        regionId: "region-1",
+        cityId: "city-1",
+        neighborhoodId: null,
+        type: "cafe",
+        coordinates: { latitude: 91, longitude: 0 },
+        roasters: null,
+        coffeeOptions: null,
+        nonCoffeeDrinks: null,
+        food: null,
+      },
+      published: null,
+    };
+
+    expect(() => publishLocationDetails(location)).toThrow(RangeError);
+    expect(location.published).toBeNull();
+  });
+});
 
 describe("location coordinates", () => {
   it("accepts missing coordinates and valid geographic limits", () => {
