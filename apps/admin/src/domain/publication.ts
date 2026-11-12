@@ -1,3 +1,4 @@
+import { validateIdentifier } from "./identifiers";
 import { publishLocationDetails, type ShopLocation } from "./location";
 import { publishShopDetails, type Shop } from "./shop";
 
@@ -5,6 +6,7 @@ export function publishShopLocation(
   shop: Shop,
   location: ShopLocation,
 ): { shop: Shop; location: ShopLocation } {
+  validateIdentifier(shop.id, "Shop ID");
   if (location.shopId !== shop.id) {
     throw new Error("Location does not belong to the shop.");
   }

@@ -72,4 +72,14 @@ describe("shop details", () => {
       sources: null,
     });
   });
+
+  it("rejects a shop without an identity", () => {
+    const shop: Shop = {
+      id: " ",
+      draft: { name: "Coffee shop", links: null, sources: null },
+      published: null,
+    };
+
+    expect(() => publishShopDetails(shop)).toThrow(RangeError);
+  });
 });

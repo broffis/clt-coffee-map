@@ -3,6 +3,7 @@ import {
   type RegularHours,
   validateRegularHours,
 } from "./hours";
+import { validateIdentifier } from "./identifiers";
 import { type ContactLinks, copyContactLinks } from "./links";
 import { copySources, type SourceReference } from "./sources";
 
@@ -73,6 +74,13 @@ export interface ShopLocation {
 
 export function publishLocationDetails(location: ShopLocation): ShopLocation {
   const { draft } = location;
+  validateIdentifier(location.id, "Location ID");
+  validateIdentifier(location.shopId, "Shop ID");
+  validateIdentifier(draft.regionId, "Region ID");
+  validateIdentifier(draft.cityId, "City ID");
+  if (draft.neighborhoodId !== null) {
+    validateIdentifier(draft.neighborhoodId, "Neighborhood ID");
+  }
   validateCoordinates(draft.coordinates);
   validateRegularHours(draft.regularHours);
 

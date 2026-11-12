@@ -1,3 +1,4 @@
+import { validateIdentifier } from "./identifiers";
 import { type ContactLinks, copyContactLinks } from "./links";
 import { copySources, type SourceReference } from "./sources";
 
@@ -14,6 +15,7 @@ export interface Shop {
 }
 
 export function publishShopDetails(shop: Shop): Shop {
+  validateIdentifier(shop.id, "Shop ID");
   if (shop.draft.name.trim().length === 0) {
     throw new RangeError("Shop name must not be blank.");
   }

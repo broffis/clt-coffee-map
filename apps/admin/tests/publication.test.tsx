@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { ShopLocation } from "../src/domain/location";
+import {
+  publishLocationDetails,
+  type ShopLocation,
+} from "../src/domain/location";
 import {
   isShopVisible,
   publishShopLocation,
@@ -142,6 +145,54 @@ describe("shop location lifecycle", () => {
       "Location does not belong to the shop.",
     );
     expect(shop.published).toBeNull();
+  });
+
+  it("allows a fixed location without an address or coordinates", () => {
+    const shop: Shop = {
+      id: "shop-1",
+      draft: { name: "Coffee shop", links: null, sources: null },
+      published: null,
+    };
+    const draftLocation = location();
+    const withoutAddress = {
+      ...draftLocation,
+      draft: { ...draftLocation.draft, address: null, coordinates: null },
+    };
+
+    expect(
+      publishShopLocation(shop, withoutAddress).location.published,
+    ).toEqual(withoutAddress.draft);
+  });
+
+  it.each([{ id: "" }, { shopId: " " }])(
+    "rejects a location with a missing identity: %o",
+    (invalid) => {
+      expect(() =>
+        publishLocationDetails({ ...location(), ...invalid }),
+      ).toThrow(RangeError);
+    },
+  );
+
+  it.each([{ regionId: "" }, { cityId: " " }, { neighborhoodId: "" }])(
+    "rejects a location with a blank geographic reference: %o",
+    (invalid) => {
+      const draftLocation = location();
+      expect(() =>
+        publishLocationDetails({
+          ...draftLocation,
+          draft: { ...draftLocation.draft, ...invalid },
+        }),
+      ).toThrow(RangeError);
+    },
+  );
+
+  it("rejects a blank shop ID even if shared details were previously published", () => {
+    const shop: Shop = {
+      id: " ",
+      draft: { name: "Coffee shop", links: null, sources: null },
+      published: { name: "Coffee shop", links: null, sources: null },
+    };
+    expect(() => publishShopLocation(shop, location(" "))).toThrow(RangeError);
   });
 
   it("rejects the first location if its shared shop name is blank", () => {
