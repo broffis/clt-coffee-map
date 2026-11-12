@@ -41,8 +41,9 @@ Review completion criteria also remain open.
 Stable internal shop and location IDs, region relationships, publication state,
 source references, and verification dates are application metadata, not
 requirements on a provider. External IDs support matching but do not replace
-our IDs. Field ownership, multiple roasters, and unknown-value semantics remain
-open design questions.
+our IDs. A shop owns its shared name, while offerings and multiple roasters
+belong to each location; unknown offerings are distinct from confirmed absence.
+Ownership of other fields remains to be decided.
 
 Regular hours currently follow [ADR 0008](docs/decisions/0008-manually-maintained-opening-hours.md):
 verify against a shop-controlled source, record an hours-specific source and

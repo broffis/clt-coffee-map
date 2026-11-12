@@ -274,6 +274,13 @@ TanStack Start, and TanStack Form, per
 and deployment configuration remain open.
 Keep visitor contact details out of public shop data.
 
+A shop may have multiple independently published locations. Its shared name
+is public only when at least one location is published. Publishing the first
+location also publishes the current shared shop details. Later changes to
+shared shop details or published locations remain private drafts until
+explicitly published; unpublishing a location retains its curated data as a
+private draft. Shared fields beyond the shop name remain to be decided.
+
 Use Overture Places as the preferred initial source of shop location candidates;
 see [LOCATION_DATA.md](LOCATION_DATA.md) for the evaluation and licensing
 review. Source records can suggest names, addresses, coordinates, categories,
