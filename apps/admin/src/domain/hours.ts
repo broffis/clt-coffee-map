@@ -60,6 +60,62 @@ export function validateRegularHours(hours: RegularHours | null): void {
     }
     throw error;
   }
+
+  validatePeriods(hours.days);
+}
+
+function minutesSinceMidnight(time: string): number {
+  if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) {
+    throw new RangeError("Opening periods require valid local times.");
+  }
+  return Number(time.slice(0, 2)) * 60 + Number(time.slice(3, 5));
+}
+
+function validatePeriods(days: RegularHours["days"]): void {
+  const intervals: { start: number; end: number }[] = [];
+  const week = [
+    days.monday,
+    days.tuesday,
+    days.wednesday,
+    days.thursday,
+    days.friday,
+    days.saturday,
+    days.sunday,
+  ];
+
+  week.forEach((day, index) => {
+    if (day.status !== "open") {
+      return;
+    }
+    if (day.periods.length === 0) {
+      throw new RangeError("An open day requires at least one period.");
+    }
+
+    for (const period of day.periods) {
+      const start = index * 1440 + minutesSinceMidnight(period.opensAt);
+      const end =
+        index * 1440 +
+        minutesSinceMidnight(period.closesAt) +
+        (period.closesNextDay ? 1440 : 0);
+      if (end <= start) {
+        throw new RangeError("An opening period must end after it starts.");
+      }
+      intervals.push({ start, end });
+    }
+  });
+
+  intervals.sort((a, b) => a.start - b.start);
+  for (let index = 1; index < intervals.length; index += 1) {
+    if (intervals[index - 1].end > intervals[index].start) {
+      throw new RangeError("Opening periods must not overlap.");
+    }
+  }
+  if (
+    intervals.length > 0 &&
+    intervals[intervals.length - 1].end > intervals[0].start + 7 * 1440
+  ) {
+    throw new RangeError("Opening periods must not overlap.");
+  }
 }
 
 function copyDayHours(day: DayHours): DayHours {

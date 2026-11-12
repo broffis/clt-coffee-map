@@ -23,6 +23,99 @@ describe("regular hours verification", () => {
     expect(() => validateRegularHours(hours())).not.toThrow();
   });
 
+  describe("regular hours periods", () => {
+    it("accepts split, overnight, and adjacent 24-hour periods", () => {
+      const regular = hours();
+      expect(() =>
+        validateRegularHours({
+          ...regular,
+          days: {
+            ...regular.days,
+            monday: {
+              status: "open",
+              periods: [
+                { opensAt: "08:00", closesAt: "12:00", closesNextDay: false },
+                { opensAt: "20:00", closesAt: "02:00", closesNextDay: true },
+              ],
+            },
+            wednesday: {
+              status: "open",
+              periods: [
+                { opensAt: "00:00", closesAt: "00:00", closesNextDay: true },
+              ],
+            },
+            thursday: {
+              status: "open",
+              periods: [
+                { opensAt: "00:00", closesAt: "00:00", closesNextDay: true },
+              ],
+            },
+          },
+        }),
+      ).not.toThrow();
+    });
+
+    it.each([
+      { periods: [] },
+      {
+        periods: [{ opensAt: "9:00", closesAt: "17:00", closesNextDay: false }],
+      },
+      {
+        periods: [
+          { opensAt: "08:00", closesAt: "24:00", closesNextDay: false },
+        ],
+      },
+      {
+        periods: [
+          { opensAt: "08:00", closesAt: "08:00", closesNextDay: false },
+        ],
+      },
+      {
+        periods: [
+          { opensAt: "17:00", closesAt: "08:00", closesNextDay: false },
+        ],
+      },
+      {
+        periods: [
+          { opensAt: "08:00", closesAt: "12:00", closesNextDay: false },
+          { opensAt: "11:00", closesAt: "13:00", closesNextDay: false },
+        ],
+      },
+    ])("rejects malformed or overlapping periods: %o", ({ periods }) => {
+      const regular = hours();
+      expect(() =>
+        validateRegularHours({
+          ...regular,
+          days: { ...regular.days, monday: { status: "open", periods } },
+        }),
+      ).toThrow(RangeError);
+    });
+
+    it("rejects overlapping overnight periods across the end of the week", () => {
+      const regular = hours();
+      expect(() =>
+        validateRegularHours({
+          ...regular,
+          days: {
+            ...regular.days,
+            sunday: {
+              status: "open",
+              periods: [
+                { opensAt: "22:00", closesAt: "02:00", closesNextDay: true },
+              ],
+            },
+            monday: {
+              status: "open",
+              periods: [
+                { opensAt: "01:00", closesAt: "04:00", closesNextDay: false },
+              ],
+            },
+          },
+        }),
+      ).toThrow(RangeError);
+    });
+  });
+
   it.each([
     { source: { url: "", verifiedOn: "2024-02-29" } },
     { source: { url: "javascript:alert(1)", verifiedOn: "2024-02-29" } },
