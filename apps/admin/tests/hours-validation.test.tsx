@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { type RegularHours, validateRegularHours } from "../src/domain/hours";
 
 function hours(): RegularHours {
@@ -21,6 +21,28 @@ describe("regular hours verification", () => {
   it("accepts unknown hours and valid source metadata", () => {
     expect(() => validateRegularHours(null)).not.toThrow();
     expect(() => validateRegularHours(hours())).not.toThrow();
+  });
+
+  it("rejects a future verification date in the location's time zone", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-11-12T03:00:00Z"));
+    try {
+      const regular = hours();
+      expect(() =>
+        validateRegularHours({
+          ...regular,
+          source: { ...regular.source, verifiedOn: "2026-11-12" },
+        }),
+      ).toThrow(RangeError);
+      expect(() =>
+        validateRegularHours({
+          ...regular,
+          source: { ...regular.source, verifiedOn: "2026-11-11" },
+        }),
+      ).not.toThrow();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   describe("regular hours periods", () => {

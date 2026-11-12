@@ -61,6 +61,24 @@ export function validateRegularHours(hours: RegularHours | null): void {
     throw error;
   }
 
+  const dateParts = new Intl.DateTimeFormat("en-US", {
+    timeZone: hours.timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const year = dateParts.find((part) => part.type === "year")?.value;
+  const month = dateParts.find((part) => part.type === "month")?.value;
+  const day = dateParts.find((part) => part.type === "day")?.value;
+  if (!year || !month || !day) {
+    throw new Error("Unable to determine the local date for regular hours.");
+  }
+  if (verifiedOn > `${year}-${month}-${day}`) {
+    throw new RangeError(
+      "Regular hours cannot have a future verification date.",
+    );
+  }
+
   validatePeriods(hours.days);
 }
 

@@ -53,7 +53,7 @@ describe("regular hours", () => {
     ];
     const source = {
       url: "https://example.com/hours",
-      verifiedOn: "2026-11-12",
+      verifiedOn: "2024-02-29",
     };
     const hours: NonNullable<LocationDetails["regularHours"]> = {
       timeZone: "America/New_York",
@@ -93,7 +93,7 @@ describe("regular hours", () => {
     const result = publishLocationDetails(location);
     periods[0].opensAt = "09:00";
     periods.push({ opensAt: "03:00", closesAt: "04:00", closesNextDay: false });
-    source.verifiedOn = "2026-11-13";
+    source.verifiedOn = "2024-03-01";
 
     expect(result.published?.regularHours?.days.monday).toEqual({
       status: "open",
@@ -109,7 +109,7 @@ describe("regular hours", () => {
       status: "closed",
     });
     expect(result.published?.regularHours?.source.verifiedOn).toBe(
-      "2026-11-12",
+      "2024-02-29",
     );
     expect(result.published?.hoursInfoUrl).toBe("https://example.com/hours");
   });
