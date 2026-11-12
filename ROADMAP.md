@@ -30,6 +30,10 @@ Build a public, account-free directory that makes it easy to find local spots.
   bakery, or mobile coffee business.
 - Assign each location one primary type: cafe, bakery, mobile coffee, or coffee
   roaster. Revisit the categories as the directory grows.
+- Include the bean roaster, coffee options (espresso, drip, pour-over, cold
+  brew, and milk drinks), non-coffee drinks, and food when known. Administrators
+  curate and verify these details; distinguish unknown information from a
+  confirmed absence.
 - Provide a form for visitors to suggest shops or corrections. Administrators
   review submissions in a private admin inbox and decide whether to update
   the directory. Store submissions separately in Atlas; administrators check
@@ -58,7 +62,9 @@ Build a public, account-free directory that makes it easy to find local spots.
    add to and update through a private editor, without code changes. Give each
    entry a stable ID, name, description, city, and type; record its address,
    coordinates, and neighborhood when applicable. Record a source and
-   last-verified date so information can be maintained.
+   last-verified date so information can be maintained. Use Overture Places as
+   the preferred initial source of location candidates; administrators can
+   manually add missing shops and periodically review potential changes.
 3. Build the map, markers, and shop details from that shared dataset. Keep
    filtering consistent between the map and list.
 4. Establish a process for reviewing visitor suggestions and entries, checking
@@ -148,6 +154,7 @@ experience with React, TypeScript, Vue, and WordPress.
 | Admin authentication | Clerk email codes, invite-only, owner-approved per-user access | Production sign-in/recovery validation, owner continuity, revocation/blocking tests, and future MFA |
 | Map | Leaflet with Stadia Maps raster tiles; keep provider replaceable | Style, eligibility, cost, usage limits, attribution, accessibility, and provider terms |
 | MVP shop data | MongoDB Atlas | Tier, cost, access control, backups, and portability |
+| Initial location candidates | Overture Places downloadable data, reviewed by admins | Release-specific notices, staging, refresh, cost, and review workflow |
 | Shop photos | Cloudflare R2 Standard; resize images during upload | Processing runtime, dimensions/formats, original retention, delivery, and recovery |
 | Hosting | Vercel initially; separate public/admin projects and portable static public output | Eligibility, server runtime compatibility, publication/cache behavior, availability, and cost |
 
@@ -266,6 +273,25 @@ TanStack Start, and TanStack Form, per
 and deployment configuration remain open.
 Keep visitor contact details out of public shop data.
 
+Use Overture Places as the preferred initial source of shop location candidates;
+see [LOCATION_DATA.md](LOCATION_DATA.md) for the evaluation and licensing
+review. Source records can suggest names, addresses, coordinates, categories,
+websites, and social links where available. Administrators review and edit
+candidates before saving them to the curated shop database as unpublished
+drafts; publishing is a separate action. Never display source records directly
+to visitors, automatically overwrite curated shops, or automatically unpublish
+shops absent from a later source release. Keep internal IDs independent of
+source IDs and retain source and verification metadata.
+
+Consider a separate private, temporary staging database for downloaded source
+records, replaced when refreshed. Its storage, authorization, retention,
+failure handling, concurrent reviews, and handling of interrupted edits remain
+open; refreshing staged data must not alter curated drafts or published shops.
+Before import or distribution, verify the chosen release's sources, licensing,
+and notices, and provide applicable attribution, license texts, and notices
+with public output and exports. Review costs and update behavior before enabling
+the integration.
+
 Store shop photos in Cloudflare R2 Standard and resize them during the upload
 workflow before publication, as recorded in
 [ADR 0002](docs/decisions/0002-r2-photo-storage.md). Store photo references in
@@ -314,6 +340,8 @@ management system before those stages need them.
 - What publication freshness targets, deployment triggers, cache durations,
   invalidation, and failure handling should be used for prerendered content,
   including unpublishing?
+- How should Overture candidate staging and refresh work, including
+  authorization, review completion, interrupted edits, retention, and failures?
 
 Image-processing runtime, dimensions/formats, original retention, and R2
 delivery, replacement/deletion, and recovery details are deferred to
