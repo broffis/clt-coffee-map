@@ -61,7 +61,7 @@ function toLocation(document: LocationDocument): ShopLocation {
 }
 
 // Driver messages can contain connection details, so they are not propagated.
-async function run<T>(operation: () => Promise<T>): Promise<T> {
+export async function run<T>(operation: () => Promise<T>): Promise<T> {
   try {
     return await operation();
   } catch (error) {
