@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.4.0...admin-v0.5.0) (2026-11-13)
+
+
+### Features
+
+* **admin:** add server-side authorization service ([#86](https://github.com/broffis/clt-coffee-map/issues/86)) ([97f7187](https://github.com/broffis/clt-coffee-map/commit/97f7187e6dd4e47dd5f8350f3a37fe23a67b90ea))
+
 ## [0.4.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.3.0...admin-v0.4.0) (2026-11-13)
 
 
