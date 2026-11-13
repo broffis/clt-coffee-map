@@ -31,9 +31,10 @@ Build a public, account-free directory that makes it easy to find local spots.
 - Assign each location one primary type: cafe, bakery, mobile coffee, or coffee
   roaster. Revisit the categories as the directory grows.
 - Include the bean roaster, coffee options (espresso, drip, pour-over, cold
-  brew, and milk drinks), non-coffee drinks, and food when known. Administrators
-  curate and verify these details; distinguish unknown information from a
-  confirmed absence.
+  brew, and milk drinks), non-coffee drinks, and food when known. Food options
+  include baked goods, sandwiches, full menu, breakfast items, and salads.
+  Administrators curate and verify these details; distinguish unknown
+  information from a confirmed absence.
 - Provide a form for visitors to suggest shops or corrections. Administrators
   review submissions in a private admin inbox and decide whether to update
   the directory. Store submissions separately in Atlas; administrators check
@@ -273,6 +274,24 @@ TanStack Start, and TanStack Form, per
 and deployment configuration remain open.
 Keep visitor contact details out of public shop data.
 
+A shop may have multiple independently published locations. Its shared name
+is public only when at least one location is published. Publishing the first
+location also publishes the current shared shop details. Later changes to
+shared shop details or published locations remain private drafts until
+explicitly published; unpublishing a location retains its curated data as a
+private draft. When a hidden shop's location is republished, its previously
+published shared details return; newer shared drafts still require explicit
+publication.
+
+Store addresses per location with street lines and postal code alongside the
+existing city and region relationships; an address may be unknown or absent
+for a mobile business. A fixed location can be published with an unknown
+address or coordinates; without coordinates it appears in the list, not on
+the map. Shops and locations can each have a website and additional labeled
+links. How shared and location-specific links are presented together remains
+to be decided.
+Ownership of other fields remains open.
+
 Use Overture Places as the preferred initial source of shop location candidates;
 see [LOCATION_DATA.md](LOCATION_DATA.md) for the evaluation and licensing
 review. Source records can suggest names, addresses, coordinates, categories,
@@ -303,7 +322,13 @@ Maintain regular weekly hours manually from shop-controlled sources, per
 every three months and investigate reported changes sooner. Keep verification
 specific to hours, distinguish unknown hours from closed days, and do not
 present regular schedules as live availability. No automated hours provider,
-scraping, or reminder system is selected.
+scraping, or reminder system is selected. Model each day as unknown, closed,
+or open with one or more periods; support split, overnight, and 24-hour
+periods in the location's time zone.
+
+For other shop and location details, retain source references identifying the
+fields each source supports. Keep an actual verification date separate from
+source release information; an imported record is not automatically verified.
 
 Use Clerk's prebuilt authentication screens for email-code sign-in where
 practical. Do not enable password or social fallback methods without a

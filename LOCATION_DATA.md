@@ -34,15 +34,16 @@ Review completion criteria also remain open.
 | Regular weekly hours | Possible lead from a provider; verify against a shop-controlled source |
 | Roaster supplying the beans | Manually curate and verify |
 | Coffee options | Manually curate: espresso, drip, pour-over, cold brew, and milk drinks |
-| Non-coffee drinks and food | Separate manually curated fields |
+| Non-coffee drinks and food | Separate manually curated fields; food options include baked goods, sandwiches, full menu, breakfast items, and salads |
 | Description, menu link, and photo | Curated when available; verify photo reuse rights |
 | Neighborhood/community | Administrator-reviewed assignment, not a provider-derived boundary |
 
 Stable internal shop and location IDs, region relationships, publication state,
 source references, and verification dates are application metadata, not
 requirements on a provider. External IDs support matching but do not replace
-our IDs. Field ownership, multiple roasters, and unknown-value semantics remain
-open design questions.
+our IDs. A shop owns its shared name, while offerings and multiple roasters
+belong to each location; unknown offerings are distinct from confirmed absence.
+Ownership of other fields remains to be decided.
 
 Regular hours currently follow [ADR 0008](docs/decisions/0008-manually-maintained-opening-hours.md):
 verify against a shop-controlled source, record an hours-specific source and
