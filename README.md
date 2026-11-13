@@ -206,6 +206,16 @@ coverage provider, Testing Library, and jsdom supply isolated tests. These
 direct dependencies use MIT or Apache-2.0 licenses (Biome offers either);
 `pnpm licenses list` inventories transitive licenses as well. There are no paid
 services or additional client UI packages.
+
+The admin app adds the official `mongodb` driver (Apache-2.0; transitive
+packages are MIT, Apache-2.0, BSD-2-Clause, or Unlicense) for server-only Atlas
+persistence per [ADR 0001](docs/decisions/0001-mongodb-atlas.md). It is used
+only behind the repository interfaces in `apps/admin/src/persistence`, so it must
+never be imported from browser code. It adds no paid service; Atlas tier and
+cost decisions remain separate. To replace it, implement another adapter for the
+same repository interfaces and remove the package. An ODM was not chosen because
+validation already lives in the domain layer.
+
 Dependencies are pinned and transitive resolution is captured in
 `pnpm-lock.yaml`; updates require normal review and validation.
 
