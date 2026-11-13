@@ -3,6 +3,8 @@ import type { ShopLocation } from "../src/domain/location";
 import type { Shop } from "../src/domain/shop";
 import { PersistenceError } from "../src/persistence/errors";
 import { createInMemoryRepositories } from "../src/persistence/memory";
+import { createMongoRepositories } from "../src/persistence/mongo-repositories";
+import { createFakeDatabase } from "./fake-mongo";
 
 function shop(id = "shop-1", published = true): Shop {
   const details = {
@@ -68,9 +70,15 @@ async function failure(promise: Promise<unknown>): Promise<PersistenceError> {
   throw new Error("Expected the operation to fail.");
 }
 
-describe("in-memory repositories", () => {
+describe.each([
+  ["in-memory", createInMemoryRepositories],
+  [
+    "Mongo (fake database)",
+    () => createMongoRepositories(createFakeDatabase()),
+  ],
+])("%s repositories", (_name, create) => {
   it("round-trips shops and locations as isolated copies", async () => {
-    const { shops, locations } = createInMemoryRepositories();
+    const { shops, locations } = create();
     const original = shop();
     await shops.save(original);
     await locations.save(location());
@@ -85,7 +93,7 @@ describe("in-memory repositories", () => {
   });
 
   it("lists shops and a shop's locations in stable ID order", async () => {
-    const { shops, locations } = createInMemoryRepositories();
+    const { shops, locations } = create();
     await shops.save(shop("shop-2"));
     await shops.save(shop("shop-1"));
     await locations.save(location("location-b", "shop-1"));
@@ -103,7 +111,7 @@ describe("in-memory repositories", () => {
   });
 
   it("rejects blank identifiers with a validation error", async () => {
-    const { shops, locations } = createInMemoryRepositories();
+    const { shops, locations } = create();
 
     expect((await failure(shops.save(shop(" ")))).code).toBe("validation");
     expect((await failure(locations.save(location(" ")))).code).toBe(
@@ -114,14 +122,14 @@ describe("in-memory repositories", () => {
   });
 
   it("rejects a location whose shop does not exist", async () => {
-    const { locations } = createInMemoryRepositories();
+    const { locations } = create();
 
     const error = await failure(locations.save(location()));
     expect(error.code).toBe("missing-reference");
   });
 
   it("rejects moving a location to another shop", async () => {
-    const { shops, locations } = createInMemoryRepositories();
+    const { shops, locations } = create();
     await shops.save(shop("shop-1"));
     await shops.save(shop("shop-2"));
     await locations.save(location("location-1", "shop-1"));
@@ -133,7 +141,7 @@ describe("in-memory repositories", () => {
   });
 
   it("refuses to delete a shop that still has locations", async () => {
-    const { shops, locations } = createInMemoryRepositories();
+    const { shops, locations } = create();
     await shops.save(shop());
     await locations.save(location());
 
@@ -145,14 +153,14 @@ describe("in-memory repositories", () => {
   });
 
   it("fails to delete records that do not exist", async () => {
-    const { shops, locations } = createInMemoryRepositories();
+    const { shops, locations } = create();
 
     expect((await failure(shops.delete("missing"))).code).toBe("not-found");
     expect((await failure(locations.delete("missing"))).code).toBe("not-found");
   });
 
   it("reads only published shops without private fields", async () => {
-    const { shops, locations, published } = createInMemoryRepositories();
+    const { shops, locations, published } = create();
     await shops.save(shop("shop-1"));
     await shops.save(shop("shop-2", false));
     await shops.save(shop("shop-3"));
