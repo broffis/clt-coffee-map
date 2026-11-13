@@ -2,7 +2,9 @@ export type PersistenceErrorCode =
   | "validation"
   | "not-found"
   | "conflict"
-  | "missing-reference";
+  | "missing-reference"
+  | "configuration"
+  | "unavailable";
 
 export class PersistenceError extends Error {
   readonly code: PersistenceErrorCode;
