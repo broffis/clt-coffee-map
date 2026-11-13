@@ -1,3 +1,5 @@
+import { validateHttpsUrl } from "./validation";
+
 export type DayHours =
   | { readonly status: "unknown" }
   | { readonly status: "closed" }
@@ -32,12 +34,7 @@ export function validateRegularHours(hours: RegularHours | null): void {
     return;
   }
 
-  if (
-    !URL.canParse(hours.source.url) ||
-    !["http:", "https:"].includes(new URL(hours.source.url).protocol)
-  ) {
-    throw new RangeError("Regular hours require a valid source URL.");
-  }
+  validateHttpsUrl(hours.source.url, "Regular hours source URL");
 
   const { verifiedOn } = hours.source;
   const date = new Date(`${verifiedOn}T00:00:00Z`);

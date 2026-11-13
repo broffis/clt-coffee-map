@@ -140,6 +140,7 @@ describe("regular hours verification", () => {
 
   it.each([
     { source: { url: "", verifiedOn: "2024-02-29" } },
+    { source: { url: "http://example.com", verifiedOn: "2024-02-29" } },
     { source: { url: "javascript:alert(1)", verifiedOn: "2024-02-29" } },
     { source: { url: "https://example.com", verifiedOn: "2023-02-29" } },
     { source: { url: "https://example.com", verifiedOn: "2024-2-29" } },

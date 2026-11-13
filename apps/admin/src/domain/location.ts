@@ -4,8 +4,17 @@ import {
   validateRegularHours,
 } from "./hours";
 import { validateIdentifier } from "./identifiers";
-import { type ContactLinks, copyContactLinks } from "./links";
-import { copySources, type SourceReference } from "./sources";
+import {
+  type ContactLinks,
+  copyContactLinks,
+  validateContactLinks,
+} from "./links";
+import { copySources, type SourceReference, validateSources } from "./sources";
+import {
+  validateHttpsUrl,
+  validateOptionalText,
+  validateUniqueNonBlankValues,
+} from "./validation";
 
 export type LocationType =
   | "cafe"
@@ -82,7 +91,27 @@ export function publishLocationDetails(location: ShopLocation): ShopLocation {
     validateIdentifier(draft.neighborhoodId, "Neighborhood ID");
   }
   validateCoordinates(draft.coordinates);
+  validateAddress(draft.address);
+  validateContactLinks(draft.links);
+  if (draft.hoursInfoUrl !== null) {
+    validateHttpsUrl(draft.hoursInfoUrl, "Hours information URL");
+  }
   validateRegularHours(draft.regularHours);
+  validateLocationValues(draft);
+  validateSources(draft.sources, [
+    "regionId",
+    "cityId",
+    "neighborhoodId",
+    "type",
+    "coordinates",
+    "address",
+    "links",
+    "hoursInfoUrl",
+    "roasters",
+    "coffeeOptions",
+    "nonCoffeeDrinks",
+    "food",
+  ]);
 
   return {
     ...location,
@@ -99,6 +128,64 @@ export function publishLocationDetails(location: ShopLocation): ShopLocation {
       sources: copySources(draft.sources),
     },
   };
+}
+
+function validateAddress(address: LocationDetails["address"]): void {
+  if (address === null) {
+    return;
+  }
+
+  validateOptionalText(address.streetLine1, "Address street line 1");
+  validateOptionalText(address.streetLine2, "Address street line 2");
+  validateOptionalText(address.postalCode, "Address postal code");
+  if (
+    address.streetLine1 === null &&
+    address.streetLine2 === null &&
+    address.postalCode === null
+  ) {
+    throw new RangeError("An address must contain at least one value.");
+  }
+}
+
+function validateLocationValues(details: LocationDetails): void {
+  if (
+    !["cafe", "bakery", "mobile coffee", "coffee roaster"].includes(
+      details.type,
+    )
+  ) {
+    throw new RangeError(`Unsupported location type: ${details.type}.`);
+  }
+  if (details.roasters !== null) {
+    validateUniqueNonBlankValues(details.roasters, "Roasters");
+  }
+  if (details.coffeeOptions !== null) {
+    validateUniqueNonBlankValues(details.coffeeOptions, "Coffee options");
+    for (const option of details.coffeeOptions) {
+      if (
+        !["espresso", "drip", "pour-over", "cold brew", "milk drinks"].includes(
+          option,
+        )
+      ) {
+        throw new RangeError(`Unsupported coffee option: ${option}.`);
+      }
+    }
+  }
+  if (details.food !== null) {
+    validateUniqueNonBlankValues(details.food, "Food options");
+    for (const option of details.food) {
+      if (
+        ![
+          "baked goods",
+          "sandwiches",
+          "full menu",
+          "breakfast items",
+          "salads",
+        ].includes(option)
+      ) {
+        throw new RangeError(`Unsupported food option: ${option}.`);
+      }
+    }
+  }
 }
 
 export function validateCoordinates(

@@ -1,6 +1,10 @@
 import { validateIdentifier } from "./identifiers";
-import { type ContactLinks, copyContactLinks } from "./links";
-import { copySources, type SourceReference } from "./sources";
+import {
+  type ContactLinks,
+  copyContactLinks,
+  validateContactLinks,
+} from "./links";
+import { copySources, type SourceReference, validateSources } from "./sources";
 
 export interface ShopDetails {
   readonly name: string;
@@ -19,6 +23,8 @@ export function publishShopDetails(shop: Shop): Shop {
   if (shop.draft.name.trim().length === 0) {
     throw new RangeError("Shop name must not be blank.");
   }
+  validateContactLinks(shop.draft.links);
+  validateSources(shop.draft.sources, ["name", "links"]);
 
   return {
     ...shop,
