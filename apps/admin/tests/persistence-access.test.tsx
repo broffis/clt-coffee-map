@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { AdminAccess } from "../src/domain/access";
+import { type AdminAccess, hasActiveAccess } from "../src/domain/access";
 import { createInMemoryAccessRepository } from "../src/persistence/access-memory";
 import { createMongoAccessRepository } from "../src/persistence/access-mongo";
 import { PersistenceError } from "../src/persistence/errors";
@@ -59,6 +59,18 @@ describe.each([
       "user_a",
       "user_b",
     ]);
+  });
+
+  it("starts a recreated account with a new user ID unapproved", async () => {
+    const repository = create();
+    await repository.save(access("user_old", "blocked"));
+    await repository.save(access("user_other", "approved"));
+
+    const recreated = await repository.get("user_new");
+
+    expect(recreated).toBeNull();
+    expect(hasActiveAccess(recreated)).toBe(false);
+    expect(hasActiveAccess(await repository.get("user_old"))).toBe(false);
   });
 
   it("rejects blank user IDs", async () => {
