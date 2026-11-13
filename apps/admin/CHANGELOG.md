@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.2.0...admin-v0.3.0) (2026-11-13)
+
+
+### Features
+
+* **admin:** add Atlas shop persistence repositories ([#78](https://github.com/broffis/clt-coffee-map/issues/78)) ([fc02a07](https://github.com/broffis/clt-coffee-map/commit/fc02a076932a95cb4be71025e2c596dbe591c23b))
+
 ## [0.2.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.1.0...admin-v0.2.0) (2026-11-13)
 
 
