@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.1.0...admin-v0.2.0) (2026-11-13)
+
+
+### Features
+
+* **admin:** define shop and location domain model ([#76](https://github.com/broffis/clt-coffee-map/issues/76)) ([787dd0b](https://github.com/broffis/clt-coffee-map/commit/787dd0b6969078ace755bf3a332ffa7881307a9f))
+
 ## 0.1.0 (2026-11-11)
 
 
