@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.3.0...admin-v0.4.0) (2026-11-13)
+
+
+### Features
+
+* **admin:** add admin permission model and access store ([#84](https://github.com/broffis/clt-coffee-map/issues/84)) ([724b92e](https://github.com/broffis/clt-coffee-map/commit/724b92eb0d3668d63d4258b06e23f9164a9620af))
+
 ## [0.3.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.2.0...admin-v0.3.0) (2026-11-13)
 
 
