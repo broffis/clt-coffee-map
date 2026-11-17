@@ -207,7 +207,15 @@ direct dependencies use MIT or Apache-2.0 licenses (Biome offers either);
 `pnpm licenses list` inventories transitive licenses as well. There are no paid
 services or additional client UI packages.
 
-The admin app adds the official `mongodb` driver (Apache-2.0; transitive
+The admin app adds the official `@clerk/backend` SDK (MIT; version 3.29.0) for
+server-only Clerk session verification. It is not imported by browser code and
+does not grant application access: the existing Atlas-backed authorization
+records remain the source of permission. It adds no paid dependency, but Clerk
+service limits, email delivery, and production pricing still require
+verification. To replace it, implement the same `SessionVerifier` boundary with
+another server identity provider and remove the package.
+
+The admin app also adds the official `mongodb` driver (Apache-2.0; transitive
 packages are MIT, Apache-2.0, BSD-2-Clause, or Unlicense) for server-only Atlas
 persistence per [ADR 0001](docs/decisions/0001-mongodb-atlas.md). It is used
 only behind the repository interfaces in `apps/admin/src/persistence`, so it must

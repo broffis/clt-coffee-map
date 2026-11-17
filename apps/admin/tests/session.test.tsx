@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  createClerkSessionVerifier,
   SessionVerificationError,
   requireVerifiedSession,
   type SessionVerifier,
@@ -11,6 +12,32 @@ type TestRequest = {
 };
 
 describe("server session boundary", () => {
+  it("maps an authenticated Clerk request to its server-verified user ID", async () => {
+    const verifier = createClerkSessionVerifier({
+      authenticateRequest: async () => ({
+        isAuthenticated: true,
+        toAuth: () => ({ userId: "user_clerk" }),
+      }),
+    });
+
+    await expect(
+      verifier.verify(new Request("https://admin.example.test")),
+    ).resolves.toEqual({ userId: "user_clerk" });
+  });
+
+  it("does not accept an unauthenticated Clerk request", async () => {
+    const verifier = createClerkSessionVerifier({
+      authenticateRequest: async () => ({
+        isAuthenticated: false,
+        toAuth: () => ({ userId: null }),
+      }),
+    });
+
+    await expect(
+      verifier.verify(new Request("https://admin.example.test")),
+    ).resolves.toBeNull();
+  });
+
   it("uses the verifier result rather than a client-supplied user ID", async () => {
     const verifier: SessionVerifier<TestRequest> = {
       verify: async () => ({ userId: "user_verified" }),
