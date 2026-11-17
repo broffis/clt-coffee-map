@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.5.0...admin-v0.6.0) (2026-11-17)
+
+
+### Features
+
+* **admin:** add owner access management ([#89](https://github.com/broffis/clt-coffee-map/issues/89)) ([ade3bdb](https://github.com/broffis/clt-coffee-map/commit/ade3bdbf1b3068a0ebafa244ce5bcb279fd28f3c))
+
 ## [0.5.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.4.0...admin-v0.5.0) (2026-11-13)
 
 
