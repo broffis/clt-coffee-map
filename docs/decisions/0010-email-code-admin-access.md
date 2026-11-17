@@ -64,6 +64,16 @@ required. Access changes use a compare-and-save check so a stale
 read-modify-write cannot overwrite a newer decision, and each successful
 change records a private audit entry with actor, target, action, and timestamp.
 
+The trusted local setup command `pnpm admin:bootstrap-owner` uses separate
+temporary database credentials and defaults to read-only preflight. Applying
+requires an interactive confirmation of the exact Clerk user ID. Owner creation
+and its audit entry commit together in a MongoDB transaction; a fixed audit
+identifier prevents competing command invocations from bootstrapping different
+owners. Existing owner records, target access decisions, and the bootstrap
+marker prevent reuse. This does not make the legacy access-management service's
+other audit/save or last-owner operations cross-process atomic, and it is not an
+owner-recovery procedure. See the README for setup and cleanup.
+
 Revoking access removes all private admin access, including inbox reads and
 editing. Blocking persistently denies future private access until the owner
 explicitly restores it. A new code, session, invitation, or recreated account

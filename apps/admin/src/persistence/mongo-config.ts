@@ -1,4 +1,4 @@
-import { PersistenceError } from "./errors";
+import { PersistenceError } from "./errors.ts";
 
 export interface MongoConfig {
   readonly uri: string;

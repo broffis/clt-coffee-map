@@ -7,6 +7,7 @@
     "node": "24.x"
   },
   "scripts": {
+    "admin:bootstrap-owner": "pnpm --filter @clt-coffee/admin bootstrap:owner",
     "dev:public": "pnpm --filter @clt-coffee/public dev",
     "dev:admin": "pnpm --filter @clt-coffee/admin dev",
     "build": "pnpm -r run build",

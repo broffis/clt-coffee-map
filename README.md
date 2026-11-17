@@ -252,6 +252,54 @@ query, or trailing slash. The origin is configuration, never inferred from
 request headers. Configure email-code sign-in and Invite-only in the Clerk
 Dashboard; source code alone does not verify those provider settings.
 
+### Trusted initial owner setup
+
+The local-only `pnpm admin:bootstrap-owner` command defaults to a read-only
+preflight. It is not a web endpoint, sign-in hook, or recovery mechanism. Use it
+only against the intended development database after independently checking the
+target user in the matching Clerk development application's dashboard.
+The command does not query Clerk or infer ownership from an email address.
+
+Keep the running application's Atlas credentials read-only. Create a separate
+temporary database user with `readWrite` on only the development database,
+restricted to the intended cluster and current IP. In the ignored
+`apps/admin/.env.bootstrap.local`, set:
+
+```dotenv
+BOOTSTRAP_MONGODB_URI="completed-Atlas-URI-for-the-temporary-user"
+BOOTSTRAP_MONGODB_DB_NAME="your-development-database"
+BOOTSTRAP_CLERK_USER_ID="user_copy-the-exact-development-user-id"
+```
+
+Never paste this file, the URI, or passwords into chat or logs. Preserve Atlas
+URI options and percent-encode password special characters. Bootstrap settings
+are separate from `apps/admin/.env.local`; the web app does not load them.
+
+Run `pnpm admin:bootstrap-owner` from the root to check without writing.
+After reviewing the intended development database and Clerk user, run
+`pnpm admin:bootstrap-owner --apply` in your own interactive terminal and type
+the exact target user ID when prompted. No credentials belong in CLI arguments.
+The command uses Node 24's native TypeScript support; explicit `.ts` imports in
+its dependency chain are necessary for execution without another runner.
+
+The write uses a MongoDB transaction with majority write concern to commit the
+owner and private audit entry together. A fixed audit `_id` serializes competing
+invocations of this command, even for different target IDs. It refuses to run
+if any owner exists (including revoked/blocked), the target already has an
+access record, or its bootstrap audit marker already exists. It never replaces
+access decisions. Keep that audit marker; do not delete records to rerun setup.
+Transactions must be supported by the selected deployment; there is no
+nontransactional fallback. A connection/commit error is not proof of failure:
+inspect both records before retrying an unconfirmed outcome.
+
+After a confirmed commit, delete the temporary Atlas user and local bootstrap
+file, then check access through the still-read-only admin app. This path does
+not repair the older access-management service's separate audit/save operations,
+timestamp conflict checks, cross-process last-owner checks, or owner recovery.
+Do not invoke its legacy `bootstrapOwner` helper as an alternative setup path.
+Live transaction/concurrency behavior and owner recovery still require
+verification before production use.
+
 The admin app also adds the official `mongodb` driver (Apache-2.0; transitive
 packages are MIT, Apache-2.0, BSD-2-Clause, or Unlicense) for server-only Atlas
 persistence per [ADR 0001](docs/decisions/0001-mongodb-atlas.md). It is used
@@ -269,9 +317,8 @@ React plugin, Rolldown, and platform binding versions in `pnpm-workspace.yaml`.
 `minimumReleaseAgeStrict` requires review before adding further exceptions;
 these entries do not approve arbitrary future versions.
 
-`.env.example` documents that no variables are currently required. Add actual
-names with safe placeholders alongside each integration rather than inventing
-unused credentials. If needed later, app-local `.env.local` files stay ignored;
+`.env.example` documents the current integration variables with safe
+placeholders. App-local `.env.local` and `.env.bootstrap.local` files stay ignored;
 never put database, storage, or Clerk secrets in `VITE_` variables, client
 modules, prerendered output, or logs. Keep dev/test/preview/production resources
 and credentials separate. Service-backed tests must use dedicated nonproduction
