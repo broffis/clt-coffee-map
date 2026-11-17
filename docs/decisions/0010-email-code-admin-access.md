@@ -55,6 +55,13 @@ server operation, including private page/data reads, inbox access, shop edits,
 uploads, publication actions, and access management. Only the owner may invoke
 access-management operations, regardless of what controls the browser displays.
 
+The initial owner bootstrap is a separate trusted server-side operation, not an
+ordinary login or invitation path. It may create an owner only when no owner
+record exists; once an owner exists, normal access-management operations are
+required. Access changes use a compare-and-save check so a stale
+read-modify-write cannot overwrite a newer decision, and each successful
+change records a private audit entry with actor, target, action, and timestamp.
+
 Revoking access removes all private admin access, including inbox reads and
 editing. Blocking persistently denies future private access until the owner
 explicitly restores it. A new code, session, invitation, or recreated account
@@ -96,6 +103,12 @@ compromise require independently verified owner action. Recovery must preserve
 revocation/block decisions unless deliberately changed. Document session
 revocation and restoration steps without putting credentials, OTPs, or recovery
 secrets in repository files or logs.
+
+The application does not provide a public recovery bypass or an
+email-triggered owner transfer. Before launch, the operator must document and
+test an independently verified, server-side recovery procedure for the initial
+owner; the procedure must preserve the existing access records and use the same
+last-owner protection as routine access changes.
 
 ### Cost and MFA review
 

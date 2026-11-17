@@ -2,6 +2,19 @@ import { validateIdentifier } from "./identifiers";
 
 export type AdminRole = "owner" | "editor";
 export type AccessStatus = "approved" | "revoked" | "blocked";
+export type AccessAuditAction =
+  | "bootstrap-owner"
+  | "approve"
+  | "revoke"
+  | "block"
+  | "restore";
+
+export interface AccessAuditRecord {
+  readonly actorUserId: string;
+  readonly targetUserId: string;
+  readonly action: AccessAuditAction;
+  readonly occurredAt: string;
+}
 
 // A missing record means no access; only an approved record grants it.
 export interface AdminAccess {

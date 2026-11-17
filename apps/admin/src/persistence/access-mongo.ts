@@ -3,6 +3,7 @@ import type { AccessRepository } from "./access-repository";
 import { checkIdentifier } from "./checks";
 import { PersistenceError } from "./errors";
 import {
+  type DocumentCollection,
   type MongoDatabase,
   run as runDatabaseOperation,
 } from "./mongo-repositories";
@@ -36,7 +37,11 @@ function toAccess(document: AccessDocument): AdminAccess {
 export function createMongoAccessRepository(
   database: MongoDatabase,
 ): AccessRepository {
-  const collection = database.collection<AccessDocument>("adminAccess");
+  const collection = database.collection<AccessDocument>(
+    "adminAccess",
+  ) as DocumentCollection<AccessDocument> & {
+    insertOne(document: AccessDocument): Promise<unknown>;
+  };
 
   return {
     get: (userId) =>
@@ -61,6 +66,40 @@ export function createMongoAccessRepository(
           },
           { upsert: true },
         );
+      }),
+    saveIfCurrent: (access, expectedUpdatedAt) =>
+      runDatabaseOperation(async () => {
+        checkIdentifier(access.userId, "User ID");
+        if (expectedUpdatedAt === null) {
+          try {
+            await collection.insertOne({
+              _id: access.userId,
+              role: access.role,
+              status: access.status,
+              updatedAt: access.updatedAt,
+            });
+            return true;
+          } catch (error) {
+            if (
+              typeof error === "object" &&
+              error !== null &&
+              (error as { code?: unknown }).code === 11000
+            ) {
+              return false;
+            }
+            throw error;
+          }
+        }
+        const result = await collection.replaceOne(
+          { _id: access.userId, updatedAt: expectedUpdatedAt },
+          {
+            role: access.role,
+            status: access.status,
+            updatedAt: access.updatedAt,
+          },
+          { upsert: false },
+        );
+        return result.matchedCount === 1;
       }),
   };
 }

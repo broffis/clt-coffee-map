@@ -20,5 +20,14 @@ export function createInMemoryAccessRepository(): AccessRepository {
       checkIdentifier(access.userId, "User ID");
       records.set(access.userId, structuredClone(access));
     },
+    async saveIfCurrent(access, expectedUpdatedAt) {
+      checkIdentifier(access.userId, "User ID");
+      const current = records.get(access.userId);
+      if ((current?.updatedAt ?? null) !== expectedUpdatedAt) {
+        return false;
+      }
+      records.set(access.userId, structuredClone(access));
+      return true;
+    },
   };
 }

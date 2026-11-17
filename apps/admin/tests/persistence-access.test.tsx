@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { type AdminAccess, hasActiveAccess } from "../src/domain/access";
+import {
+  type AccessAuditRecord,
+  type AdminAccess,
+  hasActiveAccess,
+} from "../src/domain/access";
+import { createMongoAccessAuditRepository } from "../src/persistence/access-audit-mongo";
 import { createInMemoryAccessRepository } from "../src/persistence/access-memory";
 import { createMongoAccessRepository } from "../src/persistence/access-mongo";
 import { PersistenceError } from "../src/persistence/errors";
@@ -50,6 +55,24 @@ describe.each([
     expect(await repository.list()).toHaveLength(1);
   });
 
+  it("only saves when the record still has the expected version", async () => {
+    const repository = create();
+    const original = access("user_1", "approved");
+    const changed = {
+      ...access("user_1", "revoked"),
+      updatedAt: "2026-11-17T12:01:00.000Z",
+    };
+    await repository.save(original);
+
+    await expect(
+      repository.saveIfCurrent(changed, original.updatedAt),
+    ).resolves.toBe(true);
+    await expect(
+      repository.saveIfCurrent(access("user_1", "blocked"), original.updatedAt),
+    ).resolves.toBe(false);
+    await expect(repository.get("user_1")).resolves.toEqual(changed);
+  });
+
   it("lists records in user ID order", async () => {
     const repository = create();
     await repository.save(access("user_b", "approved"));
@@ -98,6 +121,29 @@ describe("Mongo access repository", () => {
         updatedAt: "2026-11-13T12:00:00.000Z",
       },
     ]);
+  });
+
+  describe("Mongo access audit repository", () => {
+    it("stores private audit records without exposing its generated ID", async () => {
+      const database = createFakeDatabase();
+      const repository = createMongoAccessAuditRepository(database);
+      const record: AccessAuditRecord = {
+        actorUserId: "user_owner",
+        targetUserId: "user_editor",
+        action: "approve",
+        occurredAt: "2026-11-17T12:00:00.000Z",
+      };
+
+      await repository.append(record);
+
+      expect(await repository.list()).toEqual([record]);
+      expect(
+        database.collections.get("adminAccessAudit")?.documents,
+      ).toHaveLength(1);
+      expect(
+        database.collections.get("adminAccessAudit")?.documents[0],
+      ).toEqual(expect.objectContaining(record));
+    });
   });
 
   it("refuses to read a stored record with an unknown status or role", async () => {
