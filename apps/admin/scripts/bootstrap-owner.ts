@@ -43,7 +43,7 @@ export async function runOwnerBootstrapCommand(
   const client = new MongoClient(config.uri, {
     serverSelectionTimeoutMS: 8000,
     connectTimeoutMS: 8000,
-    timeoutMS: 15000,
+    socketTimeoutMS: 8000,
     maxPoolSize: 1,
   });
   try {

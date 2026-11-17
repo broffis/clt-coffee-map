@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { runOwnerBootstrapCommand } from "../scripts/bootstrap-owner";
 
 const mocks = vi.hoisted(() => ({
+  clientOptions: vi.fn(),
   connect: vi.fn(),
   close: vi.fn(),
   bootstrap: vi.fn(),
@@ -23,6 +24,10 @@ vi.mock("node:readline/promises", () => ({
 }));
 vi.mock("mongodb", () => ({
   MongoClient: class {
+    constructor(_uri: string, options: unknown) {
+      mocks.clientOptions(options);
+    }
+
     connect = mocks.connect;
     close = mocks.close;
   },
@@ -54,6 +59,12 @@ describe("local owner bootstrap command", () => {
   it("only preflights unless apply is explicitly requested", async () => {
     await runOwnerBootstrapCommand([], env);
 
+    expect(mocks.clientOptions).toHaveBeenCalledWith(
+      expect.objectContaining({ socketTimeoutMS: expect.any(Number) }),
+    );
+    expect(mocks.clientOptions.mock.calls[0]?.[0]).not.toHaveProperty(
+      "timeoutMS",
+    );
     expect(mocks.bootstrap).toHaveBeenCalledWith(
       expect.anything(),
       {
