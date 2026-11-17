@@ -215,6 +215,12 @@ service limits, email delivery, and production pricing still require
 verification. To replace it, implement the same `SessionVerifier` boundary with
 another server identity provider and remove the package.
 
+`requireRequestPermission` verifies the incoming request's session before
+checking the verified user's current application permissions. It never grants
+access on sign-in or accepts an actor ID from request parameters. This helper
+is tested with credential-free adapters; routes and sign-in UI are not wired
+to it yet.
+
 The admin app also adds the official `mongodb` driver (Apache-2.0; transitive
 packages are MIT, Apache-2.0, BSD-2-Clause, or Unlicense) for server-only Atlas
 persistence per [ADR 0001](docs/decisions/0001-mongodb-atlas.md). It is used
