@@ -4,8 +4,10 @@
 
 Accepted on 2026-11-09. Related work: [#51](https://github.com/broffis/clt-coffee-map/issues/51).
 
-The policy is accepted; production configuration, recovery, and access
-revocation have not been implemented or tested.
+The policy is accepted. Clerk sign-in and a server-authorized access-check
+endpoint are implemented under #83, with credential-free tests. Production
+configuration, real email delivery, invitation restrictions, owner recovery,
+and live session/revocation behavior remain launch-verification requirements.
 
 ## Context
 

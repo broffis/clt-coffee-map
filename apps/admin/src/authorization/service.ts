@@ -41,7 +41,7 @@ function denialFor(access: AdminAccess | null): DenialReason {
 // Reads the current record on every call; nothing is cached or trusted from
 // session claims, so revocation applies to existing sessions immediately.
 export async function authorize(
-  repository: AccessRepository,
+  repository: Pick<AccessRepository, "get">,
   identity: VerifiedIdentity,
   action: AdminAction,
 ): Promise<AuthorizationResult> {
@@ -61,7 +61,7 @@ export async function authorize(
 }
 
 export async function requirePermission(
-  repository: AccessRepository,
+  repository: Pick<AccessRepository, "get">,
   identity: VerifiedIdentity,
   action: AdminAction,
 ): Promise<AdminAccess> {

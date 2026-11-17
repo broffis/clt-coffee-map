@@ -10,8 +10,9 @@ choices are in [the ADRs](docs/decisions/), and contribution requirements are in
 
 Use Node.js **24 LTS** (`.node-version`) and **pnpm 12.15.0**
 (`package.json#packageManager`). Use a Node version manager and pnpm's
-[installation instructions](https://pnpm.io/installation) if needed. No service
-accounts, credentials, or environment variables are needed for this scaffold.
+[installation instructions](https://pnpm.io/installation) if needed. Public
+development and automated tests need no service credentials. Admin sign-in
+requires the Clerk development keys described below.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -25,8 +26,9 @@ Both commands fail if their port is occupied rather than silently switching.
 ## Workspace and boundaries
 
 - `apps/public`: TanStack Start public app. The homepage is prerendered.
-- `apps/admin`: independent TanStack Start app with a nonprivileged placeholder.
-  Clerk, private data, editing, and TanStack Form integration belong to later work.
+- `apps/admin`: independent TanStack Start app with Clerk sign-in and a
+  server-authorized access-check endpoint. Shop editing and TanStack Form
+  integration are not implemented.
 - `static`: existing public assets, served by the public app; the original logo
   remains at `static/images/logos/CLTCOFFEE.png`.
 - `tests/setup.ts`: isolated DOM test setup, including cleanup and a jsdom
@@ -37,10 +39,11 @@ Each app owns its router types and TypeScript project. There is no shared
 application package until something actually needs sharing. Tool configuration
 and testing dependencies live at the workspace root.
 
-The admin shell is **not an authorization implementation**. It exposes no private
-records, forms, or server operations. A `noindex` directive is not access control.
-Do not add private behavior until server-side session and current permission
-checks are implemented.
+The admin homepage exposes no private shop records or editing operations.
+The access-check endpoint enforces the server session and current application
+permissions; a `noindex` directive or client-side sign-in component is not an
+authorization boundary. Every future private operation must enforce those
+checks independently.
 
 ## Local checks
 
@@ -204,22 +207,50 @@ React plugin provide builds; TypeScript checks types. Biome covers source
 formatting/linting without separate formatter/linter stacks. Vitest, its V8
 coverage provider, Testing Library, and jsdom supply isolated tests. These
 direct dependencies use MIT or Apache-2.0 licenses (Biome offers either);
-`pnpm licenses list` inventories transitive licenses as well. There are no paid
-services or additional client UI packages.
+`pnpm licenses list` inventories transitive licenses as well. No paid service
+plan is configured by the source code.
 
-The admin app adds the official `@clerk/backend` SDK (MIT; version 3.29.0) for
-server-only Clerk session verification. It is not imported by browser code and
-does not grant application access: the existing Atlas-backed authorization
-records remain the source of permission. It adds no paid dependency, but Clerk
-service limits, email delivery, and production pricing still require
-verification. To replace it, implement the same `SessionVerifier` boundary with
-another server identity provider and remove the package.
+The admin sign-in integration uses the official MIT-licensed
+`@clerk/tanstack-react-start` adapter, pinned to 1.7.13. Its maintained Clerk
+React components and Start middleware handle sign-in and session transport
+rather than a custom email-code implementation. Its transitive backend SDK
+stays server-side. This adds client JavaScript
+and Clerk-hosted UI/network dependencies to the admin app only; the public
+app must not import it. Measure the built bundle and verify production costs,
+email delivery, and runtime compatibility before launch. The initial local
+admin client build increased from 109.26 kB to 144.92 kB gzip; Clerk's separately
+loaded hosted assets and runtime requests are additional. The package license
+does not make the hosted service unlimited or free. To remove it, replace the
+provider, sign-in controls, and middleware with another identity adapter while
+retaining application permission checks and existing Clerk-ID access records
+until an explicit identity migration is performed.
 
 `requireRequestPermission` verifies the incoming request's session before
 checking the verified user's current application permissions. It never grants
-access on sign-in or accepts an actor ID from request parameters. This helper
-is tested with credential-free adapters; routes and sign-in UI are not wired
-to it yet.
+access on sign-in or accepts an actor ID from request parameters.
+
+The admin homepage offers Clerk sign-in and a read-only **Check admin access**
+action. `GET /api/admin/access` uses Clerk's server middleware and reads the
+current access record from Atlas. It returns 401 without a session, 403 without
+approval, or 503 if permissions cannot be verified; responses use
+`Cache-Control: private, no-store`. The homepage contains no private shop data
+or editing operations, and a successful sign-in never bootstraps an owner.
+
+For local development, put `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` in
+`apps/admin/.env.local` (gitignored). Vite loads only the named server settings
+into the server process, without defining them in browser code. The provider
+receives the publishable key through Clerk's public SSR state; the secret key
+must never be prefixed with `VITE_` or sent to the browser. The access check
+also requires `MONGODB_URI` and `MONGODB_DB_NAME`; without Atlas configuration
+it reports unavailable permissions, not successful access or an unapproved
+account. No database or Clerk account is created automatically.
+
+In development, Clerk session authorized parties are limited to
+`http://127.0.0.1:3001` and `http://localhost:3001`. Outside development,
+`ADMIN_ORIGIN` must specify the exact HTTP(S) admin origin, without a path,
+query, or trailing slash. The origin is configuration, never inferred from
+request headers. Configure email-code sign-in and Invite-only in the Clerk
+Dashboard; source code alone does not verify those provider settings.
 
 The admin app also adds the official `mongodb` driver (Apache-2.0; transitive
 packages are MIT, Apache-2.0, BSD-2-Clause, or Unlicense) for server-only Atlas

@@ -1,23 +1,10 @@
-import { createClerkClient } from "@clerk/backend";
-import { createClerkSessionVerifier, type SessionVerifier } from "./session";
+import "@tanstack/react-start/server-only";
+import { auth } from "@clerk/tanstack-react-start/server";
+import type { SessionVerifier } from "./session";
 
-export function createClerkServerSessionVerifier(
-  secretKey: string,
-  publishableKey: string,
-): SessionVerifier<Request> {
-  if (secretKey.trim() === "" || publishableKey.trim() === "") {
-    throw new Error("Clerk server credentials are required.");
-  }
-  const client = createClerkClient({ secretKey, publishableKey });
-  return createClerkSessionVerifier({
-    authenticateRequest: async (request) => {
-      const state = await client.authenticateRequest(request);
-      return {
-        isAuthenticated: state.isAuthenticated,
-        toAuth: () => ({
-          userId: state.isAuthenticated ? state.toAuth().userId : null,
-        }),
-      };
-    },
-  });
-}
+export const clerkSessionVerifier: SessionVerifier<Request> = {
+  async verify() {
+    const session = await auth({ acceptsToken: "session_token" });
+    return session.isAuthenticated ? { userId: session.userId } : null;
+  },
+};

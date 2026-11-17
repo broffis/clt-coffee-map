@@ -8,7 +8,7 @@ import type { AccessRepository } from "../persistence/access-repository";
 import { requirePermission } from "./service";
 
 export async function requireRequestPermission(
-  repository: AccessRepository,
+  repository: Pick<AccessRepository, "get">,
   verifier: SessionVerifier<Request>,
   request: Request,
   action: AdminAction,
