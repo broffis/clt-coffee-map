@@ -6,4 +6,8 @@ export interface AccessRepository {
   list(): Promise<readonly AdminAccess[]>;
   // Records are never deleted so revoked and blocked users stay denied.
   save(access: AdminAccess): Promise<void>;
+  saveIfCurrent(
+    access: AdminAccess,
+    expectedUpdatedAt: string | null,
+  ): Promise<boolean>;
 }

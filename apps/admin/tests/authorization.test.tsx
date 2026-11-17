@@ -116,6 +116,7 @@ describe("authorize", () => {
       },
       list: async () => [],
       save: async () => undefined,
+      saveIfCurrent: async () => true,
     };
 
     expect(await authorize(failing, { userId: "user_1" }, "shop:edit")).toEqual(

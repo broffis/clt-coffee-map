@@ -50,6 +50,14 @@ export class FakeCollection implements DocumentCollection<Doc> {
     };
   }
 
+  async insertOne(document: Doc) {
+    this.check();
+    if (this.documents.some((doc) => doc._id === document._id)) {
+      throw Object.assign(new Error("E11000 duplicate key"), { code: 11000 });
+    }
+    this.documents.push(structuredClone(document));
+  }
+
   async countDocuments(filter: Record<string, unknown>) {
     this.check();
     return this.documents.filter((doc) => matches(doc, filter)).length;
@@ -58,14 +66,17 @@ export class FakeCollection implements DocumentCollection<Doc> {
   async replaceOne(
     filter: Record<string, unknown>,
     replacement: Omit<Doc, "_id">,
-    _options: { upsert: true },
+    options: { upsert: boolean },
   ) {
     this.check();
     const index = this.documents.findIndex((doc) => matches(doc, filter));
     if (index >= 0) {
       const { _id } = this.documents[index] as Doc;
       this.documents[index] = structuredClone({ ...replacement, _id });
-      return;
+      return { matchedCount: 1 };
+    }
+    if (!options.upsert) {
+      return { matchedCount: 0 };
     }
     // Like the server, an upsert seeds the new document from the filter's equality fields.
     const inserted = { ...filter, ...replacement } as Doc;
@@ -73,6 +84,7 @@ export class FakeCollection implements DocumentCollection<Doc> {
       throw Object.assign(new Error("E11000 duplicate key"), { code: 11000 });
     }
     this.documents.push(structuredClone(inserted));
+    return { matchedCount: 0, upsertedCount: 1 };
   }
 
   async deleteOne(filter: Record<string, unknown>) {

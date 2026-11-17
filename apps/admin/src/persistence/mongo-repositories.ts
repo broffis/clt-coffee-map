@@ -17,8 +17,8 @@ export interface DocumentCollection<T extends Document> {
   replaceOne(
     filter: MongoFilter<T>,
     replacement: Omit<T, "_id">,
-    options: { upsert: true },
-  ): Promise<unknown>;
+    options: { upsert: boolean },
+  ): Promise<{ matchedCount: number; upsertedCount?: number }>;
   deleteOne(filter: MongoFilter<T>): Promise<{ deletedCount: number }>;
   createIndex(specification: Record<string, 1 | -1>): Promise<unknown>;
 }
