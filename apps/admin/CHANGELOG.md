@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.6.0...admin-v0.7.0) (2026-11-18)
+
+
+### Features
+
+* **clerk:** sessions invite only ([#91](https://github.com/broffis/clt-coffee-map/issues/91)) ([653ee11](https://github.com/broffis/clt-coffee-map/commit/653ee111cd4985102c2f80abbea03c2d27503fb5))
+
 ## [0.6.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.5.0...admin-v0.6.0) (2026-11-17)
 
 
