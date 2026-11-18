@@ -1,4 +1,4 @@
-import { validateIdentifier } from "./identifiers";
+import { validateIdentifier } from "./identifiers.ts";
 
 export type AdminRole = "owner" | "editor";
 export type AccessStatus = "approved" | "revoked" | "blocked";

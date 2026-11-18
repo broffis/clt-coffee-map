@@ -10,8 +10,9 @@ choices are in [the ADRs](docs/decisions/), and contribution requirements are in
 
 Use Node.js **24 LTS** (`.node-version`) and **pnpm 12.15.0**
 (`package.json#packageManager`). Use a Node version manager and pnpm's
-[installation instructions](https://pnpm.io/installation) if needed. No service
-accounts, credentials, or environment variables are needed for this scaffold.
+[installation instructions](https://pnpm.io/installation) if needed. Public
+development and automated tests need no service credentials. Admin sign-in
+requires the Clerk development keys described below.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -25,8 +26,9 @@ Both commands fail if their port is occupied rather than silently switching.
 ## Workspace and boundaries
 
 - `apps/public`: TanStack Start public app. The homepage is prerendered.
-- `apps/admin`: independent TanStack Start app with a nonprivileged placeholder.
-  Clerk, private data, editing, and TanStack Form integration belong to later work.
+- `apps/admin`: independent TanStack Start app with Clerk sign-in and a
+  server-authorized access-check endpoint. Shop editing and TanStack Form
+  integration are not implemented.
 - `static`: existing public assets, served by the public app; the original logo
   remains at `static/images/logos/CLTCOFFEE.png`.
 - `tests/setup.ts`: isolated DOM test setup, including cleanup and a jsdom
@@ -37,10 +39,11 @@ Each app owns its router types and TypeScript project. There is no shared
 application package until something actually needs sharing. Tool configuration
 and testing dependencies live at the workspace root.
 
-The admin shell is **not an authorization implementation**. It exposes no private
-records, forms, or server operations. A `noindex` directive is not access control.
-Do not add private behavior until server-side session and current permission
-checks are implemented.
+The admin homepage exposes no private shop records or editing operations.
+The access-check endpoint enforces the server session and current application
+permissions; a `noindex` directive or client-side sign-in component is not an
+authorization boundary. Every future private operation must enforce those
+checks independently.
 
 ## Local checks
 
@@ -204,10 +207,135 @@ React plugin provide builds; TypeScript checks types. Biome covers source
 formatting/linting without separate formatter/linter stacks. Vitest, its V8
 coverage provider, Testing Library, and jsdom supply isolated tests. These
 direct dependencies use MIT or Apache-2.0 licenses (Biome offers either);
-`pnpm licenses list` inventories transitive licenses as well. There are no paid
-services or additional client UI packages.
+`pnpm licenses list` inventories transitive licenses as well. No paid service
+plan is configured by the source code.
 
-The admin app adds the official `mongodb` driver (Apache-2.0; transitive
+The admin sign-in integration uses the official MIT-licensed
+`@clerk/tanstack-react-start` adapter, pinned to 1.7.13. Its maintained Clerk
+React components and Start middleware handle sign-in and session transport
+rather than a custom email-code implementation. Its transitive backend SDK
+stays server-side. This adds client JavaScript
+and Clerk-hosted UI/network dependencies to the admin app only; the public
+app must not import it. Measure the built bundle and verify production costs,
+email delivery, and runtime compatibility before launch. The initial local
+admin client build increased from 109.26 kB to 144.92 kB gzip; Clerk's separately
+loaded hosted assets and runtime requests are additional. The package license
+does not make the hosted service unlimited or free. To remove it, replace the
+provider, sign-in controls, and middleware with another identity adapter while
+retaining application permission checks and existing Clerk-ID access records
+until an explicit identity migration is performed.
+
+`requireRequestPermission` verifies the incoming request's session before
+checking the verified user's current application permissions. It never grants
+access on sign-in or accepts an actor ID from request parameters.
+
+The admin homepage offers Clerk sign-in and a read-only **Check admin access**
+action. `GET /api/admin/access` uses Clerk's server middleware and reads the
+current access record from Atlas. It returns 401 without a session, 403 without
+approval, or 503 if permissions cannot be verified; responses use
+`Cache-Control: private, no-store`. The homepage contains no private shop data
+or editing operations, and a successful sign-in never bootstraps an owner.
+
+For local development, put `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` in
+`apps/admin/.env.local` (gitignored). Vite loads only the named server settings
+into the server process, without defining them in browser code. The provider
+receives the publishable key through Clerk's public SSR state; the secret key
+must never be prefixed with `VITE_` or sent to the browser. The access check
+also requires `MONGODB_URI` and `MONGODB_DB_NAME`; without Atlas configuration
+it reports unavailable permissions, not successful access or an unapproved
+account. No database or Clerk account is created automatically.
+
+In development, Clerk session authorized parties are limited to
+`http://127.0.0.1:3001` and `http://localhost:3001`. Outside development,
+`ADMIN_ORIGIN` must specify the exact HTTP(S) admin origin, without a path,
+query, or trailing slash. The origin is configuration, never inferred from
+request headers. Configure email-code sign-in and Invite-only in the Clerk
+Dashboard; source code alone does not verify those provider settings.
+
+### Development verification (2026-11-18)
+
+The following checks used the development Clerk application and Atlas database,
+not a production deployment. Browser and dashboard results were reported by the
+operator; they are not automated end-to-end tests. No addresses, user IDs,
+invitation links, codes, or credentials are recorded here.
+
+| Check | Evidence |
+| --- | --- |
+| Authentication settings | Invite-only; email verification codes enabled; email links, passwords, phone/SMS, passkeys, and social/enterprise connections disabled in the dashboard. |
+| Email sign-in | A real code email arrived; an altered code was rejected while signed out; the correct code signed in and the access check allowed the owner. |
+| Expired code | The original code was rejected after waiting at least 11 minutes without resending; a new code restored owner access. |
+| Used code in a new challenge | Within five minutes, a previously used code was rejected in a new sign-in challenge; the latest code restored access. This is not a same-attempt protocol replay test. |
+| Uninvited enrollment | The hosted sign-up page, opened signed out without an invitation, required an invitation and blocked sign-up. The portal link was under the dashboard's Configure tab. |
+| Invited enrollment | A separate test account received an invitation, enrolled, signed in locally, and remained unapproved. No application permission was granted to it. |
+| Owner persistence and access | Read-only Atlas checks found one approved owner and its matching bootstrap audit entry; the operator confirmed allowed owner access. Temporary bootstrap credentials were removed afterward. |
+| Unsigned requests | Local HTTP checks returned 401 with `private, no-store` from the access endpoint; the sign-in homepage remained available. |
+
+Live Clerk session revocation was explicitly deferred on 2026-11-18 after the
+dashboard control could not be located. No session was revoked, and no
+revocation helper was added. Live Atlas-backed application revocation/blocking
+across existing and new sessions is also unverified: the test account has not
+been approved, revoked, or blocked. Credential-free request-authorization tests
+cover denial after current permission records change, not those live workflows.
+Keep the only owner's access intact when completing these checks.
+
+Before launch, verify production configuration and delivery, same-attempt code
+replay behavior, revocation/blocking, and owner recovery. Review existing users'
+authentication methods as well: Clerk documents that disabling passwords does
+not remove an existing user's password sign-in capability. Dashboard settings
+alone do not establish that every existing account is email-code-only.
+These results do not establish production authorization or accessibility.
+See [ADR 0010](docs/decisions/0010-email-code-admin-access.md) for the current
+pricing review and remaining cost checks.
+
+### Trusted initial owner setup
+
+The local-only `pnpm admin:bootstrap-owner` command defaults to a read-only
+preflight. It is not a web endpoint, sign-in hook, or recovery mechanism. Use it
+only against the intended development database after independently checking the
+target user in the matching Clerk development application's dashboard.
+The command does not query Clerk or infer ownership from an email address.
+
+Keep the running application's Atlas credentials read-only. Create a separate
+temporary database user with `readWrite` on only the development database,
+restricted to the intended cluster and current IP. In the ignored
+`apps/admin/.env.bootstrap.local`, set:
+
+```dotenv
+BOOTSTRAP_MONGODB_URI="completed-Atlas-URI-for-the-temporary-user"
+BOOTSTRAP_MONGODB_DB_NAME="your-development-database"
+BOOTSTRAP_CLERK_USER_ID="user_copy-the-exact-development-user-id"
+```
+
+Never paste this file, the URI, or passwords into chat or logs. Preserve Atlas
+URI options and percent-encode password special characters. Bootstrap settings
+are separate from `apps/admin/.env.local`; the web app does not load them.
+
+Run `pnpm admin:bootstrap-owner` from the root to check without writing.
+After reviewing the intended development database and Clerk user, run
+`pnpm admin:bootstrap-owner --apply` in your own interactive terminal and type
+the exact target user ID when prompted. No credentials belong in CLI arguments.
+The command uses Node 24's native TypeScript support; explicit `.ts` imports in
+its dependency chain are necessary for execution without another runner.
+
+The write uses a MongoDB transaction with majority write concern to commit the
+owner and private audit entry together. A fixed audit `_id` serializes competing
+invocations of this command, even for different target IDs. It refuses to run
+if any owner exists (including revoked/blocked), the target already has an
+access record, or its bootstrap audit marker already exists. It never replaces
+access decisions. Keep that audit marker; do not delete records to rerun setup.
+Transactions must be supported by the selected deployment; there is no
+nontransactional fallback. A connection/commit error is not proof of failure:
+inspect both records before retrying an unconfirmed outcome.
+
+After a confirmed commit, delete the temporary Atlas user and local bootstrap
+file, then check access through the still-read-only admin app. This path does
+not repair the older access-management service's separate audit/save operations,
+timestamp conflict checks, cross-process last-owner checks, or owner recovery.
+Do not invoke its legacy `bootstrapOwner` helper as an alternative setup path.
+A single development bootstrap has been verified. Concurrent transaction
+behavior and owner recovery still require verification before production use.
+
+The admin app also adds the official `mongodb` driver (Apache-2.0; transitive
 packages are MIT, Apache-2.0, BSD-2-Clause, or Unlicense) for server-only Atlas
 persistence per [ADR 0001](docs/decisions/0001-mongodb-atlas.md). It is used
 only behind the repository interfaces in `apps/admin/src/persistence`, so it must
@@ -224,9 +352,8 @@ React plugin, Rolldown, and platform binding versions in `pnpm-workspace.yaml`.
 `minimumReleaseAgeStrict` requires review before adding further exceptions;
 these entries do not approve arbitrary future versions.
 
-`.env.example` documents that no variables are currently required. Add actual
-names with safe placeholders alongside each integration rather than inventing
-unused credentials. If needed later, app-local `.env.local` files stay ignored;
+`.env.example` documents the current integration variables with safe
+placeholders. App-local `.env.local` and `.env.bootstrap.local` files stay ignored;
 never put database, storage, or Clerk secrets in `VITE_` variables, client
 modules, prerendered output, or logs. Keep dev/test/preview/production resources
 and credentials separate. Service-backed tests must use dedicated nonproduction
