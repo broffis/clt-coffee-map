@@ -252,6 +252,41 @@ query, or trailing slash. The origin is configuration, never inferred from
 request headers. Configure email-code sign-in and Invite-only in the Clerk
 Dashboard; source code alone does not verify those provider settings.
 
+### Development verification (2026-11-18)
+
+The following checks used the development Clerk application and Atlas database,
+not a production deployment. Browser and dashboard results were reported by the
+operator; they are not automated end-to-end tests. No addresses, user IDs,
+invitation links, codes, or credentials are recorded here.
+
+| Check | Evidence |
+| --- | --- |
+| Authentication settings | Invite-only; email verification codes enabled; email links, passwords, phone/SMS, passkeys, and social/enterprise connections disabled in the dashboard. |
+| Email sign-in | A real code email arrived; an altered code was rejected while signed out; the correct code signed in and the access check allowed the owner. |
+| Expired code | The original code was rejected after waiting at least 11 minutes without resending; a new code restored owner access. |
+| Used code in a new challenge | Within five minutes, a previously used code was rejected in a new sign-in challenge; the latest code restored access. This is not a same-attempt protocol replay test. |
+| Uninvited enrollment | The hosted sign-up page, opened signed out without an invitation, required an invitation and blocked sign-up. The portal link was under the dashboard's Configure tab. |
+| Invited enrollment | A separate test account received an invitation, enrolled, signed in locally, and remained unapproved. No application permission was granted to it. |
+| Owner persistence and access | Read-only Atlas checks found one approved owner and its matching bootstrap audit entry; the operator confirmed allowed owner access. Temporary bootstrap credentials were removed afterward. |
+| Unsigned requests | Local HTTP checks returned 401 with `private, no-store` from the access endpoint; the sign-in homepage remained available. |
+
+Live Clerk session revocation was explicitly deferred on 2026-11-18 after the
+dashboard control could not be located. No session was revoked, and no
+revocation helper was added. Live Atlas-backed application revocation/blocking
+across existing and new sessions is also unverified: the test account has not
+been approved, revoked, or blocked. Credential-free request-authorization tests
+cover denial after current permission records change, not those live workflows.
+Keep the only owner's access intact when completing these checks.
+
+Before launch, verify production configuration and delivery, same-attempt code
+replay behavior, revocation/blocking, and owner recovery. Review existing users'
+authentication methods as well: Clerk documents that disabling passwords does
+not remove an existing user's password sign-in capability. Dashboard settings
+alone do not establish that every existing account is email-code-only.
+These results do not establish production authorization or accessibility.
+See [ADR 0010](docs/decisions/0010-email-code-admin-access.md) for the current
+pricing review and remaining cost checks.
+
 ### Trusted initial owner setup
 
 The local-only `pnpm admin:bootstrap-owner` command defaults to a read-only
@@ -297,8 +332,8 @@ file, then check access through the still-read-only admin app. This path does
 not repair the older access-management service's separate audit/save operations,
 timestamp conflict checks, cross-process last-owner checks, or owner recovery.
 Do not invoke its legacy `bootstrapOwner` helper as an alternative setup path.
-Live transaction/concurrency behavior and owner recovery still require
-verification before production use.
+A single development bootstrap has been verified. Concurrent transaction
+behavior and owner recovery still require verification before production use.
 
 The admin app also adds the official `mongodb` driver (Apache-2.0; transitive
 packages are MIT, Apache-2.0, BSD-2-Clause, or Unlicense) for server-only Atlas

@@ -5,9 +5,13 @@
 Accepted on 2026-11-09. Related work: [#51](https://github.com/broffis/clt-coffee-map/issues/51).
 
 The policy is accepted. Clerk sign-in and a server-authorized access-check
-endpoint are implemented under #83, with credential-free tests. Production
-configuration, real email delivery, invitation restrictions, owner recovery,
-and live session/revocation behavior remain launch-verification requirements.
+endpoint are implemented under #83, with credential-free tests. Development
+email delivery, invitation restrictions, and approved/unapproved access were
+manually exercised on 2026-11-17 and 2026-11-18; evidence and limits are in the
+[README](../../README.md#development-verification-2026-11-18). Production
+configuration/delivery, owner recovery, and live session/application-permission
+revocation remain launch-verification requirements. Live Clerk session
+revocation was explicitly deferred on 2026-11-18, not verified or waived.
 
 ## Context
 
@@ -93,6 +97,12 @@ itself refuses to authenticate the email address. Session revocation can
 provide additional sign-out behavior but is not a substitute for application
 authorization.
 
+Clerk documents a default 60-second session JWT, distinct from the full session
+lifetime. Revoking a Clerk session does not make an already issued JWT
+cryptographically invalid immediately; do not promise instantaneous provider
+sign-out from local token verification. Current Atlas permissions must still be
+checked on each privileged operation independently of token refresh.
+
 Record access changes with actor, target user ID, action, and timestamp in
 private audit records. Show persistence failures explicitly rather than
 reporting a successful revocation or approval that was not saved.
@@ -124,17 +134,26 @@ last-owner protection as routine access changes.
 
 ### Cost and MFA review
 
-Pricing reviewed on 2026-11-09 lists Hobby as free with 50,000 monthly retained
-users per app, email codes, and a fixed seven-day session lifetime. Public
-anonymous visitors do not need Clerk sessions. Recheck plan eligibility,
-email delivery behavior, rate limits, and optional usage-based charges before
-launch; this is not a guarantee of unlimited free service.
+Pricing rechecked on 2026-11-18 lists Hobby as free with 50,000 monthly retained
+users per app, up to three dashboard seats, email codes, and a fixed seven-day
+session lifetime. Public anonymous visitors do not need Clerk sessions.
+The published pricing review does not verify the actual account's billing
+configuration or production eligibility, and is not an unlimited-free-service
+guarantee.
 
-Clerk production MFA and passkeys require a paid plan. Pro currently lists
+Clerk production MFA, passkeys, and user bans require a paid plan. Pro lists
 $25/month, or $20/month billed annually. Documented MFA options include
-authenticator apps, SMS, and backup codes; SMS has usage charges. Discuss
-recurring costs before any upgrade. Development availability does not prove a
-feature is free in production.
+authenticator apps, SMS, and backup codes; SMS has usage charges. Application
+permission blocking must not depend on paid Clerk bans.
+
+The pricing page also lists 10,000 Protect protection checks per month included,
+then $0.002 per check up to 1,000,000 checks; basic and advanced protections
+consume checks, while brute-force prevention does not. Verify applicable Hobby
+limit enforcement, billing activation, and available spend controls before
+production. Recheck email delivery limits and other usage-based charges.
+No paid upgrade or add-on is authorized by this review. Discuss recurring costs
+before enabling them; development availability does not prove production
+availability is free.
 
 Email compromise can grant access as an approved admin. Reevaluate MFA as
 private data, editing responsibility, or risk grows. If selected later, plan
@@ -169,9 +188,9 @@ Use persistent application permission decisions as the access boundary.
 - Test authorization failures, direct server calls, re-invitation/account
   recreation without inherited privileges, and owner recovery without a
   permission bypass. Verify actual production email delivery and configuration.
-- No Clerk application, account, invitation, permission record, dependency,
-  billing change, or authentication flow has been configured by this decision.
-  The remaining launch checks in #51 are not complete.
+- This decision alone does not configure hosted resources or authorize billing
+  changes. Development implementation and verification are recorded in the
+  README; the remaining launch checks in #51 are not complete.
 
 ## References
 
@@ -179,5 +198,6 @@ Use persistent application permission decisions as the access boundary.
 - [Email codes and MFA options](https://clerk.com/docs/guides/configure/auth-strategies/sign-up-sign-in-options)
 - [Invite-only access and paid identifier allowlists](https://clerk.com/docs/guides/secure/restricting-access)
 - [Session revocation](https://clerk.com/docs/reference/backend/sessions/revoke-session)
+- [Session JWT lifetime and refresh](https://clerk.com/docs/guides/how-clerk-works/overview#clerks-authentication-model)
 - [MFA recovery and reset limitations](https://clerk.com/docs/guides/secure/mfa-recovery)
 - [Production deployment requirements](https://clerk.com/docs/guides/development/deployment/production)
