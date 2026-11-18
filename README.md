@@ -225,6 +225,14 @@ provider, sign-in controls, and middleware with another identity adapter while
 retaining application permission checks and existing Clerk-ID access records
 until an explicit identity migration is performed.
 
+The shop editor form uses MIT-licensed `@tanstack/react-form`, pinned to 1.33.5
+as selected in ADR 0003; it adds three small TanStack packages. It adds about
+14.7 kB gzip to the admin client (144.92 kB to 159.61 kB, measured locally with
+the editor form) and nothing to the public app. It manages field state and
+submission only; the server remains the validator and authorizer. To remove it,
+replace `ShopDraftForm` state handling with plain React state, keeping the
+server validation, error display, and unsaved-change warning unchanged.
+
 `requireRequestPermission` verifies the incoming request's session before
 checking the verified user's current application permissions. It never grants
 access on sign-in or accepts an actor ID from request parameters.
@@ -250,7 +258,8 @@ Saving shop drafts (`POST /api/admin/shops`) uses separate editor credentials,
 read-only variables. Create a dedicated Atlas user limited to read/write on the
 shop and location collections; access records stay read-only through
 `MONGODB_URI`. Without them, saving reports the editor as unavailable. Drafts
-are never published by this endpoint.
+are never published by this endpoint. The server generates shop IDs; a
+request-supplied ID may only edit an existing shop and is otherwise rejected.
 State-changing requests to admin route handlers (not only server functions)
 must pass origin validation: requests that are cross-site, from another
 origin, or without `Sec-Fetch-Site`/`Origin`/`Referer` headers are rejected

@@ -8,14 +8,15 @@ export interface ShopDraftDependencies {
   readonly access: Pick<AccessRepository, "get">;
   readonly repositories: Pick<Repositories, "shops">;
   readonly verifier: SessionVerifier<Request>;
+  readonly newId: () => string;
 }
 
 export type ShopDraftErrors = Partial<
-  Record<"form" | "id" | "name" | "website", string>
+  Record<"form" | "name" | "website", string>
 >;
 
 export type ShopDraftResult =
-  | { readonly ok: true }
+  | { readonly ok: true; readonly id: string }
   | { readonly ok: false; readonly errors: ShopDraftErrors };
 
 function text(value: unknown): string {
@@ -47,13 +48,10 @@ export async function saveShopDraft(
     return { ok: false, errors: { form: "Submitted shop data is not valid." } };
   }
   const fields = input as Record<string, unknown>;
-  const id = text(fields.id).trim();
+  const requestedId = text(fields.id).trim();
   const name = text(fields.name).trim();
   const website = text(fields.website).trim();
   const errors: ShopDraftErrors = {};
-  if (id === "") {
-    errors.id = "Shop ID must not be blank.";
-  }
   if (name === "") {
     errors.name = "Shop name must not be blank.";
   }
@@ -63,7 +61,13 @@ export async function saveShopDraft(
   if (Object.keys(errors).length > 0) {
     return { ok: false, errors };
   }
-  const existing = await deps.repositories.shops.get(id);
+  // Only the server mints IDs; a supplied ID may only edit an existing shop.
+  const existing =
+    requestedId === "" ? null : await deps.repositories.shops.get(requestedId);
+  if (requestedId !== "" && existing === null) {
+    return { ok: false, errors: { form: "Shop not found." } };
+  }
+  const id = existing?.id ?? deps.newId();
   const draft: ShopDetails = {
     name,
     links: website === "" ? null : { website, other: [] },
@@ -74,5 +78,5 @@ export async function saveShopDraft(
     draft,
     published: existing?.published ?? null,
   });
-  return { ok: true };
+  return { ok: true, id };
 }

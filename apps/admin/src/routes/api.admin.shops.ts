@@ -13,6 +13,7 @@ export const Route = createFileRoute("/api/admin/shops")({
             access: serverAccessReader,
             repositories: serverEditorRepositories,
             verifier: clerkSessionVerifier,
+            newId: () => crypto.randomUUID(),
           },
           request,
         ),

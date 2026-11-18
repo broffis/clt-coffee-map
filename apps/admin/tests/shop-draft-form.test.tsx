@@ -16,7 +16,7 @@ describe("ShopDraftForm", () => {
   it("offers labeled fields and a save button", () => {
     setup();
 
-    expect(screen.getByLabelText("Shop ID")).toBeVisible();
+    expect(screen.queryByLabelText("Shop ID")).not.toBeInTheDocument();
     expect(screen.getByLabelText("Shop name")).toBeVisible();
     expect(screen.getByLabelText("Website (optional)")).toBeVisible();
     expect(screen.getByRole("button", { name: "Save draft" })).toBeEnabled();
@@ -25,14 +25,12 @@ describe("ShopDraftForm", () => {
   it("submits the entered values and confirms the saved draft", async () => {
     const { save } = setup();
 
-    type("Shop ID", "shop-1");
     type("Shop name", "Bean There");
     type("Website (optional)", "https://bean.example.test");
     fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
 
     expect(await screen.findByRole("status")).toHaveTextContent("Draft saved.");
     expect(save).toHaveBeenCalledWith({
-      id: "shop-1",
       name: "Bean There",
       website: "https://bean.example.test",
     });
@@ -44,7 +42,7 @@ describe("ShopDraftForm", () => {
       errors: { name: "Shop name must not be blank." },
     });
 
-    type("Shop ID", "shop-1");
+    type("Website (optional)", "http://x.example.test");
     fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
 
     const alert = await screen.findByText("Shop name must not be blank.");
@@ -52,7 +50,9 @@ describe("ShopDraftForm", () => {
     expect(alert).toHaveAttribute("role", "alert");
     expect(field).toHaveAttribute("aria-invalid", "true");
     expect(field).toHaveAttribute("aria-describedby", alert.id);
-    expect(screen.getByLabelText("Shop ID")).toHaveValue("shop-1");
+    expect(screen.getByLabelText("Website (optional)")).toHaveValue(
+      "http://x.example.test",
+    );
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 

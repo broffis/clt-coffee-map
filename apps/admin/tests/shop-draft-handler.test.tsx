@@ -23,7 +23,11 @@ async function setup() {
   const access = createInMemoryAccessRepository();
   await access.save(approveAccess(null, "user_editor", NOW));
   const repositories = createInMemoryRepositories();
-  return { repositories, deps: { access, repositories, verifier: verified } };
+  const newId = () => "shop-new";
+  return {
+    repositories,
+    deps: { access, repositories, verifier: verified, newId },
+  };
 }
 
 describe("shop draft endpoint", () => {
@@ -32,13 +36,13 @@ describe("shop draft endpoint", () => {
 
     const response = await handleShopDraftSave(
       deps,
-      post(JSON.stringify({ id: "shop-1", name: "Bean There" })),
+      post(JSON.stringify({ name: "Bean There" })),
     );
 
     expect(response.status).toBe(200);
     expect(response.headers.get("Cache-Control")).toBe("private, no-store");
-    expect(await response.json()).toEqual({ ok: true });
-    expect(await repositories.shops.get("shop-1")).not.toBeNull();
+    expect(await response.json()).toEqual({ ok: true, id: "shop-new" });
+    expect(await repositories.shops.get("shop-new")).not.toBeNull();
   });
 
   it("returns 422 with field errors for invalid input", async () => {
@@ -46,7 +50,7 @@ describe("shop draft endpoint", () => {
 
     const response = await handleShopDraftSave(
       deps,
-      post(JSON.stringify({ id: "shop-1", name: " " })),
+      post(JSON.stringify({ name: " " })),
     );
 
     expect(response.status).toBe(422);
@@ -74,7 +78,7 @@ describe("shop draft endpoint", () => {
 
     const response = await handleShopDraftSave(
       { ...deps, verifier: { verify: async () => null } },
-      post(JSON.stringify({ id: "shop-1", name: "X" })),
+      post(JSON.stringify({ name: "X" })),
     );
 
     expect(response.status).toBe(401);
@@ -88,7 +92,7 @@ describe("shop draft endpoint", () => {
 
     const response = await handleShopDraftSave(
       { ...deps, access: createInMemoryAccessRepository() },
-      post(JSON.stringify({ id: "shop-1", name: "X" })),
+      post(JSON.stringify({ name: "X" })),
     );
 
     expect(response.status).toBe(403);
@@ -102,7 +106,7 @@ describe("shop draft endpoint", () => {
       ...deps.repositories,
       shops: {
         ...deps.repositories.shops,
-        get: async () => {
+        save: async () => {
           throw new PersistenceError("configuration", "MONGODB_URI secret");
         },
       },
@@ -110,7 +114,7 @@ describe("shop draft endpoint", () => {
 
     const response = await handleShopDraftSave(
       { ...deps, repositories: failing },
-      post(JSON.stringify({ id: "shop-1", name: "X" })),
+      post(JSON.stringify({ name: "X" })),
     );
 
     expect(response.status).toBe(503);

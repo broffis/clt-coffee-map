@@ -79,10 +79,7 @@ describe("admin sign-in", () => {
       .mockResolvedValue(Response.json({ ok: true }));
     await renderAdmin();
 
-    fireEvent.change(await screen.findByLabelText("Shop ID"), {
-      target: { value: "shop-1" },
-    });
-    fireEvent.change(screen.getByLabelText("Shop name"), {
+    fireEvent.change(await screen.findByLabelText("Shop name"), {
       target: { value: "Bean There" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Save draft" }));

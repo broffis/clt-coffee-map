@@ -2,7 +2,6 @@ import { useForm, useStore } from "@tanstack/react-form";
 import { useEffect, useId, useState } from "react";
 
 export interface ShopDraftValues {
-  readonly id: string;
   readonly name: string;
   readonly website: string;
 }
@@ -17,7 +16,7 @@ export type SaveOutcome =
       readonly message?: string;
     };
 
-const EMPTY: ShopDraftValues = { id: "", name: "", website: "" };
+const EMPTY: ShopDraftValues = { name: "", website: "" };
 
 export function ShopDraftForm({
   save,
@@ -99,7 +98,6 @@ export function ShopDraftForm({
         void form.handleSubmit();
       }}
     >
-      {field("id", "Shop ID")}
       {field("name", "Shop name")}
       {field("website", "Website (optional)", "url")}
       {errors.form !== undefined && <p role="alert">{errors.form}</p>}

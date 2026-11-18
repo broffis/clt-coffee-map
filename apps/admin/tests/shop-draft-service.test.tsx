@@ -16,22 +16,26 @@ async function setup() {
   const access = createInMemoryAccessRepository();
   await access.save(approveAccess(null, "user_editor", NOW));
   const repositories = createInMemoryRepositories();
-  return { access, repositories, deps: { access, repositories, verifier } };
+  const newId = () => "shop-new";
+  return {
+    access,
+    repositories,
+    deps: { access, repositories, verifier, newId },
+  };
 }
 
 describe("saveShopDraft", () => {
-  it("creates an unpublished draft for an approved editor", async () => {
+  it("creates an unpublished draft under a server-generated ID", async () => {
     const { repositories, deps } = await setup();
 
     const result = await saveShopDraft(deps, request, {
-      id: "shop-1",
       name: "  Bean There  ",
       website: "https://bean.example.test",
     });
 
-    expect(result).toEqual({ ok: true });
-    expect(await repositories.shops.get("shop-1")).toEqual({
-      id: "shop-1",
+    expect(result).toEqual({ ok: true, id: "shop-new" });
+    expect(await repositories.shops.get("shop-new")).toEqual({
+      id: "shop-new",
       draft: {
         name: "Bean There",
         links: { website: "https://bean.example.test", other: [] },
@@ -45,7 +49,6 @@ describe("saveShopDraft", () => {
     const { repositories, deps } = await setup();
 
     const result = await saveShopDraft(deps, request, {
-      id: "shop-1",
       name: "   ",
       website: "http://insecure.example.test",
     });
@@ -83,13 +86,29 @@ describe("saveShopDraft", () => {
       published,
     });
 
-    await saveShopDraft(deps, request, { id: "shop-1", name: "New Draft" });
+    const result = await saveShopDraft(deps, request, {
+      id: "shop-1",
+      name: "New Draft",
+    });
 
+    expect(result).toEqual({ ok: true, id: "shop-1" });
     expect(await repositories.shops.get("shop-1")).toEqual({
       id: "shop-1",
       draft: { name: "New Draft", links: null, sources: null },
       published,
     });
+  });
+
+  it("rejects editing an unknown shop without creating it", async () => {
+    const { repositories, deps } = await setup();
+
+    await expect(
+      saveShopDraft(deps, request, { id: "ghost", name: "Ghost" }),
+    ).resolves.toEqual({
+      ok: false,
+      errors: { form: "Shop not found." },
+    });
+    expect(await repositories.shops.list()).toEqual([]);
   });
 
   it("denies an unapproved or revoked session without writing", async () => {
@@ -101,7 +120,7 @@ describe("saveShopDraft", () => {
     await access.save(revokeAccess(editor, NOW));
 
     await expect(
-      saveShopDraft(deps, request, { id: "shop-1", name: "Nope" }),
+      saveShopDraft(deps, request, { name: "Nope" }),
     ).rejects.toEqual(new AuthorizationError("revoked"));
     expect(await repositories.shops.list()).toEqual([]);
   });
