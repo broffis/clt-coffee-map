@@ -245,6 +245,16 @@ also requires `MONGODB_URI` and `MONGODB_DB_NAME`; without Atlas configuration
 it reports unavailable permissions, not successful access or an unapproved
 account. No database or Clerk account is created automatically.
 
+Saving shop drafts (`POST /api/admin/shops`) uses separate editor credentials,
+`MONGODB_WRITE_URI` and `MONGODB_WRITE_DB_NAME`, which never fall back to the
+read-only variables. Create a dedicated Atlas user limited to read/write on the
+shop and location collections; access records stay read-only through
+`MONGODB_URI`. Without them, saving reports the editor as unavailable. Drafts
+are never published by this endpoint.
+State-changing requests to admin route handlers (not only server functions)
+must pass origin validation: requests that are cross-site, from another
+origin, or without `Sec-Fetch-Site`/`Origin`/`Referer` headers are rejected
+with 403.
 In development, Clerk session authorized parties are limited to
 `http://127.0.0.1:3001` and `http://localhost:3001`. Outside development,
 `ADMIN_ORIGIN` must specify the exact HTTP(S) admin origin, without a path,
