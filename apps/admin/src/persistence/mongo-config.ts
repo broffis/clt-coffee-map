@@ -16,17 +16,27 @@ function requireSetting(
   return value;
 }
 
+type Env = Readonly<Record<string, string | undefined>>;
+
 // Error messages never include the URI because it contains credentials.
-export function readMongoConfig(
-  env: Readonly<Record<string, string | undefined>>,
-): MongoConfig {
-  const uri = requireSetting(env, "MONGODB_URI");
-  const databaseName = requireSetting(env, "MONGODB_DB_NAME");
+function readConfig(env: Env, uriName: string, dbName: string): MongoConfig {
+  const uri = requireSetting(env, uriName);
+  const databaseName = requireSetting(env, dbName);
   if (!/^mongodb(\+srv)?:\/\//.test(uri)) {
     throw new PersistenceError(
       "configuration",
-      "MONGODB_URI must be a mongodb:// or mongodb+srv:// URI.",
+      `${uriName} must be a mongodb:// or mongodb+srv:// URI.`,
     );
   }
   return { uri, databaseName };
+}
+
+export function readMongoConfig(env: Env): MongoConfig {
+  return readConfig(env, "MONGODB_URI", "MONGODB_DB_NAME");
+}
+
+// Editor writes use dedicated least-privilege credentials, never the
+// read-only application user.
+export function readMongoWriteConfig(env: Env): MongoConfig {
+  return readConfig(env, "MONGODB_WRITE_URI", "MONGODB_WRITE_DB_NAME");
 }

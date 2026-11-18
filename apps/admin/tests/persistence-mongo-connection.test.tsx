@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import { PersistenceError } from "../src/persistence/errors";
-import { readMongoConfig } from "../src/persistence/mongo-config";
+import {
+  readMongoConfig,
+  readMongoWriteConfig,
+} from "../src/persistence/mongo-config";
 import {
   createMongoClient,
   createMongoConnection,
@@ -18,6 +21,35 @@ function fakeClient() {
     close: vi.fn(async () => undefined),
   };
 }
+
+describe("Mongo editor write configuration", () => {
+  it("reads only the dedicated write variables", () => {
+    expect(
+      readMongoWriteConfig({
+        MONGODB_WRITE_URI: "mongodb://localhost:27017",
+        MONGODB_WRITE_DB_NAME: "clt",
+      }),
+    ).toEqual({ uri: "mongodb://localhost:27017", databaseName: "clt" });
+  });
+
+  it("never falls back to the read-only credentials", () => {
+    const env = {
+      MONGODB_URI: "mongodb://localhost:27017",
+      MONGODB_DB_NAME: "clt",
+    };
+    expect(() => readMongoWriteConfig(env)).toThrow(PersistenceError);
+    expect(() => readMongoWriteConfig(env)).toThrow("MONGODB_WRITE_URI");
+  });
+
+  it("rejects a non-Mongo URI", () => {
+    expect(() =>
+      readMongoWriteConfig({
+        MONGODB_WRITE_URI: "https://example.test",
+        MONGODB_WRITE_DB_NAME: "clt",
+      }),
+    ).toThrow(/mongodb/);
+  });
+});
 
 describe("Mongo configuration", () => {
   it("reads the URI and database name from the environment", () => {
