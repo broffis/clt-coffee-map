@@ -72,6 +72,28 @@ describe("admin sign-in", () => {
     },
   );
 
+  it("shows the shop draft form only to signed-in users and saves through the private endpoint", async () => {
+    session.signedIn = true;
+    const fetch = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(Response.json({ ok: true }));
+    await renderAdmin();
+
+    fireEvent.change(await screen.findByLabelText("Shop ID"), {
+      target: { value: "shop-1" },
+    });
+    fireEvent.change(screen.getByLabelText("Shop name"), {
+      target: { value: "Bean There" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+
+    expect(await screen.findByText("Draft saved.")).toBeVisible();
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/admin/shops",
+      expect.objectContaining({ method: "POST" }),
+    );
+  });
+
   it("reports network failure and allows retrying the access check", async () => {
     session.signedIn = true;
     vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("Offline"));
