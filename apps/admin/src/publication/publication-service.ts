@@ -7,11 +7,16 @@ import {
 } from "../domain/publication";
 import type { AccessRepository } from "../persistence/access-repository";
 import type { Repositories } from "../persistence/repositories";
+import type {
+  PublicRegenerationRequest,
+  PublicRegenerationTrigger,
+} from "./public-regeneration";
 
 export interface PublicationDependencies {
   readonly access: Pick<AccessRepository, "get">;
   readonly repositories: Pick<Repositories, "shops" | "locations">;
   readonly verifier: SessionVerifier<Request>;
+  readonly publicRegeneration?: PublicRegenerationTrigger;
 }
 
 export type PublicationErrors = Partial<
@@ -135,6 +140,14 @@ export async function updatePublication(
       return { ok: false, errors: { form: "Shop or location not found." } };
     }
     await deps.repositories.locations.save(unpublishLocation(location));
+  }
+  if (deps.publicRegeneration !== undefined) {
+    const regeneration: PublicRegenerationRequest = {
+      action: publicationAction,
+      shopId,
+      ...(locationId === "" ? {} : { locationId }),
+    };
+    await deps.publicRegeneration.trigger(regeneration);
   }
 
   return {

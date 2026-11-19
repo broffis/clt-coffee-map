@@ -56,7 +56,8 @@ export async function updateLocationPublication(
     case 503:
       return {
         ok: false,
-        message: "Publication is unavailable right now. Try again later.",
+        message:
+          "The change was saved, but the public update could not be triggered. Try again later.",
       };
     default:
       return {

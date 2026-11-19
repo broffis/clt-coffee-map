@@ -269,6 +269,20 @@ The server generates location IDs and applies the region and city from
 creates a location. If either is missing, creating a location reports the
 editor as unavailable; editing existing locations keeps their region and city.
 The editor user needs no privileges beyond the shop and location collections.
+Publishing a location or republishing shared shop details saves the Atlas
+snapshot first, then POSTs a server-only publication event to the configured
+`PUBLIC_REGENERATION_WEBHOOK_URL`. The URL must be HTTPS and is never exposed
+to browser code; an optional `PUBLIC_REGENERATION_WEBHOOK_SECRET` is sent in
+the `X-Public-Regeneration-Secret` header. The hook should start the public
+app's provider-neutral build/deploy or revalidation job. If it is missing or
+fails, the records remain saved but the admin receives a 503 indicating that
+the public update is pending; this avoids claiming immediate public
+visibility. Keep the hook URL fixed in deployment configuration, do not accept
+it from requests, and protect the hook with its own secret or provider
+authentication. The current public API uses
+`public, max-age=60, s-maxage=300, stale-while-revalidate=600` for successful
+reads and `no-store` for failures; these are freshness bounds, not an
+instant purge guarantee.
 State-changing requests to admin route handlers (not only server functions)
 must pass origin validation: requests that are cross-site, from another
 origin, or without `Sec-Fetch-Site`/`Origin`/`Referer` headers are rejected

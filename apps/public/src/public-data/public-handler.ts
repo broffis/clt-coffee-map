@@ -1,3 +1,4 @@
+import { publicCacheControl, publicFailureCacheControl } from "./cache-policy";
 import { PublicReadError, type PublicShopReader } from "./public-reader";
 
 export interface PublicReadDependencies {
@@ -5,10 +6,9 @@ export interface PublicReadDependencies {
 }
 
 const successHeaders = {
-  "Cache-Control":
-    "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
+  "Cache-Control": publicCacheControl,
 };
-const failureHeaders = { "Cache-Control": "no-store" };
+const failureHeaders = { "Cache-Control": publicFailureCacheControl };
 
 export async function handlePublicShops(
   deps: PublicReadDependencies,

@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { SessionVerifier } from "../src/authentication/session";
 import { AuthorizationError } from "../src/authorization/service";
 import { approveAccess, revokeAccess } from "../src/domain/access";
@@ -102,6 +102,23 @@ describe("updatePublication", () => {
     expect((await repositories.shops.get("shop-1"))?.published).not.toBeNull();
   });
 
+  it("triggers public regeneration after saving a publication", async () => {
+    const trigger = { trigger: vi.fn().mockResolvedValue(undefined) };
+    const { deps } = await setup();
+
+    await updatePublication({ ...deps, publicRegeneration: trigger }, request, {
+      action: "publish-location",
+      shopId: "shop-1",
+      locationId: "location-1",
+    });
+
+    expect(trigger.trigger).toHaveBeenCalledWith({
+      action: "publish-location",
+      shopId: "shop-1",
+      locationId: "location-1",
+    });
+  });
+
   it("republishes shared shop details without changing locations", async () => {
     const { repositories, deps } = await setup();
     await updatePublication(deps, request, {
@@ -109,6 +126,7 @@ describe("updatePublication", () => {
       shopId: "shop-1",
       locationId: "location-1",
     });
+
     const publishedShop = await repositories.shops.get("shop-1");
     if (publishedShop === null) {
       throw new Error("Expected the shop to exist.");
