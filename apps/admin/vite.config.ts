@@ -10,6 +10,8 @@ export default defineConfig(({ mode }) => {
     "ADMIN_ORIGIN",
     "MONGODB_URI",
     "MONGODB_DB_NAME",
+    "PUBLIC_REGENERATION_WEBHOOK_URL",
+    "PUBLIC_REGENERATION_WEBHOOK_SECRET",
   ]) {
     if (env[name] !== undefined) {
       process.env[name] ??= env[name];

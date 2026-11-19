@@ -4,6 +4,7 @@ import { useState } from "react";
 import { EditorWorkspace } from "../editor/EditorWorkspace";
 import { loadEditorRecordsRequest } from "../editor/editor-records-client";
 import { saveLocationDraftRequest } from "../editor/location-draft-client";
+import { updateLocationPublication } from "../editor/publication-client";
 import { saveShopDraftRequest } from "../editor/shop-draft-client";
 
 export const Route = createFileRoute("/")({
@@ -70,6 +71,7 @@ export function Home() {
           load={loadEditorRecordsRequest}
           saveShop={saveShopDraftRequest}
           saveLocation={saveLocationDraftRequest}
+          updatePublication={updateLocationPublication}
         />
       </Show>
     </main>

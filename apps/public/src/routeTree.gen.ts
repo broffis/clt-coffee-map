@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiShopsRouteImport } from './routes/api.shops'
+import { Route as ShopsShopIdRouteImport } from './routes/shops/$shopId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiShopsRoute = ApiShopsRouteImport.update({
+  id: '/api/shops',
+  path: '/api/shops',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopsShopIdRoute = ShopsShopIdRouteImport.update({
+  id: '/shops/$shopId',
+  path: '/shops/$shopId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/shops': typeof ApiShopsRoute
+  '/shops/$shopId': typeof ShopsShopIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/shops': typeof ApiShopsRoute
+  '/shops/$shopId': typeof ShopsShopIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/shops': typeof ApiShopsRoute
+  '/shops/$shopId': typeof ShopsShopIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/api/shops' | '/shops/$shopId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/api/shops' | '/shops/$shopId'
+  id: '__root__' | '/' | '/api/shops' | '/shops/$shopId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiShopsRoute: typeof ApiShopsRoute
+  ShopsShopIdRoute: typeof ShopsShopIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/shops': {
+      id: '/api/shops'
+      path: '/api/shops'
+      fullPath: '/api/shops'
+      preLoaderRoute: typeof ApiShopsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shops/$shopId': {
+      id: '/shops/$shopId'
+      path: '/shops/$shopId'
+      fullPath: '/shops/$shopId'
+      preLoaderRoute: typeof ShopsShopIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiShopsRoute: ApiShopsRoute,
+  ShopsShopIdRoute: ShopsShopIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

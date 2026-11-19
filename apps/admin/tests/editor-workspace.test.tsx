@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { EditorWorkspace } from "../src/editor/EditorWorkspace";
 import type { LoadOutcome } from "../src/editor/editor-records-client";
+import type { PublicationOutcome } from "../src/editor/publication-client";
 
 const records = {
   shops: [
@@ -9,9 +10,11 @@ const records = {
       id: "s1",
       name: "Bean There",
       website: "https://bean.example.test",
+      published: false,
       locations: [
         {
           id: "l1",
+          published: false,
           type: "cafe",
           streetLine1: "1 Main St",
           streetLine2: "",
@@ -30,6 +33,7 @@ function setup(
     load?: () => Promise<LoadOutcome>;
     saveShop?: () => Promise<{ ok: true; id?: string }>;
     saveLocation?: () => Promise<{ ok: true; id?: string }>;
+    updatePublication?: () => Promise<PublicationOutcome>;
   } = {},
 ) {
   const load = vi.fn(options.load ?? (async () => ({ ok: true, records })));
@@ -37,14 +41,18 @@ function setup(
   const saveLocation = vi.fn(
     options.saveLocation ?? (async () => ({ ok: true })),
   );
+  const updatePublication = vi.fn(
+    options.updatePublication ?? (async () => ({ ok: true })),
+  );
   render(
     <EditorWorkspace
       load={load as never}
       saveShop={saveShop as never}
       saveLocation={saveLocation as never}
+      updatePublication={updatePublication as never}
     />,
   );
-  return { load, saveShop, saveLocation };
+  return { load, saveShop, saveLocation, updatePublication };
 }
 
 describe("EditorWorkspace", () => {
@@ -54,6 +62,101 @@ describe("EditorWorkspace", () => {
     expect(screen.getByText("Loading shops...")).toBeVisible();
     expect(await screen.findByText("Bean There")).toBeVisible();
     expect(screen.getByText(/1 Main St/)).toBeVisible();
+    expect(screen.getByRole("button", { name: "Publish" })).toBeVisible();
+  });
+
+  it("publishes an unpublished location and reports success", async () => {
+    const { updatePublication } = setup();
+    await screen.findByText("Bean There");
+
+    fireEvent.click(screen.getByRole("button", { name: "Publish" }));
+
+    await waitFor(() =>
+      expect(updatePublication).toHaveBeenCalledWith(
+        "s1",
+        "l1",
+        "publish-location",
+      ),
+    );
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Location published.",
+    );
+  });
+
+  it("republishes shared shop details", async () => {
+    const { updatePublication } = setup({
+      load: async () => ({
+        ok: true,
+        records: {
+          ...records,
+          shops: records.shops.map((shop) => ({ ...shop, published: true })),
+        },
+      }),
+    });
+    await screen.findByText("Bean There");
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Republish shop details" }),
+    );
+
+    await waitFor(() =>
+      expect(updatePublication).toHaveBeenCalledWith(
+        "s1",
+        undefined,
+        "republish-shop",
+      ),
+    );
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Shop details republished.",
+    );
+  });
+
+  it("unpublishes a published location", async () => {
+    const { updatePublication } = setup({
+      load: async () => ({
+        ok: true,
+        records: {
+          ...records,
+          shops: records.shops.map((shop) => ({
+            ...shop,
+            locations: shop.locations.map((location) => ({
+              ...location,
+              published: true,
+            })),
+          })),
+        },
+      }),
+    });
+    await screen.findByText("Bean There");
+
+    fireEvent.click(screen.getByRole("button", { name: "Unpublish" }));
+
+    await waitFor(() =>
+      expect(updatePublication).toHaveBeenCalledWith(
+        "s1",
+        "l1",
+        "unpublish-location",
+      ),
+    );
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Location unpublished.",
+    );
+  });
+
+  it("reports publication failures", async () => {
+    setup({
+      updatePublication: async () => ({
+        ok: false,
+        message: "Publishing is unavailable.",
+      }),
+    });
+    await screen.findByText("Bean There");
+
+    fireEvent.click(screen.getByRole("button", { name: "Publish" }));
+
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Publishing is unavailable.",
+    );
   });
 
   it("reports a load failure and retries", async () => {
@@ -161,9 +264,11 @@ describe("EditorWorkspace", () => {
               id: "s2",
               name: "Truck",
               website: "",
+              published: false,
               locations: [
                 {
                   id: "l2",
+                  published: false,
                   type: "mobile coffee",
                   streetLine1: "",
                   streetLine2: "",

@@ -1,5 +1,6 @@
 export interface EditorLocationRecord {
   readonly id: string;
+  readonly published: boolean;
   readonly type: string;
   readonly streetLine1: string;
   readonly streetLine2: string;
@@ -13,6 +14,7 @@ export interface EditorShopRecord {
   readonly id: string;
   readonly name: string;
   readonly website: string;
+  readonly published: boolean;
   readonly locations: readonly EditorLocationRecord[];
 }
 

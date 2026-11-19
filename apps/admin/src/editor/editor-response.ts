@@ -1,6 +1,7 @@
 import { SessionVerificationError } from "../authentication/session";
 import { AuthorizationError } from "../authorization/service";
 import { PersistenceError } from "../persistence/errors";
+import { PublicRegenerationError } from "../publication/public-regeneration";
 
 const headers = { "Cache-Control": "private, no-store" };
 
@@ -23,6 +24,12 @@ export function respondToEditorError(error: unknown): Response {
   }
   if (error instanceof PersistenceError) {
     return Response.json({ error: "unavailable" }, { status: 503, headers });
+  }
+  if (error instanceof PublicRegenerationError) {
+    return Response.json(
+      { error: "public-update-pending" },
+      { status: 503, headers },
+    );
   }
   throw error;
 }

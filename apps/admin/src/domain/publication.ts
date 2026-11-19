@@ -17,6 +17,15 @@ export function publishShopLocation(
   };
 }
 
+export function republishShopDetails(shop: Shop): Shop {
+  if (shop.published === null) {
+    throw new RangeError(
+      "Publish a location before republishing shop details.",
+    );
+  }
+  return publishShopDetails(shop);
+}
+
 export function unpublishLocation(location: ShopLocation): ShopLocation {
   return { ...location, published: null };
 }

@@ -28,9 +28,11 @@ export async function handleEditorRecords(
         id: shop.id,
         name: shop.draft.name,
         website: shop.draft.links?.website ?? "",
+        published: shop.published !== null,
         locations: (await deps.repositories.locations.listByShop(shop.id)).map(
-          ({ id, draft }) => ({
+          ({ id, draft, published }) => ({
             id,
+            published: published !== null,
             type: draft.type,
             streetLine1: draft.address?.streetLine1 ?? "",
             streetLine2: draft.address?.streetLine2 ?? "",
