@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/broffis/clt-coffee-map/compare/public-v0.1.0...public-v0.2.0) (2026-11-19)
+
+
+### Features
+
+* implement published public read and publication workflow ([#97](https://github.com/broffis/clt-coffee-map/issues/97)) ([b0210ff](https://github.com/broffis/clt-coffee-map/commit/b0210ffb902b1c9841d9400675ffbe9a4fc6c709))
+
 ## 0.1.0 (2026-11-11)
 
 
