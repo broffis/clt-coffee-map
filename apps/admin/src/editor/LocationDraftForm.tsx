@@ -5,6 +5,8 @@ import type { LocationDraftValues } from "./location-draft-client";
 
 type FieldName = keyof LocationDraftValues;
 
+const REQUIRED: readonly FieldName[] = ["shopId", "type"];
+
 const TYPES = ["cafe", "bakery", "mobile coffee", "coffee roaster"] as const;
 
 const EMPTY: LocationDraftValues = {
@@ -82,6 +84,9 @@ export function LocationDraftForm({
             value: api.state.value,
             "aria-invalid": error === undefined ? undefined : (true as const),
             "aria-describedby": error === undefined ? undefined : errorId,
+            "aria-required": REQUIRED.includes(name)
+              ? (true as const)
+              : undefined,
           };
           const change = (value: string) => {
             setSaved(false);
@@ -90,6 +95,7 @@ export function LocationDraftForm({
           return (
             <div>
               <label htmlFor={shared.id}>{label}</label>
+              {REQUIRED.includes(name) && <span aria-hidden="true"> *</span>}
               {control === "select" ? (
                 <select
                   {...shared}
@@ -134,6 +140,7 @@ export function LocationDraftForm({
         void form.handleSubmit();
       }}
     >
+      <p>* Required field</p>
       {field("shopId", "Shop", "select", [
         { value: "", label: "Select a shop" },
         ...shops.map((shop) => ({ value: shop.id, label: shop.name })),
@@ -145,11 +152,11 @@ export function LocationDraftForm({
         TYPES.map((type) => ({ value: type, label: type })),
       )}
       {field("streetLine1", "Street address")}
-      {field("streetLine2", "Street address line 2 (optional)")}
-      {field("postalCode", "Postal code (optional)")}
-      {field("latitude", "Latitude (optional for mobile)")}
-      {field("longitude", "Longitude (optional for mobile)")}
-      {field("website", "Location website (optional)")}
+      {field("streetLine2", "Street address line 2")}
+      {field("postalCode", "Postal code")}
+      {field("latitude", "Latitude")}
+      {field("longitude", "Longitude")}
+      {field("website", "Location website")}
       {errors.form !== undefined && <p role="alert">{errors.form}</p>}
       <button type="submit" disabled={submitting}>
         {submitting ? "Saving..." : "Save location"}

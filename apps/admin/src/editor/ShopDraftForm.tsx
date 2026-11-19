@@ -66,11 +66,13 @@ export function ShopDraftForm({
         {(api) => (
           <div>
             <label htmlFor={`${prefix}-${name}`}>{label}</label>
+            {name === "name" && <span aria-hidden="true"> *</span>}
             <input
               id={`${prefix}-${name}`}
               name={name}
               type={type}
               value={api.state.value}
+              aria-required={name === "name" ? true : undefined}
               aria-invalid={error === undefined ? undefined : true}
               aria-describedby={error === undefined ? undefined : errorId}
               onChange={(event) => {
@@ -98,8 +100,9 @@ export function ShopDraftForm({
         void form.handleSubmit();
       }}
     >
+      <p>* Required field</p>
       {field("name", "Shop name")}
-      {field("website", "Website (optional)", "url")}
+      {field("website", "Website", "url")}
       {errors.form !== undefined && <p role="alert">{errors.form}</p>}
       <button type="submit" disabled={submitting}>
         {submitting ? "Saving..." : "Save draft"}

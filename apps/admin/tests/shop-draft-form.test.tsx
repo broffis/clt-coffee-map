@@ -18,7 +18,10 @@ describe("ShopDraftForm", () => {
 
     expect(screen.queryByLabelText("Shop ID")).not.toBeInTheDocument();
     expect(screen.getByLabelText("Shop name")).toBeVisible();
-    expect(screen.getByLabelText("Website (optional)")).toBeVisible();
+    expect(screen.getByLabelText("Website")).toBeVisible();
+    expect(screen.getByText("* Required field")).toBeVisible();
+    expect(screen.getByLabelText("Shop name")).toBeRequired();
+    expect(screen.getByLabelText("Website")).not.toBeRequired();
     expect(screen.getByRole("button", { name: "Save draft" })).toBeEnabled();
   });
 
@@ -48,7 +51,7 @@ describe("ShopDraftForm", () => {
     const { save } = setup();
 
     type("Shop name", "Bean There");
-    type("Website (optional)", "https://bean.example.test");
+    type("Website", "https://bean.example.test");
     fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
 
     expect(await screen.findByRole("status")).toHaveTextContent("Draft saved.");
@@ -64,7 +67,7 @@ describe("ShopDraftForm", () => {
       errors: { name: "Shop name must not be blank." },
     });
 
-    type("Website (optional)", "http://x.example.test");
+    type("Website", "http://x.example.test");
     fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
 
     const alert = await screen.findByText("Shop name must not be blank.");
@@ -72,7 +75,7 @@ describe("ShopDraftForm", () => {
     expect(alert).toHaveAttribute("role", "alert");
     expect(field).toHaveAttribute("aria-invalid", "true");
     expect(field).toHaveAttribute("aria-describedby", alert.id);
-    expect(screen.getByLabelText("Website (optional)")).toHaveValue(
+    expect(screen.getByLabelText("Website")).toHaveValue(
       "http://x.example.test",
     );
     expect(screen.queryByRole("status")).not.toBeInTheDocument();

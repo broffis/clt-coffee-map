@@ -35,14 +35,18 @@ describe("LocationDraftForm", () => {
     ).toEqual(["cafe", "bakery", "mobile coffee", "coffee roaster"]);
     for (const label of [
       "Street address",
-      "Street address line 2 (optional)",
-      "Postal code (optional)",
-      "Latitude (optional for mobile)",
-      "Longitude (optional for mobile)",
-      "Location website (optional)",
+      "Street address line 2",
+      "Postal code",
+      "Latitude",
+      "Longitude",
+      "Location website",
     ]) {
       expect(screen.getByLabelText(label)).toBeVisible();
     }
+    expect(screen.getByText("* Required field")).toBeVisible();
+    expect(screen.getByLabelText("Shop")).toBeRequired();
+    expect(screen.getByLabelText("Type")).toBeRequired();
+    expect(screen.getByLabelText("Street address")).not.toBeRequired();
     expect(screen.queryByLabelText(/region|city|id/i)).not.toBeInTheDocument();
   });
 
@@ -52,8 +56,8 @@ describe("LocationDraftForm", () => {
     type("Shop", "s2");
     type("Type", "bakery");
     type("Street address", "1 Main St");
-    type("Latitude (optional for mobile)", "35.2");
-    type("Longitude (optional for mobile)", "-80.8");
+    type("Latitude", "35.2");
+    type("Longitude", "-80.8");
     fireEvent.click(screen.getByRole("button", { name: "Save location" }));
 
     expect(await screen.findByRole("status")).toHaveTextContent(
@@ -97,7 +101,7 @@ describe("LocationDraftForm", () => {
     fireEvent.click(screen.getByRole("button", { name: "Save location" }));
 
     const alert = await screen.findByText("Latitude is out of range.");
-    const field = screen.getByLabelText("Latitude (optional for mobile)");
+    const field = screen.getByLabelText("Latitude");
     expect(alert).toHaveAttribute("role", "alert");
     expect(field).toHaveAttribute("aria-invalid", "true");
     expect(field).toHaveAttribute("aria-describedby", alert.id);
