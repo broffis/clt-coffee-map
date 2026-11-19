@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import type { CandidateLoadOutcome, CandidateRecord } from "./candidate-client";
 import type { SaveOutcome } from "./draft-request";
 import type {
   EditorLocationRecord,
@@ -43,6 +44,8 @@ export function EditorWorkspace({
   saveShop,
   saveLocation,
   updatePublication,
+  loadCandidates,
+  reviewCandidate,
 }: {
   readonly load: () => Promise<LoadOutcome>;
   readonly saveShop: (
@@ -56,6 +59,13 @@ export function EditorWorkspace({
     locationId: string | undefined,
     action: PublicationAction,
   ) => Promise<PublicationOutcome>;
+  readonly loadCandidates?: () => Promise<CandidateLoadOutcome>;
+  readonly reviewCandidate?: (
+    candidateId: string,
+    type: string,
+    name?: string,
+    website?: string,
+  ) => Promise<SaveOutcome>;
 }) {
   const [state, setState] = useState<State>({ status: "loading" });
   const [selection, setSelection] = useState<Selection | null>(null);
@@ -70,6 +80,26 @@ export function EditorWorkspace({
     readonly busy: boolean;
     readonly message?: string;
   } | null>(null);
+  const [candidateState, setCandidateState] = useState<
+    | { readonly status: "unavailable"; readonly message: string }
+    | {
+        readonly status: "ready";
+        readonly candidates: readonly CandidateRecord[];
+      }
+    | null
+  >(null);
+  const [candidateTypes, setCandidateTypes] = useState<Record<string, string>>(
+    {},
+  );
+  const [candidateNames, setCandidateNames] = useState<Record<string, string>>(
+    {},
+  );
+  const [candidateWebsites, setCandidateWebsites] = useState<
+    Record<string, string>
+  >({});
+  const [reviewingCandidate, setReviewingCandidate] = useState<string | null>(
+    null,
+  );
 
   const refresh = useCallback(async () => {
     const outcome = await load();
@@ -82,7 +112,41 @@ export function EditorWorkspace({
 
   useEffect(() => {
     void refresh();
-  }, [refresh]);
+    if (loadCandidates !== undefined) {
+      void (async () => {
+        const outcome = await loadCandidates();
+        setCandidateState(
+          outcome.ok
+            ? { status: "ready", candidates: outcome.candidates }
+            : { status: "unavailable", message: outcome.message },
+        );
+      })();
+    }
+  }, [loadCandidates, refresh]);
+
+  async function review(candidate: CandidateRecord): Promise<void> {
+    if (reviewCandidate === undefined) {
+      return;
+    }
+    const type = candidateTypes[candidate.id] ?? candidate.type ?? "cafe";
+    const name = candidateNames[candidate.id] ?? candidate.name;
+    const website = candidateWebsites[candidate.id] ?? candidate.website ?? "";
+    setReviewingCandidate(candidate.id);
+    const outcome = await reviewCandidate(candidate.id, type, name, website);
+    setReviewingCandidate(null);
+    if (!outcome.ok) {
+      setCandidateState({
+        status: "unavailable",
+        message: outcome.message ?? "Candidate could not be reviewed.",
+      });
+      return;
+    }
+    await refresh();
+    const candidates = await loadCandidates?.();
+    if (candidates?.ok) {
+      setCandidateState({ status: "ready", candidates: candidates.candidates });
+    }
+  }
 
   function open(next: Omit<Selection, "formKey">) {
     setFormCount((count) => count + 1);
@@ -198,6 +262,93 @@ export function EditorWorkspace({
           New location
         </button>
       </div>
+      {candidateState?.status === "unavailable" && (
+        <p role="alert">{candidateState.message}</p>
+      )}
+      {candidateState?.status === "ready" &&
+        candidateState.candidates.length > 0 && (
+          <section aria-labelledby="candidate-heading">
+            <h2 id="candidate-heading">Source candidates</h2>
+            <p>
+              Review candidates into unpublished drafts. They never become
+              public automatically.
+            </p>
+            <ul aria-label="Source candidates">
+              {candidateState.candidates.map((candidate) => {
+                const type =
+                  candidateTypes[candidate.id] ?? candidate.type ?? "cafe";
+                return (
+                  <li key={candidate.id}>
+                    <strong>{candidate.name}</strong>{" "}
+                    <span>
+                      ({candidate.sourceRecordId}, {candidate.release})
+                    </span>
+                    <label>
+                      Name
+                      <input
+                        value={candidateNames[candidate.id] ?? candidate.name}
+                        onChange={(event) =>
+                          setCandidateNames((current) => ({
+                            ...current,
+                            [candidate.id]: event.target.value,
+                          }))
+                        }
+                      />
+                    </label>
+                    <label>
+                      Website
+                      <input
+                        value={
+                          candidateWebsites[candidate.id] ??
+                          candidate.website ??
+                          ""
+                        }
+                        onChange={(event) =>
+                          setCandidateWebsites((current) => ({
+                            ...current,
+                            [candidate.id]: event.target.value,
+                          }))
+                        }
+                      />
+                    </label>
+                    <label>
+                      Type
+                      <select
+                        value={type}
+                        onChange={(event) =>
+                          setCandidateTypes((current) => ({
+                            ...current,
+                            [candidate.id]: event.target.value,
+                          }))
+                        }
+                      >
+                        {[
+                          "cafe",
+                          "bakery",
+                          "mobile coffee",
+                          "coffee roaster",
+                        ].map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <button
+                      type="button"
+                      disabled={reviewingCandidate === candidate.id}
+                      onClick={() => void review(candidate)}
+                    >
+                      {reviewingCandidate === candidate.id
+                        ? "Reviewing..."
+                        : "Review as draft"}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
       {shops.length === 0 ? (
         <p>No shops yet. Create a shop before adding locations.</p>
       ) : (

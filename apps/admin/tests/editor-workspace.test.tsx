@@ -1,6 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { EditorWorkspace } from "../src/editor/EditorWorkspace";
+import type { CandidateLoadOutcome } from "../src/editor/candidate-client";
+import type { SaveOutcome } from "../src/editor/draft-request";
 import type { LoadOutcome } from "../src/editor/editor-records-client";
 import type { PublicationOutcome } from "../src/editor/publication-client";
 
@@ -34,6 +36,8 @@ function setup(
     saveShop?: () => Promise<{ ok: true; id?: string }>;
     saveLocation?: () => Promise<{ ok: true; id?: string }>;
     updatePublication?: () => Promise<PublicationOutcome>;
+    loadCandidates?: () => Promise<CandidateLoadOutcome>;
+    reviewCandidate?: () => Promise<SaveOutcome>;
   } = {},
 ) {
   const load = vi.fn(options.load ?? (async () => ({ ok: true, records })));
@@ -50,6 +54,8 @@ function setup(
       saveShop={saveShop as never}
       saveLocation={saveLocation as never}
       updatePublication={updatePublication as never}
+      loadCandidates={options.loadCandidates as never}
+      reviewCandidate={options.reviewCandidate as never}
     />,
   );
   return { load, saveShop, saveLocation, updatePublication };
@@ -296,5 +302,92 @@ describe("EditorWorkspace", () => {
 
     expect(await screen.findByText(/No shops yet/)).toBeVisible();
     expect(screen.getByRole("button", { name: "New location" })).toBeDisabled();
+  });
+
+  it("shows source candidates and reviews one as a draft", async () => {
+    const reviewCandidate = vi.fn(async () => ({ ok: true as const }));
+    const loadCandidates = vi.fn(async () => ({
+      ok: true as const,
+      candidates: [
+        {
+          id: "candidate-1",
+          source: "overture" as const,
+          sourceRecordId: "ov-1",
+          release: "release-1",
+          name: "Candidate Coffee",
+          type: null,
+          address: null,
+          coordinates: null,
+          website: null,
+          importedAt: "2026-11-19T20:00:00.000Z",
+          status: "pending" as const,
+          reviewedBy: null,
+          reviewedAt: null,
+        },
+      ],
+    }));
+    setup({ loadCandidates, reviewCandidate });
+
+    expect(await screen.findByText("Candidate Coffee")).toBeVisible();
+    fireEvent.change(screen.getByLabelText("Name"), {
+      target: { value: "Edited Candidate Coffee" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Review as draft" }));
+    await waitFor(() =>
+      expect(reviewCandidate).toHaveBeenCalledWith(
+        "candidate-1",
+        "cafe",
+        "Edited Candidate Coffee",
+        "",
+      ),
+    );
+    expect(loadCandidates).toHaveBeenCalledTimes(2);
+  });
+
+  it("reports candidate loading failures", async () => {
+    setup({
+      loadCandidates: async () => ({
+        ok: false,
+        message: "Candidates unavailable.",
+      }),
+    });
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Candidates unavailable.",
+    );
+  });
+
+  it("reports candidate review failures", async () => {
+    const reviewCandidate = vi.fn(async () => ({
+      ok: false as const,
+      message: "Candidate review failed.",
+    }));
+    setup({
+      loadCandidates: async () => ({
+        ok: true as const,
+        candidates: [
+          {
+            id: "candidate-2",
+            source: "overture" as const,
+            sourceRecordId: "ov-2",
+            release: "release-1",
+            name: "Review Failure",
+            type: "bakery" as const,
+            address: null,
+            coordinates: null,
+            website: null,
+            importedAt: "2026-11-19T20:00:00.000Z",
+            status: "pending" as const,
+            reviewedBy: null,
+            reviewedAt: null,
+          },
+        ],
+      }),
+      reviewCandidate,
+    });
+    expect(await screen.findByText("Review Failure")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Review as draft" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Candidate review failed.",
+    );
   });
 });
