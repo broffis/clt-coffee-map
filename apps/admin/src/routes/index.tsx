@@ -1,6 +1,10 @@
 import { Show, SignInButton, UserButton } from "@clerk/tanstack-react-start";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import {
+  loadCandidateRequest,
+  reviewCandidateRequest,
+} from "../editor/candidate-client";
 import { EditorWorkspace } from "../editor/EditorWorkspace";
 import { loadEditorRecordsRequest } from "../editor/editor-records-client";
 import { saveLocationDraftRequest } from "../editor/location-draft-client";
@@ -72,6 +76,8 @@ export function Home() {
           saveShop={saveShopDraftRequest}
           saveLocation={saveLocationDraftRequest}
           updatePublication={updateLocationPublication}
+          loadCandidates={loadCandidateRequest}
+          reviewCandidate={reviewCandidateRequest}
         />
       </Show>
     </main>
