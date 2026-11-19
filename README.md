@@ -260,6 +260,15 @@ shop and location collections; access records stay read-only through
 `MONGODB_URI`. Without them, saving reports the editor as unavailable. Drafts
 are never published by this endpoint. The server generates shop IDs; a
 request-supplied ID may only edit an existing shop and is otherwise rejected.
+Locations are saved with `POST /api/admin/locations` and listed with
+`GET /api/admin/shops` (requires `private:read`), which return draft values only.
+The editor's core location fields are shop, type, street address, postal code,
+coordinates and a location website; hours and details are not yet editable.
+The server generates location IDs and applies the region and city from
+`DEFAULT_REGION_ID` and `DEFAULT_CITY_ID` (never from the client) when it
+creates a location. If either is missing, creating a location reports the
+editor as unavailable; editing existing locations keeps their region and city.
+The editor user needs no privileges beyond the shop and location collections.
 State-changing requests to admin route handlers (not only server functions)
 must pass origin validation: requests that are cross-site, from another
 origin, or without `Sec-Fetch-Site`/`Origin`/`Referer` headers are rejected

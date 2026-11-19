@@ -15,7 +15,10 @@ let connection: MongoConnection<MongoDatabase> | undefined;
 
 // Resolved per call so missing credentials surface as a persistence error
 // from the handler instead of failing at import time.
-export const serverEditorRepositories: Pick<Repositories, "shops"> = {
+export const serverEditorRepositories: Pick<
+  Repositories,
+  "shops" | "locations"
+> = {
   shops: {
     async get(id) {
       return (await repositories()).shops.get(id);
@@ -28,6 +31,20 @@ export const serverEditorRepositories: Pick<Repositories, "shops"> = {
     },
     async delete(id) {
       return (await repositories()).shops.delete(id);
+    },
+  },
+  locations: {
+    async get(id) {
+      return (await repositories()).locations.get(id);
+    },
+    async listByShop(shopId) {
+      return (await repositories()).locations.listByShop(shopId);
+    },
+    async save(location) {
+      return (await repositories()).locations.save(location);
+    },
+    async delete(id) {
+      return (await repositories()).locations.delete(id);
     },
   },
 };

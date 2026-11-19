@@ -3,6 +3,7 @@ import { requireRequestPermission } from "../authorization/request";
 import type { LocationDetails, LocationType } from "../domain/location";
 import type { AccessRepository } from "../persistence/access-repository";
 import type { Repositories } from "../persistence/repositories";
+import type { RegionDefaults } from "./region-defaults";
 
 const LOCATION_TYPES: readonly string[] = [
   "cafe",
@@ -10,11 +11,6 @@ const LOCATION_TYPES: readonly string[] = [
   "mobile coffee",
   "coffee roaster",
 ];
-
-export interface RegionDefaults {
-  readonly regionId: string;
-  readonly cityId: string;
-}
 
 export interface LocationDraftDependencies {
   readonly access: Pick<AccessRepository, "get">;

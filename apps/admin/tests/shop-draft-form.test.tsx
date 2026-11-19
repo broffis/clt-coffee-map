@@ -22,6 +22,28 @@ describe("ShopDraftForm", () => {
     expect(screen.getByRole("button", { name: "Save draft" })).toBeEnabled();
   });
 
+  it("starts from initial values when editing an existing shop", async () => {
+    const save = vi.fn(async () => ({ ok: true }) as SaveOutcome);
+    render(
+      <ShopDraftForm
+        save={save}
+        initialValues={{
+          name: "Bean There",
+          website: "https://b.example.test",
+        }}
+      />,
+    );
+
+    expect(screen.getByLabelText("Shop name")).toHaveValue("Bean There");
+    fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+    await waitFor(() =>
+      expect(save).toHaveBeenCalledWith({
+        name: "Bean There",
+        website: "https://b.example.test",
+      }),
+    );
+  });
+
   it("submits the entered values and confirms the saved draft", async () => {
     const { save } = setup();
 

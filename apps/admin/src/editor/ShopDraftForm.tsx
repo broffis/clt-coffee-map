@@ -1,5 +1,8 @@
 import { useForm, useStore } from "@tanstack/react-form";
 import { useEffect, useId, useState } from "react";
+import type { SaveOutcome } from "./draft-request";
+
+export type { SaveOutcome } from "./draft-request";
 
 export interface ShopDraftValues {
   readonly name: string;
@@ -8,35 +11,32 @@ export interface ShopDraftValues {
 
 type FieldName = keyof ShopDraftValues;
 
-export type SaveOutcome =
-  | { readonly ok: true }
-  | {
-      readonly ok: false;
-      readonly errors?: Partial<Record<FieldName | "form", string>>;
-      readonly message?: string;
-    };
-
 const EMPTY: ShopDraftValues = { name: "", website: "" };
 
 export function ShopDraftForm({
   save,
+  initialValues = EMPTY,
 }: {
   readonly save: (values: ShopDraftValues) => Promise<SaveOutcome>;
+  readonly initialValues?: ShopDraftValues;
 }) {
   const prefix = useId();
   const [errors, setErrors] = useState<
     Partial<Record<FieldName | "form", string>>
   >({});
   const [saved, setSaved] = useState(false);
+  // Saved values become the new defaults so re-renders do not reset the form.
+  const [defaults, setDefaults] = useState(initialValues);
 
   const form = useForm({
-    defaultValues: EMPTY,
+    defaultValues: defaults,
     onSubmit: async ({ value }) => {
       setSaved(false);
       const outcome = await save(value);
       if (outcome.ok) {
         setErrors({});
         setSaved(true);
+        setDefaults(value);
         form.reset(value);
         return;
       }
