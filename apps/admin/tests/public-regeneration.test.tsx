@@ -55,6 +55,27 @@ describe("createPublicRegenerationTrigger", () => {
       }),
     ).rejects.toBeInstanceOf(PublicRegenerationError);
 
+    await expect(
+      createPublicRegenerationTrigger({
+        PUBLIC_REGENERATION_WEBHOOK_URL: "not-a-url",
+      }).trigger({
+        action: "publish-location",
+        shopId: "shop-1",
+        locationId: "location-1",
+      }),
+    ).rejects.toBeInstanceOf(PublicRegenerationError);
+
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("network"));
+    await expect(
+      createPublicRegenerationTrigger({
+        PUBLIC_REGENERATION_WEBHOOK_URL: "https://deploy.example.test/hook",
+      }).trigger({
+        action: "publish-location",
+        shopId: "shop-1",
+        locationId: "location-1",
+      }),
+    ).rejects.toBeInstanceOf(PublicRegenerationError);
+
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(null, { status: 500 }),
     );

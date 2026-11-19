@@ -38,4 +38,17 @@ describe("handlePublicShops", () => {
     expect(response.headers.get("Cache-Control")).toBe("no-store");
     await expect(response.json()).resolves.toEqual({ error: "unavailable" });
   });
+
+  it("rethrows unexpected reader errors", async () => {
+    await expect(
+      handlePublicShops({
+        reader: {
+          get: async () => null,
+          list: async () => {
+            throw new Error("unexpected");
+          },
+        },
+      }),
+    ).rejects.toThrow("unexpected");
+  });
 });

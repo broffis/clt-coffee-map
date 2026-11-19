@@ -63,4 +63,28 @@ describe("updateLocationPublication", () => {
       updateLocationPublication("shop-1", "location-1", "unpublish-location"),
     ).resolves.toEqual({ ok: false, message: expect.stringMatching(message) });
   });
+
+  it("describes a republish validation failure", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(null, { status: 422 }),
+    );
+
+    await expect(
+      updateLocationPublication("shop-1", undefined, "republish-shop"),
+    ).resolves.toEqual({
+      ok: false,
+      message: "The shop details could not be republished.",
+    });
+  });
+
+  it("maps network failures to a safe message", async () => {
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("network"));
+
+    await expect(
+      updateLocationPublication("shop-1", "location-1", "publish-location"),
+    ).resolves.toEqual({
+      ok: false,
+      message: expect.stringMatching(/connection/i),
+    });
+  });
 });

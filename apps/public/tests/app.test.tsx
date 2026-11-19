@@ -46,6 +46,14 @@ describe("public application scaffold", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("renders an empty directory", () => {
+    render(<Directory data={{ ok: true, shops: [] }} />, {
+      container: document,
+    });
+
+    expect(screen.getByText(/No published coffee shops/)).toBeVisible();
+  });
+
   it("renders published shops from the public projection", () => {
     render(
       <Directory
@@ -98,5 +106,36 @@ describe("public application scaffold", () => {
     expect(
       screen.getByRole("link", { name: "Back to coffee shops" }),
     ).toHaveAttribute("href", "/");
+  });
+
+  it("renders detail unavailable and fallback public values", () => {
+    render(<ShopDetailContent data={{ ok: false, error: "not-found" }} />, {
+      container: document,
+    });
+    expect(
+      screen.getByRole("heading", { name: "Shop not found" }),
+    ).toBeVisible();
+
+    render(
+      <ShopDetailContent
+        data={{
+          ok: true,
+          shop: {
+            id: "shop-2",
+            details: {},
+            locations: [
+              { id: "location-2", shopId: "shop-2", details: {} },
+              { id: "location-3", shopId: "shop-2", details: {} },
+            ],
+          },
+        }}
+      />,
+      { container: document },
+    );
+    expect(
+      screen.getByRole("heading", { name: "Unnamed coffee shop" }),
+    ).toBeVisible();
+    expect(screen.getByText("2 locations")).toBeVisible();
+    expect(screen.getAllByText("Coffee shop")).toHaveLength(2);
   });
 });

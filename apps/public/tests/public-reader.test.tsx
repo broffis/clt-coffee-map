@@ -60,6 +60,11 @@ function database(): PublicMongoDatabase {
         type: "cafe",
       },
     },
+    {
+      _id: "location-3",
+      shopId: "shop-1",
+      published: null,
+    },
   ];
   return {
     collection(name: string) {
@@ -97,5 +102,50 @@ describe("public Mongo reader", () => {
     const reader = createPublicMongoReader(database());
 
     await expect(reader.get("shop-2")).resolves.toBeNull();
+  });
+
+  it("handles an empty public shop collection", async () => {
+    const reader = createPublicMongoReader({
+      collection() {
+        return new FakeCollection(
+          [],
+        ) as unknown as PublicDocumentCollection<never>;
+      },
+    });
+
+    await expect(reader.list()).resolves.toEqual([]);
+  });
+
+  it("rejects unsupported public values", async () => {
+    const invalidDatabase: PublicMongoDatabase = {
+      collection(name: string) {
+        const documents =
+          name === "shops"
+            ? [{ _id: "shop-1", published: { name: () => "invalid" } }]
+            : [];
+        return {
+          findOne: async () => documents[0] ?? null,
+          find: () => ({ toArray: async () => documents }),
+        } as unknown as PublicDocumentCollection<never>;
+      },
+    };
+
+    await expect(
+      createPublicMongoReader(invalidDatabase).list(),
+    ).rejects.toThrow("Public shop data is unavailable.");
+  });
+
+  it("hides a published shop with no published locations", async () => {
+    const reader = createPublicMongoReader({
+      collection(name: string) {
+        return new FakeCollection(
+          name === "shops"
+            ? [{ _id: "shop-1", published: { name: "Shop" } }]
+            : [],
+        ) as unknown as PublicDocumentCollection<never>;
+      },
+    });
+
+    await expect(reader.get("shop-1")).resolves.toBeNull();
   });
 });

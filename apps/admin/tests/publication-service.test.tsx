@@ -56,6 +56,15 @@ async function setup() {
 }
 
 describe("updatePublication", () => {
+  it("rejects non-object publication data", async () => {
+    const { deps } = await setup();
+
+    await expect(updatePublication(deps, request, null)).resolves.toEqual({
+      ok: false,
+      errors: { form: "Submitted publication data is not valid." },
+    });
+  });
+
   it("publishes a location and the shared shop details on first publication", async () => {
     const { repositories, deps } = await setup();
 
@@ -100,6 +109,33 @@ describe("updatePublication", () => {
     expect(saved?.draft).toEqual(location.draft);
     expect(saved?.published).toBeNull();
     expect((await repositories.shops.get("shop-1"))?.published).not.toBeNull();
+  });
+
+  it("returns domain validation errors while republishing", async () => {
+    const { repositories, deps } = await setup();
+    await updatePublication(deps, request, {
+      action: "publish-location",
+      shopId: "shop-1",
+      locationId: "location-1",
+    });
+    const publishedShop = await repositories.shops.get("shop-1");
+    if (publishedShop === null) {
+      throw new Error("Expected the shop to exist.");
+    }
+    await repositories.shops.save({
+      ...publishedShop,
+      draft: { ...publishedShop.draft, name: "" },
+    });
+
+    await expect(
+      updatePublication(deps, request, {
+        action: "republish-shop",
+        shopId: "shop-1",
+      }),
+    ).resolves.toEqual({
+      ok: false,
+      errors: { form: "Shop name must not be blank." },
+    });
   });
 
   it("triggers public regeneration after saving a publication", async () => {
@@ -168,6 +204,82 @@ describe("updatePublication", () => {
     });
     expect(await repositories.shops.get("shop-1")).toEqual(shop);
     expect(await repositories.locations.get("location-1")).toEqual(location);
+  });
+
+  it("rejects republishing a shop that has never been published", async () => {
+    const { deps } = await setup();
+
+    await expect(
+      updatePublication(deps, request, {
+        action: "republish-shop",
+        shopId: "shop-1",
+      }),
+    ).resolves.toEqual({
+      ok: false,
+      errors: {
+        form: "Publish a location before republishing shop details.",
+      },
+    });
+  });
+
+  it("returns domain validation errors while publishing", async () => {
+    const { deps } = await setup();
+
+    await expect(
+      updatePublication(deps, request, {
+        action: "publish-location",
+        shopId: "shop-1",
+        locationId: "location-1",
+      }),
+    ).resolves.toMatchObject({ ok: true });
+
+    const repositories = deps.repositories;
+    const savedShop = await repositories.shops.get("shop-1");
+    if (savedShop === null) {
+      throw new Error("Expected the shop to exist.");
+    }
+    await repositories.shops.save({
+      ...savedShop,
+      draft: { ...savedShop.draft, name: "" },
+      published: null,
+    });
+
+    await expect(
+      updatePublication(deps, request, {
+        action: "publish-location",
+        shopId: "shop-1",
+        locationId: "location-1",
+      }),
+    ).resolves.toEqual({
+      ok: false,
+      errors: { form: "Shop name must not be blank." },
+    });
+  });
+
+  it("reports missing shops and locations", async () => {
+    const { deps } = await setup();
+
+    await expect(
+      updatePublication(deps, request, {
+        action: "publish-location",
+        shopId: "missing",
+        locationId: "location-1",
+      }),
+    ).resolves.toEqual({
+      ok: false,
+      errors: { form: "Shop or location not found." },
+    });
+
+    await expect(
+      updatePublication(deps, request, {
+        action: "unpublish-location",
+        shopId: "shop-1",
+        locationId: "missing",
+      }),
+    ).resolves.toEqual({
+      ok: false,
+      errors: { form: "Shop or location not found." },
+    });
   });
 
   it("rejects a location belonging to another shop", async () => {
