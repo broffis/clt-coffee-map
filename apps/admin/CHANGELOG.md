@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.9.0...admin-v0.10.0) (2026-11-19)
+
+
+### Features
+
+* implement curated candidate review workflow ([#101](https://github.com/broffis/clt-coffee-map/issues/101)) ([6e2ae66](https://github.com/broffis/clt-coffee-map/commit/6e2ae6647da6b9584563c5a472bb59976dfa85e0))
+
 ## [0.9.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.8.0...admin-v0.9.0) (2026-11-19)
 
 
