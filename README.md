@@ -363,13 +363,15 @@ Do not invoke its legacy `bootstrapOwner` helper as an alternative setup path.
 A single development bootstrap has been verified. Concurrent transaction
 behavior and owner recovery still require verification before production use.
 
-The admin app also adds the official `mongodb` driver (Apache-2.0; transitive
-packages are MIT, Apache-2.0, BSD-2-Clause, or Unlicense) for server-only Atlas
-persistence per [ADR 0001](docs/decisions/0001-mongodb-atlas.md). It is used
-only behind the repository interfaces in `apps/admin/src/persistence`, so it must
-never be imported from browser code. It adds no paid service; Atlas tier and
-cost decisions remain separate. To replace it, implement another adapter for the
-same repository interfaces and remove the package. An ODM was not chosen because
+The admin and public apps use the official `mongodb` driver (Apache-2.0;
+transitive packages are MIT, Apache-2.0, BSD-2-Clause, or Unlicense) for
+server-only Atlas persistence per
+[ADR 0001](docs/decisions/0001-mongodb-atlas.md). The admin adapter is used
+behind repository interfaces in `apps/admin/src/persistence`; the public adapter
+is a read-only published projection in `apps/public/src/public-data`. Neither
+may be imported from browser code. This adds no paid service; Atlas tier and
+cost decisions remain separate. To replace it, implement equivalent adapters
+behind the app boundaries and remove the package. An ODM was not chosen because
 validation already lives in the domain layer.
 
 Dependencies are pinned and transitive resolution is captured in

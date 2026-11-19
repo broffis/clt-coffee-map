@@ -7,6 +7,10 @@ import type {
 } from "./editor-records-client";
 import { LocationDraftForm } from "./LocationDraftForm";
 import type { LocationDraftValues } from "./location-draft-client";
+import type {
+  PublicationAction,
+  PublicationOutcome,
+} from "./publication-client";
 import { ShopDraftForm, type ShopDraftValues } from "./ShopDraftForm";
 
 type Selection =
@@ -38,6 +42,7 @@ export function EditorWorkspace({
   load,
   saveShop,
   saveLocation,
+  updatePublication,
 }: {
   readonly load: () => Promise<LoadOutcome>;
   readonly saveShop: (
@@ -46,10 +51,25 @@ export function EditorWorkspace({
   readonly saveLocation: (
     values: LocationDraftValues & { readonly id?: string },
   ) => Promise<SaveOutcome>;
+  readonly updatePublication: (
+    shopId: string,
+    locationId: string | undefined,
+    action: PublicationAction,
+  ) => Promise<PublicationOutcome>;
 }) {
   const [state, setState] = useState<State>({ status: "loading" });
   const [selection, setSelection] = useState<Selection | null>(null);
   const [formCount, setFormCount] = useState(0);
+  const [publicationState, setPublicationState] = useState<{
+    readonly id: string;
+    readonly busy: boolean;
+    readonly message?: string;
+  } | null>(null);
+  const [shopPublicationState, setShopPublicationState] = useState<{
+    readonly id: string;
+    readonly busy: boolean;
+    readonly message?: string;
+  } | null>(null);
 
   const refresh = useCallback(async () => {
     const outcome = await load();
@@ -91,6 +111,56 @@ export function EditorWorkspace({
       await refresh();
     }
     return outcome;
+  }
+
+  async function changePublication(
+    shopId: string,
+    locationId: string,
+    action: PublicationAction,
+  ): Promise<void> {
+    setPublicationState({ id: locationId, busy: true });
+    const outcome = await updatePublication(shopId, locationId, action);
+    if (outcome.ok) {
+      setPublicationState({
+        id: locationId,
+        busy: false,
+        message:
+          action === "publish-location"
+            ? "Location published."
+            : "Location unpublished.",
+      });
+      await refresh();
+      return;
+    }
+
+    setPublicationState({
+      id: locationId,
+      busy: false,
+      message: outcome.message,
+    });
+  }
+
+  async function republishShop(shopId: string): Promise<void> {
+    setShopPublicationState({ id: shopId, busy: true });
+    const outcome = await updatePublication(
+      shopId,
+      undefined,
+      "republish-shop",
+    );
+    if (outcome.ok) {
+      setShopPublicationState({
+        id: shopId,
+        busy: false,
+        message: "Shop details republished.",
+      });
+      await refresh();
+      return;
+    }
+    setShopPublicationState({
+      id: shopId,
+      busy: false,
+      message: outcome.message,
+    });
   }
 
   if (state.status === "loading") {
@@ -148,6 +218,27 @@ export function EditorWorkspace({
               >
                 Edit
               </button>
+              {shop.published && (
+                <>
+                  <button
+                    type="button"
+                    disabled={
+                      shopPublicationState?.id === shop.id &&
+                      shopPublicationState.busy
+                    }
+                    onClick={() => void republishShop(shop.id)}
+                  >
+                    {shopPublicationState?.id === shop.id &&
+                    shopPublicationState.busy
+                      ? "Republishing..."
+                      : "Republish shop details"}
+                  </button>
+                  {shopPublicationState?.id === shop.id &&
+                    shopPublicationState.message !== undefined && (
+                      <p role="status">{shopPublicationState.message}</p>
+                    )}
+                </>
+              )}
               <ul>
                 {shop.locations.map((location) => (
                   <li key={location.id}>
@@ -166,6 +257,33 @@ export function EditorWorkspace({
                     >
                       Edit
                     </button>
+                    <button
+                      type="button"
+                      disabled={
+                        publicationState?.id === location.id &&
+                        publicationState.busy
+                      }
+                      onClick={() =>
+                        void changePublication(
+                          shop.id,
+                          location.id,
+                          location.published
+                            ? "unpublish-location"
+                            : "publish-location",
+                        )
+                      }
+                    >
+                      {publicationState?.id === location.id &&
+                      publicationState.busy
+                        ? "Updating..."
+                        : location.published
+                          ? "Unpublish"
+                          : "Publish"}
+                    </button>
+                    {publicationState?.id === location.id &&
+                      publicationState.message !== undefined && (
+                        <p role="status">{publicationState.message}</p>
+                      )}
                   </li>
                 ))}
               </ul>

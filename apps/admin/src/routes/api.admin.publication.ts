@@ -1,0 +1,19 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { clerkSessionVerifier } from "../authentication/clerk-server";
+import { serverAccessReader } from "../persistence/access-server";
+import { serverEditorRepositories } from "../persistence/editor-server";
+import { handlePublicationUpdate } from "../publication/publication-handler";
+
+const dependencies = {
+  access: serverAccessReader,
+  repositories: serverEditorRepositories,
+  verifier: clerkSessionVerifier,
+};
+
+export const Route = createFileRoute("/api/admin/publication")({
+  server: {
+    handlers: {
+      POST: ({ request }) => handlePublicationUpdate(dependencies, request),
+    },
+  },
+});

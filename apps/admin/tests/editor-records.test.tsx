@@ -61,9 +61,11 @@ describe("editor records endpoint", () => {
           id: "shop-1",
           name: "Bean There",
           website: "",
+          published: false,
           locations: [
             {
               id: "loc-1",
+              published: false,
               type: "cafe",
               streetLine1: "",
               streetLine2: "",
