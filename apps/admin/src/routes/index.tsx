@@ -1,6 +1,10 @@
 import { Show, SignInButton, UserButton } from "@clerk/tanstack-react-start";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { EditorWorkspace } from "../editor/EditorWorkspace";
+import { loadEditorRecordsRequest } from "../editor/editor-records-client";
+import { saveLocationDraftRequest } from "../editor/location-draft-client";
+import { saveShopDraftRequest } from "../editor/shop-draft-client";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -20,7 +24,7 @@ export function Home() {
       });
       switch (response.status) {
         case 200:
-          setMessage("Admin access is approved. The editor is not built yet.");
+          setMessage("Admin access is approved.");
           break;
         case 401:
           setMessage(
@@ -60,6 +64,13 @@ export function Home() {
           {checking ? "Checking access..." : "Check admin access"}
         </button>
         {message !== null && <p role="status">{message}</p>}
+        <h2>Shops and locations</h2>
+        <p>Saving creates or updates unpublished drafts only.</p>
+        <EditorWorkspace
+          load={loadEditorRecordsRequest}
+          saveShop={saveShopDraftRequest}
+          saveLocation={saveLocationDraftRequest}
+        />
       </Show>
     </main>
   );

@@ -225,6 +225,14 @@ provider, sign-in controls, and middleware with another identity adapter while
 retaining application permission checks and existing Clerk-ID access records
 until an explicit identity migration is performed.
 
+The shop editor form uses MIT-licensed `@tanstack/react-form`, pinned to 1.33.5
+as selected in ADR 0003; it adds three small TanStack packages. It adds about
+14.7 kB gzip to the admin client (144.92 kB to 159.61 kB, measured locally with
+the editor form) and nothing to the public app. It manages field state and
+submission only; the server remains the validator and authorizer. To remove it,
+replace `ShopDraftForm` state handling with plain React state, keeping the
+server validation, error display, and unsaved-change warning unchanged.
+
 `requireRequestPermission` verifies the incoming request's session before
 checking the verified user's current application permissions. It never grants
 access on sign-in or accepts an actor ID from request parameters.
@@ -245,6 +253,26 @@ also requires `MONGODB_URI` and `MONGODB_DB_NAME`; without Atlas configuration
 it reports unavailable permissions, not successful access or an unapproved
 account. No database or Clerk account is created automatically.
 
+Saving shop drafts (`POST /api/admin/shops`) uses separate editor credentials,
+`MONGODB_WRITE_URI` and `MONGODB_WRITE_DB_NAME`, which never fall back to the
+read-only variables. Create a dedicated Atlas user limited to read/write on the
+shop and location collections; access records stay read-only through
+`MONGODB_URI`. Without them, saving reports the editor as unavailable. Drafts
+are never published by this endpoint. The server generates shop IDs; a
+request-supplied ID may only edit an existing shop and is otherwise rejected.
+Locations are saved with `POST /api/admin/locations` and listed with
+`GET /api/admin/shops` (requires `private:read`), which return draft values only.
+The editor's core location fields are shop, type, street address, postal code,
+coordinates and a location website; hours and details are not yet editable.
+The server generates location IDs and applies the region and city from
+`DEFAULT_REGION_ID` and `DEFAULT_CITY_ID` (never from the client) when it
+creates a location. If either is missing, creating a location reports the
+editor as unavailable; editing existing locations keeps their region and city.
+The editor user needs no privileges beyond the shop and location collections.
+State-changing requests to admin route handlers (not only server functions)
+must pass origin validation: requests that are cross-site, from another
+origin, or without `Sec-Fetch-Site`/`Origin`/`Referer` headers are rejected
+with 403.
 In development, Clerk session authorized parties are limited to
 `http://127.0.0.1:3001` and `http://localhost:3001`. Outside development,
 `ADMIN_ORIGIN` must specify the exact HTTP(S) admin origin, without a path,

@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiAdminAccessRouteImport } from './routes/api.admin.access'
+import { Route as ApiAdminLocationsRouteImport } from './routes/api.admin.locations'
+import { Route as ApiAdminShopsRouteImport } from './routes/api.admin.shops'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +24,55 @@ const ApiAdminAccessRoute = ApiAdminAccessRouteImport.update({
   path: '/api/admin/access',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminLocationsRoute = ApiAdminLocationsRouteImport.update({
+  id: '/api/admin/locations',
+  path: '/api/admin/locations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminShopsRoute = ApiAdminShopsRouteImport.update({
+  id: '/api/admin/shops',
+  path: '/api/admin/shops',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/admin/access': typeof ApiAdminAccessRoute
+  '/api/admin/locations': typeof ApiAdminLocationsRoute
+  '/api/admin/shops': typeof ApiAdminShopsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/admin/access': typeof ApiAdminAccessRoute
+  '/api/admin/locations': typeof ApiAdminLocationsRoute
+  '/api/admin/shops': typeof ApiAdminShopsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/admin/access': typeof ApiAdminAccessRoute
+  '/api/admin/locations': typeof ApiAdminLocationsRoute
+  '/api/admin/shops': typeof ApiAdminShopsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/admin/access'
+  fullPaths:
+    '/' | '/api/admin/access' | '/api/admin/locations' | '/api/admin/shops'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/admin/access'
-  id: '__root__' | '/' | '/api/admin/access'
+  to: '/' | '/api/admin/access' | '/api/admin/locations' | '/api/admin/shops'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/admin/access'
+    | '/api/admin/locations'
+    | '/api/admin/shops'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiAdminAccessRoute: typeof ApiAdminAccessRoute
+  ApiAdminLocationsRoute: typeof ApiAdminLocationsRoute
+  ApiAdminShopsRoute: typeof ApiAdminShopsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +91,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminAccessRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/locations': {
+      id: '/api/admin/locations'
+      path: '/api/admin/locations'
+      fullPath: '/api/admin/locations'
+      preLoaderRoute: typeof ApiAdminLocationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/shops': {
+      id: '/api/admin/shops'
+      path: '/api/admin/shops'
+      fullPath: '/api/admin/shops'
+      preLoaderRoute: typeof ApiAdminShopsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiAdminAccessRoute: ApiAdminAccessRoute,
+  ApiAdminLocationsRoute: ApiAdminLocationsRoute,
+  ApiAdminShopsRoute: ApiAdminShopsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

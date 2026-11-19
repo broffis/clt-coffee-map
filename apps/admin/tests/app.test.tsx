@@ -72,6 +72,30 @@ describe("admin sign-in", () => {
     },
   );
 
+  it("shows the editor only to signed-in users and saves through the private endpoints", async () => {
+    session.signedIn = true;
+    const fetch = vi
+      .spyOn(globalThis, "fetch")
+      .mockImplementation(async (_url, init) =>
+        init?.method === "POST"
+          ? Response.json({ ok: true, id: "s1" })
+          : Response.json({ shops: [] }),
+      );
+    await renderAdmin();
+
+    fireEvent.click(await screen.findByRole("button", { name: "New shop" }));
+    fireEvent.change(screen.getByLabelText("Shop name"), {
+      target: { value: "Bean There" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+
+    expect(await screen.findByText("Draft saved.")).toBeVisible();
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/admin/shops",
+      expect.objectContaining({ method: "POST" }),
+    );
+  });
+
   it("reports network failure and allows retrying the access check", async () => {
     session.signedIn = true;
     vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("Offline"));
