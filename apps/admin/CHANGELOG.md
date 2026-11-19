@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.7.0...admin-v0.8.0) (2026-11-19)
+
+
+### Features
+
+* **admin:** private shop and location draft editor ([#71](https://github.com/broffis/clt-coffee-map/issues/71)) ([#94](https://github.com/broffis/clt-coffee-map/issues/94)) ([5ac2f35](https://github.com/broffis/clt-coffee-map/commit/5ac2f35ecef4de9a6bac7f7a00c4e42293c25cb1))
+
 ## [0.7.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.6.0...admin-v0.7.0) (2026-11-18)
 
 
