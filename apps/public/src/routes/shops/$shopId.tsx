@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { formatLocation } from "../../discovery";
 import {
   loadPublicShop,
   type PublicDetailData,
@@ -41,6 +42,9 @@ export function ShopDetailContent({ data }: { data: PublicDetailData }) {
         <Link to="/">Back to coffee shops</Link>
       </p>
       <h1>{shopName(data.shop.details)}</h1>
+      {typeof data.shop.details.description === "string" ? (
+        <p>{data.shop.details.description}</p>
+      ) : null}
       <p>
         {data.shop.locations.length}{" "}
         {data.shop.locations.length === 1 ? "location" : "locations"}
@@ -48,7 +52,21 @@ export function ShopDetailContent({ data }: { data: PublicDetailData }) {
       <ul>
         {data.shop.locations.map((location) => (
           <li key={location.id}>
-            {locationType(location.details)} {locationCity(location.details)}
+            <span>
+              {locationType(location.details)}{" "}
+              {formatLocation({
+                id: location.id,
+                shopId: location.shopId,
+                shopName: shopName(data.shop.details),
+                neighborhoodId:
+                  typeof location.details.neighborhoodId === "string"
+                    ? location.details.neighborhoodId
+                    : null,
+                type: locationType(location.details),
+                coordinates: null,
+                details: location.details,
+              })}
+            </span>
           </li>
         ))}
       </ul>
@@ -64,8 +82,4 @@ function shopName(details: PublicJsonObject): string {
 
 function locationType(details: PublicJsonObject): string {
   return typeof details.type === "string" ? details.type : "Coffee shop";
-}
-
-function locationCity(details: PublicJsonObject): string {
-  return typeof details.cityId === "string" ? `(${details.cityId})` : "";
 }
