@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   createDiscoveryShops,
   filterDiscoveryShops,
+  formatLocation,
   getNeighborhoods,
   mapLocations,
 } from "../src/discovery";
@@ -94,5 +95,41 @@ describe("discovery model", () => {
         },
       }),
     ).toHaveLength(0);
+  });
+
+  it("ignores invalid coordinates and formats simple addresses", () => {
+    const [shop] = createDiscoveryShops([
+      {
+        id: "shop-3",
+        details: { name: "No Coordinates" },
+        locations: [
+          {
+            id: "location-3",
+            shopId: "shop-3",
+            details: {
+              coordinates: { latitude: 91, longitude: 0 },
+              address: "100 Main Street",
+              cityId: "Charlotte",
+            },
+          },
+        ],
+      },
+    ]);
+
+    expect(shop?.locations[0]?.coordinates).toBeNull();
+    expect(shop?.locations[0] && formatLocation(shop.locations[0])).toBe(
+      "100 Main Street, Charlotte",
+    );
+    expect(
+      formatLocation({
+        id: "location-4",
+        shopId: "shop-3",
+        shopName: "No Coordinates",
+        neighborhoodId: null,
+        type: null,
+        coordinates: null,
+        details: {},
+      }),
+    ).toBe("");
   });
 });
