@@ -69,8 +69,28 @@ necessary.
 
 Rejected: paid hosted service and non-public encrypted backup, respectively.
 
+## Image processing defaults
+
+Initial values live in `apps/admin/src/photos/processing.ts` and are
+implementation choices, not part of this decision. Change them there and update
+the tests in `apps/admin/tests/photo-processing.test.tsx`:
+
+- `PHOTO_VARIANT_WIDTHS`: output widths (480, 960, 1600 px); sources are never
+  upscaled.
+- `MAX_UPLOAD_BYTES` (10 MB) and `MAX_INPUT_PIXELS` (50 million): upload limits.
+- `ALLOWED_FORMATS`: accepted input formats (JPEG, PNG, WebP).
+- The `.webp({ quality: 80 })` call: output format and quality. Changing the
+  format also requires updating `photoObjectKey` in
+  `apps/admin/src/photos/storage.ts` and the content type in `PhotoVariant`.
+
 ## Consequences
 
+- Dependencies added for #72, both server-only in the admin app: `sharp`
+  (upload-time resizing; Apache-2.0, native libvips binaries, subject to
+  Vercel function size and memory limits; replaceable by any image library
+  behind `processPhoto`) and `@aws-sdk/client-s3` (standard S3 client used
+  only in `storage-s3.ts`; replaceable by any S3-compatible client behind
+  `PhotoStorage`). Neither has recurring cost.
 - Update #72 and launch checks to reference Tigris rather than R2.
 - Public images may be served from the bucket's public domains or a custom
   domain. Decide delivery, cache behavior, and domain during implementation
