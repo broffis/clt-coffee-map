@@ -83,6 +83,19 @@ the tests in `apps/admin/tests/photo-processing.test.tsx`:
   format also requires updating `photoObjectKey` in
   `apps/admin/src/photos/storage.ts` and the content type in `PhotoVariant`.
 
+## Vercel request-size limit
+
+Vercel's function limits page (checked 2026-11-20) caps request bodies at
+4.5 MB and answers larger ones with 413 `FUNCTION_PAYLOAD_TOO_LARGE` before our
+code runs. Function memory (2 GB Hobby) and duration (300 s) are enough for
+sharp; bundle size with sharp's binaries is unverified until a deployment.
+The editor therefore shrinks images over 4 MB in the browser before upload
+(`apps/admin/src/editor/photo-downscale.ts`): long edge 2400, 1800, then
+1200 px as JPEG at quality 0.85, flattened onto white. `UPLOAD_BODY_LIMIT_BYTES`
+and `LONG_EDGES` there are the tuning points. The server's 10 MB cap and full
+processing still apply. If a host without this limit is used later, or a
+presigned direct upload is adopted, the downscaling can be removed.
+
 ## Public delivery
 
 The public detail page builds image URLs as `VITE_PUBLIC_PHOTO_BASE_URL` plus

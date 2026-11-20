@@ -80,6 +80,31 @@ describe("uploadPhotoRequest", () => {
     });
   });
 
+  it("uploads the downscaled file instead of an oversized original", async () => {
+    const shrunk = new File([new Uint8Array([9])], "front.jpg", {
+      type: "image/jpeg",
+    });
+    const fetch = respond(200, { ok: true, id: "p1", variants });
+
+    await uploadPhotoRequest(file, async () => shrunk);
+
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/admin/photos",
+      expect.objectContaining({ body: shrunk }),
+    );
+  });
+
+  it("explains when a photo cannot be shrunk enough", async () => {
+    const fetch = respond(200, {});
+
+    await expect(uploadPhotoRequest(file, async () => null)).resolves.toEqual({
+      ok: false,
+      message:
+        "This photo is too large to upload and could not be shrunk. Try a smaller image.",
+    });
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
   it("reports network failures", async () => {
     vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("offline"));
 

@@ -1,3 +1,5 @@
+import { fitUploadSize } from "./photo-downscale";
+
 export interface UploadedPhoto {
   readonly id: string;
   readonly variants: readonly {
@@ -41,8 +43,15 @@ async function readPhoto(response: Response): Promise<PhotoUploadOutcome> {
 // The file is sent as the raw body; only the validation messages the upload
 // endpoint intentionally returns are shown, never other server details.
 export async function uploadPhotoRequest(
-  file: File,
+  original: File,
+  prepare: (file: File) => Promise<File | null> = fitUploadSize,
 ): Promise<PhotoUploadOutcome> {
+  const file = await prepare(original);
+  if (file === null) {
+    return failure(
+      "This photo is too large to upload and could not be shrunk. Try a smaller image.",
+    );
+  }
   let response: Response;
   try {
     response = await fetch("/api/admin/photos", {
