@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/broffis/clt-coffee-map/compare/public-v0.3.0...public-v0.4.0) (2026-11-20)
+
+
+### Features
+
+* **admin:** implement private photo pipeline with Tigris storage ([#105](https://github.com/broffis/clt-coffee-map/issues/105)) ([b12a141](https://github.com/broffis/clt-coffee-map/commit/b12a141fdad331e0aaedf5724a27cec1e1de9461))
+
 ## [0.3.0](https://github.com/broffis/clt-coffee-map/compare/public-v0.2.0...public-v0.3.0) (2026-11-20)
 
 
