@@ -83,6 +83,16 @@ the tests in `apps/admin/tests/photo-processing.test.tsx`:
   format also requires updating `photoObjectKey` in
   `apps/admin/src/photos/storage.ts` and the content type in `PhotoVariant`.
 
+## Public delivery
+
+The public detail page builds image URLs as `VITE_PUBLIC_PHOTO_BASE_URL` plus
+the published variant key (`apps/public/src/public-photos.ts`). The setting is
+a build-time HTTPS origin, not a secret, so it can point at the Tigris public
+bucket or a custom domain and be changed without a code change. Photos are
+omitted, and the rest of the page still renders, when it is unset. Keys that do
+not match `photos/<id>/<width>.webp` are ignored. Cache headers and the custom
+domain remain open until a bucket exists.
+
 ## Consequences
 
 - Dependencies added for #72, both server-only in the admin app: `sharp`
