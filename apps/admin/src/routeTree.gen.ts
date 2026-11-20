@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiAdminAccessRouteImport } from './routes/api.admin.access'
 import { Route as ApiAdminCandidatesRouteImport } from './routes/api.admin.candidates'
 import { Route as ApiAdminLocationsRouteImport } from './routes/api.admin.locations'
+import { Route as ApiAdminPhotosRouteImport } from './routes/api.admin.photos'
 import { Route as ApiAdminPublicationRouteImport } from './routes/api.admin.publication'
 import { Route as ApiAdminShopsRouteImport } from './routes/api.admin.shops'
 
@@ -36,6 +37,11 @@ const ApiAdminLocationsRoute = ApiAdminLocationsRouteImport.update({
   path: '/api/admin/locations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminPhotosRoute = ApiAdminPhotosRouteImport.update({
+  id: '/api/admin/photos',
+  path: '/api/admin/photos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAdminPublicationRoute = ApiAdminPublicationRouteImport.update({
   id: '/api/admin/publication',
   path: '/api/admin/publication',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/api/admin/access': typeof ApiAdminAccessRoute
   '/api/admin/candidates': typeof ApiAdminCandidatesRoute
   '/api/admin/locations': typeof ApiAdminLocationsRoute
+  '/api/admin/photos': typeof ApiAdminPhotosRoute
   '/api/admin/publication': typeof ApiAdminPublicationRoute
   '/api/admin/shops': typeof ApiAdminShopsRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/api/admin/access': typeof ApiAdminAccessRoute
   '/api/admin/candidates': typeof ApiAdminCandidatesRoute
   '/api/admin/locations': typeof ApiAdminLocationsRoute
+  '/api/admin/photos': typeof ApiAdminPhotosRoute
   '/api/admin/publication': typeof ApiAdminPublicationRoute
   '/api/admin/shops': typeof ApiAdminShopsRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/api/admin/access': typeof ApiAdminAccessRoute
   '/api/admin/candidates': typeof ApiAdminCandidatesRoute
   '/api/admin/locations': typeof ApiAdminLocationsRoute
+  '/api/admin/photos': typeof ApiAdminPhotosRoute
   '/api/admin/publication': typeof ApiAdminPublicationRoute
   '/api/admin/shops': typeof ApiAdminShopsRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/api/admin/access'
     | '/api/admin/candidates'
     | '/api/admin/locations'
+    | '/api/admin/photos'
     | '/api/admin/publication'
     | '/api/admin/shops'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/api/admin/access'
     | '/api/admin/candidates'
     | '/api/admin/locations'
+    | '/api/admin/photos'
     | '/api/admin/publication'
     | '/api/admin/shops'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/api/admin/access'
     | '/api/admin/candidates'
     | '/api/admin/locations'
+    | '/api/admin/photos'
     | '/api/admin/publication'
     | '/api/admin/shops'
   fileRoutesById: FileRoutesById
@@ -104,6 +116,7 @@ export interface RootRouteChildren {
   ApiAdminAccessRoute: typeof ApiAdminAccessRoute
   ApiAdminCandidatesRoute: typeof ApiAdminCandidatesRoute
   ApiAdminLocationsRoute: typeof ApiAdminLocationsRoute
+  ApiAdminPhotosRoute: typeof ApiAdminPhotosRoute
   ApiAdminPublicationRoute: typeof ApiAdminPublicationRoute
   ApiAdminShopsRoute: typeof ApiAdminShopsRoute
 }
@@ -138,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminLocationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/photos': {
+      id: '/api/admin/photos'
+      path: '/api/admin/photos'
+      fullPath: '/api/admin/photos'
+      preLoaderRoute: typeof ApiAdminPhotosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/admin/publication': {
       id: '/api/admin/publication'
       path: '/api/admin/publication'
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAdminAccessRoute: ApiAdminAccessRoute,
   ApiAdminCandidatesRoute: ApiAdminCandidatesRoute,
   ApiAdminLocationsRoute: ApiAdminLocationsRoute,
+  ApiAdminPhotosRoute: ApiAdminPhotosRoute,
   ApiAdminPublicationRoute: ApiAdminPublicationRoute,
   ApiAdminShopsRoute: ApiAdminShopsRoute,
 }
