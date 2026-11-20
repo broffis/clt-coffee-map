@@ -4,6 +4,11 @@
 
 Accepted on 2026-11-09. Related work: [#51](https://github.com/broffis/clt-coffee-map/issues/51).
 
+Storage provider superseded on 2026-11-20 by
+[ADR 0013](0013-tigris-photo-storage.md), which selects Tigris instead of
+Cloudflare R2. The upload-time resizing, authorization, and reference-storage
+requirements below remain in force.
+
 ## Context
 
 The directory needs shop photos stored separately from MongoDB Atlas.
