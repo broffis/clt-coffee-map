@@ -147,6 +147,11 @@ billing, and offline/service-worker features until their roadmap stages.
 - Follow [CONTRIBUTING.md](CONTRIBUTING.md) for branch, PR, commit, release,
   testing, tooling, architecture decision, data validation, and accessibility
   policies, including strict incremental TDD and 90% branch coverage.
+- Every pull request title must be a Conventional Commit
+  (`<type>(optional-scope): lowercase imperative description`, for example
+  `feat(admin): implement private photo pipeline`); the `PR title` CI check
+  fails otherwise and the title becomes the squash commit for Release Please.
+  Set it when running `gh pr create`; never use a plain-English title.
 - Treat `ROADMAP.md` as the source of truth for product scope, boundaries, and
   deferred work.
 - Keep public curated shop data separate from visitor contact details,
