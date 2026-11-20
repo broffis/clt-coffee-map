@@ -1,5 +1,6 @@
 import {
   DeleteObjectCommand,
+  HeadObjectCommand,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
@@ -45,7 +46,9 @@ export function readPhotoStorageConfig(env: Env): PhotoStorageConfig {
 }
 
 interface S3Sender {
-  send(command: PutObjectCommand | DeleteObjectCommand): Promise<unknown>;
+  send(
+    command: PutObjectCommand | DeleteObjectCommand | HeadObjectCommand,
+  ): Promise<unknown>;
 }
 
 // Provider errors can echo endpoints or request details, so only a generic
@@ -80,16 +83,31 @@ export class S3PhotoStorage implements PhotoStorage {
     );
   }
 
+  async exists(key: string): Promise<boolean> {
+    try {
+      await this.#client.send(
+        new HeadObjectCommand({ Bucket: this.#bucket, Key: key }),
+      );
+      return true;
+    } catch (error) {
+      if (error instanceof Error && error.name === "NotFound") {
+        return false;
+      }
+      throw unavailable();
+    }
+  }
+
   async #send(command: PutObjectCommand | DeleteObjectCommand): Promise<void> {
     try {
       await this.#client.send(command);
     } catch {
-      throw new PersistenceError(
-        "unavailable",
-        "Photo storage is unavailable.",
-      );
+      throw unavailable();
     }
   }
+}
+
+function unavailable(): PersistenceError {
+  return new PersistenceError("unavailable", "Photo storage is unavailable.");
 }
 
 export function createS3PhotoStorage(config: PhotoStorageConfig): PhotoStorage {

@@ -10,6 +10,9 @@ export const serverPhotoStorage: PhotoStorage = {
   put(key, bytes, contentType) {
     return resolve().put(key, bytes, contentType);
   },
+  exists(key) {
+    return resolve().exists(key);
+  },
   delete(key) {
     return resolve().delete(key);
   },

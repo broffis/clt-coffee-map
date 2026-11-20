@@ -173,6 +173,7 @@ describe("photo upload endpoint", () => {
         }
         await storage.put(key, bytes, type);
       },
+      exists: (key: string) => storage.exists(key),
       delete: (key: string) => storage.delete(key),
     };
 

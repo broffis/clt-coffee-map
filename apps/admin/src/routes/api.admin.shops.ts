@@ -4,6 +4,7 @@ import { handleEditorRecords } from "../editor/editor-records";
 import { handleShopDraftSave } from "../editor/shop-draft-handler";
 import { serverAccessReader } from "../persistence/access-server";
 import { serverEditorRepositories } from "../persistence/editor-server";
+import { serverPhotoStorage } from "../photos/storage-server";
 
 const dependencies = {
   access: serverAccessReader,
@@ -17,7 +18,11 @@ export const Route = createFileRoute("/api/admin/shops")({
       GET: ({ request }) => handleEditorRecords(dependencies, request),
       POST: ({ request }) =>
         handleShopDraftSave(
-          { ...dependencies, newId: () => crypto.randomUUID() },
+          {
+            ...dependencies,
+            storage: serverPhotoStorage,
+            newId: () => crypto.randomUUID(),
+          },
           request,
         ),
     },

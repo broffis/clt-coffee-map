@@ -1,4 +1,5 @@
 export interface PhotoStorage {
+  exists(key: string): Promise<boolean>;
   put(key: string, bytes: Uint8Array, contentType: string): Promise<void>;
   // Deleting a missing key succeeds so cleanup can be retried.
   delete(key: string): Promise<void>;

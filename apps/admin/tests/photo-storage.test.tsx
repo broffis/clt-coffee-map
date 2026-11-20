@@ -29,6 +29,14 @@ describe("MemoryPhotoStorage", () => {
     expect(storage.get("k")).toBeNull();
   });
 
+  it("reports whether an object exists", async () => {
+    const storage = new MemoryPhotoStorage();
+    await storage.put("k", new Uint8Array([1]), "image/webp");
+
+    await expect(storage.exists("k")).resolves.toBe(true);
+    await expect(storage.exists("other")).resolves.toBe(false);
+  });
+
   it("treats deleting a missing key as success", async () => {
     await expect(new MemoryPhotoStorage().delete("missing")).resolves.toBe(
       undefined,

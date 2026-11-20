@@ -1,4 +1,8 @@
-import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectCommand,
+  HeadObjectCommand,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3";
 import { describe, expect, it, vi } from "vitest";
 import { PersistenceError } from "../src/persistence/errors";
 import {
@@ -79,6 +83,24 @@ describe("S3PhotoStorage", () => {
     });
   });
 
+  it("reports existence through a head request", async () => {
+    const send = vi.fn().mockResolvedValue({});
+    const storage = new S3PhotoStorage({ send }, "bucket");
+
+    await expect(storage.exists("photos/a/480.webp")).resolves.toBe(true);
+    const command = send.mock.calls[0]?.[0] as HeadObjectCommand;
+    expect(command).toBeInstanceOf(HeadObjectCommand);
+    expect(command.input).toEqual({
+      Bucket: "bucket",
+      Key: "photos/a/480.webp",
+    });
+
+    send.mockRejectedValueOnce(
+      Object.assign(new Error("missing"), { name: "NotFound" }),
+    );
+    await expect(storage.exists("photos/a/960.webp")).resolves.toBe(false);
+  });
+
   it("reports provider failures as unavailable without details", async () => {
     const send = vi.fn().mockRejectedValue(new Error("secret endpoint detail"));
     const storage = new S3PhotoStorage({ send }, "bucket");
@@ -86,6 +108,7 @@ describe("S3PhotoStorage", () => {
     for (const action of [
       () => storage.put("k", new Uint8Array(), "image/webp"),
       () => storage.delete("k"),
+      () => storage.exists("k"),
     ]) {
       const error = await action().catch((caught: unknown) => caught);
       expect(error).toBeInstanceOf(PersistenceError);
