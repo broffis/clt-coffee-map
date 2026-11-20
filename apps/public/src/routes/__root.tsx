@@ -5,6 +5,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import "../styles.css";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -12,7 +13,9 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "CLT Coffee Map" },
+      { name: "theme-color", content: "#5b351f" },
     ],
+    links: [{ rel: "manifest", href: "/site.webmanifest" }],
   }),
   component: Outlet,
   shellComponent: RootDocument,

@@ -1,0 +1,15 @@
+{
+  "name": "CLT Coffee Map",
+  "short_name": "CLT Coffee",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fffaf3",
+  "theme_color": "#5b351f",
+  "icons": [
+    {
+      "src": "/images/logos/CLTCOFFEE.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}

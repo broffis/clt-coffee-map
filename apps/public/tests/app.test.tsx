@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Directory } from "../src/routes/index";
@@ -102,10 +102,63 @@ describe("public application scaffold", () => {
     expect(
       screen.getByRole("heading", { name: "Published shop" }),
     ).toBeVisible();
-    expect(screen.getByText("cafe (charlotte)")).toBeVisible();
+    expect(screen.getByText("cafe charlotte")).toBeVisible();
     expect(
       screen.getByRole("link", { name: "Back to coffee shops" }),
     ).toHaveAttribute("href", "/");
+  });
+
+  it("keeps list and map filters consistent and preserves mobile-only shops", () => {
+    render(
+      <Directory
+        data={{
+          ok: true,
+          shops: [
+            {
+              id: "shop-1",
+              details: { name: "Uptown Coffee" },
+              locations: [
+                {
+                  id: "location-1",
+                  shopId: "shop-1",
+                  details: {
+                    neighborhoodId: "Uptown",
+                    type: "cafe",
+                    coordinates: { latitude: 35.2271, longitude: -80.8431 },
+                  },
+                },
+              ],
+            },
+            {
+              id: "shop-2",
+              details: { name: "Mobile Beans" },
+              locations: [
+                {
+                  id: "location-2",
+                  shopId: "shop-2",
+                  details: { type: "mobile coffee" },
+                },
+              ],
+            },
+          ],
+        }}
+      />,
+      { container: document },
+    );
+
+    expect(screen.getByText("Uptown Coffee")).toBeVisible();
+    expect(screen.getByText("Mobile Beans")).toBeVisible();
+    expect(screen.getByText("1 mapped locations")).toBeVisible();
+
+    fireEvent.change(screen.getByLabelText("Type"), {
+      target: { value: "mobile coffee" },
+    });
+
+    expect(screen.queryByText("Uptown Coffee")).not.toBeInTheDocument();
+    expect(screen.getByText("Mobile Beans")).toBeVisible();
+    expect(
+      screen.getByText(/No filtered shops have fixed coordinates/),
+    ).toBeVisible();
   });
 
   it("renders detail unavailable and fallback public values", () => {

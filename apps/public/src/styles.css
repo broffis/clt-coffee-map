@@ -1,0 +1,158 @@
+:root {
+  color: #2f211b;
+  background: #fffaf3;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: #7d3f20;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+select,
+input {
+  border: 1px solid #bca995;
+  border-radius: 0.4rem;
+  padding: 0.55rem 0.7rem;
+}
+
+button {
+  cursor: pointer;
+}
+
+.site-header,
+.site-main {
+  width: min(1200px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.site-header {
+  padding: 1.5rem 0 1rem;
+}
+
+.site-main {
+  padding-bottom: 3rem;
+}
+
+.directory-toolbar {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(12rem, 2fr) repeat(2, minmax(9rem, 1fr));
+  margin: 1.5rem 0;
+}
+
+.directory-toolbar label {
+  display: grid;
+  gap: 0.25rem;
+  font-weight: 600;
+}
+
+.discovery-layout {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+.discovery-list,
+.discovery-map-panel {
+  background: #fff;
+  border: 1px solid #e3d6c7;
+  border-radius: 0.75rem;
+  min-width: 0;
+}
+
+.discovery-list {
+  padding: 1rem;
+}
+
+.discovery-list ul {
+  display: grid;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.shop-card {
+  border: 1px solid #e3d6c7;
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+}
+
+.shop-card.selected {
+  border-color: #c96f3b;
+  box-shadow: 0 0 0 2px #f4b942;
+}
+
+.shop-card h3 {
+  margin: 0;
+}
+
+.shop-card p {
+  margin: 0.35rem 0 0;
+}
+
+.map-panel-heading {
+  align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1rem 0;
+}
+
+.map-view {
+  height: 34rem;
+  min-height: 18rem;
+  width: 100%;
+}
+
+.map-fallback {
+  align-items: center;
+  background: #f5eee5;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  min-height: 18rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.mobile-view-toggle {
+  display: none;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 700px) {
+  .directory-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .mobile-view-toggle {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .mobile-view-toggle button[aria-pressed="true"] {
+    background: #5b351f;
+    color: #fff;
+  }
+
+  .discovery-layout[data-mobile-view="map"] .discovery-list,
+  .discovery-layout[data-mobile-view="list"] .discovery-map-panel {
+    display: none;
+  }
+}
