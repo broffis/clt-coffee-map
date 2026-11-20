@@ -156,7 +156,7 @@ experience with React, TypeScript, Vue, and WordPress.
 | Map | Leaflet with Stadia Maps raster tiles; keep provider replaceable | Style, eligibility, cost, usage limits, attribution, accessibility, and provider terms |
 | MVP shop data | MongoDB Atlas | Tier, cost, access control, backups, and portability |
 | Initial location candidates | Overture Places downloadable data, reviewed by admins | Release-specific notices, staging, refresh, cost, and review workflow |
-| Shop photos | Cloudflare R2 Standard; resize images during upload | Processing runtime, dimensions/formats, original retention, delivery, and recovery |
+| Shop photos | Tigris Standard (S3-compatible); resize images during upload | Processing runtime, dimensions/formats, original retention, delivery, and recovery |
 | Hosting | Vercel initially; separate public/admin projects and portable static public output | Eligibility, server runtime compatibility, publication/cache behavior, availability, and cost |
 
 ### Application boundaries and availability
@@ -311,10 +311,12 @@ and notices, and provide applicable attribution, license texts, and notices
 with public output and exports. Review costs and update behavior before enabling
 the integration.
 
-Store shop photos in Cloudflare R2 Standard and resize them during the upload
-workflow before publication, as recorded in
-[ADR 0002](docs/decisions/0002-r2-photo-storage.md). Store photo references in
-Atlas, not image bytes. Processing runtime, image dimensions/formats, original
+Store shop photos in Tigris Standard (S3-compatible, behind a replaceable
+storage interface) and resize them during the upload workflow before
+publication, as recorded in
+[ADR 0013](docs/decisions/0013-tigris-photo-storage.md), which supersedes the
+provider choice in [ADR 0002](docs/decisions/0002-r2-photo-storage.md). Store
+photo references in Atlas, not image bytes. Processing runtime, image dimensions/formats, original
 retention, delivery, and media recovery still need to be designed.
 
 Maintain regular weekly hours manually from shop-controlled sources, per
@@ -368,7 +370,7 @@ management system before those stages need them.
 - How should Overture candidate staging and refresh work, including
   authorization, review completion, interrupted edits, retention, and failures?
 
-Image-processing runtime, dimensions/formats, original retention, and R2
+Image-processing runtime, dimensions/formats, original retention, and Tigris
 delivery, replacement/deletion, and recovery details are deferred to
 implementation of the photo workflow, not prerequisites to starting development.
 Resolve and validate them before launch.

@@ -5,6 +5,8 @@ import { approveAccess, revokeAccess } from "../src/domain/access";
 import { saveShopDraft } from "../src/editor/shop-draft-service";
 import { createInMemoryAccessRepository } from "../src/persistence/access-memory";
 import { createInMemoryRepositories } from "../src/persistence/memory";
+import { photoObjectKey } from "../src/photos/storage";
+import { MemoryPhotoStorage } from "../src/photos/storage-memory";
 
 const NOW = new Date("2026-11-18T20:00:00.000Z");
 const request = new Request("https://admin.example.test/");
@@ -17,10 +19,12 @@ async function setup() {
   await access.save(approveAccess(null, "user_editor", NOW));
   const repositories = createInMemoryRepositories();
   const newId = () => "shop-new";
+  const storage = new MemoryPhotoStorage();
   return {
     access,
     repositories,
-    deps: { access, repositories, verifier, newId },
+    storage,
+    deps: { access, repositories, storage, verifier, newId },
   };
 }
 
@@ -123,5 +127,201 @@ describe("saveShopDraft", () => {
       saveShopDraft(deps, request, { name: "Nope" }),
     ).rejects.toEqual(new AuthorizationError("revoked"));
     expect(await repositories.shops.list()).toEqual([]);
+  });
+
+  describe("photos", () => {
+    const bytes = new Uint8Array([1]);
+
+    function variants(id: string, widths = [480, 960]) {
+      return widths.map((width) => ({
+        width,
+        height: width / 2,
+        key: photoObjectKey(id, width),
+      }));
+    }
+
+    async function upload(
+      storage: MemoryPhotoStorage,
+      id: string,
+      widths = [480, 960],
+    ) {
+      for (const width of widths) {
+        await storage.put(photoObjectKey(id, width), bytes, "image/webp");
+      }
+      return variants(id, widths);
+    }
+
+    it("attaches an uploaded photo to the draft", async () => {
+      const { repositories, storage, deps } = await setup();
+      const uploaded = await upload(storage, "p1");
+
+      const result = await saveShopDraft(deps, request, {
+        name: "Bean",
+        photos: [{ id: "p1", alt: "  Front counter  ", variants: uploaded }],
+      });
+
+      expect(result).toEqual({ ok: true, id: "shop-new" });
+      expect((await repositories.shops.get("shop-new"))?.draft.photos).toEqual([
+        { id: "p1", alt: "Front counter", variants: uploaded },
+      ]);
+    });
+
+    it("rejects photos that were never uploaded without writing", async () => {
+      const { repositories, storage, deps } = await setup();
+      const uploaded = await upload(storage, "p1");
+      await storage.delete(uploaded[1]?.key ?? "");
+
+      await expect(
+        saveShopDraft(deps, request, {
+          name: "Bean",
+          photos: [{ id: "p1", alt: "Counter", variants: uploaded }],
+        }),
+      ).resolves.toEqual({
+        ok: false,
+        errors: { photos: "Photos must be uploaded before they are attached." },
+      });
+      expect(await repositories.shops.list()).toEqual([]);
+    });
+
+    it("rejects invalid photo input without writing", async () => {
+      const { repositories, storage, deps } = await setup();
+      const uploaded = await upload(storage, "p1");
+      const invalid = [
+        "not-an-array",
+        [null],
+        [{ id: "p1", alt: "   ", variants: uploaded }],
+        [{ id: "p1", alt: "Counter", variants: "nope" }],
+        [{ id: "p1", alt: "Counter", variants: [null] }],
+        [{ id: "p1", alt: "Counter", variants: [] }],
+        [
+          {
+            id: "p1",
+            alt: "Counter",
+            variants: [{ ...uploaded[0], key: "photos/other/480.webp" }],
+          },
+        ],
+        [{ id: "../x", alt: "Counter", variants: uploaded }],
+        [
+          { id: "p1", alt: "A", variants: uploaded },
+          { id: "p1", alt: "B", variants: uploaded },
+        ],
+      ];
+
+      for (const photos of invalid) {
+        const result = await saveShopDraft(deps, request, {
+          name: "Bean",
+          photos,
+        });
+        expect(result.ok).toBe(false);
+        expect(result).toMatchObject({
+          errors: { photos: expect.any(String) },
+        });
+      }
+      expect(await repositories.shops.list()).toEqual([]);
+      expect(storage.keys()).toHaveLength(2);
+    });
+
+    it("keeps stored photos when the submission omits photos", async () => {
+      const { repositories, storage, deps } = await setup();
+      const photo = {
+        id: "p1",
+        alt: "Counter",
+        variants: await upload(storage, "p1"),
+      };
+      await repositories.shops.save({
+        id: "shop-1",
+        draft: { name: "Bean", links: null, sources: null, photos: [photo] },
+        published: null,
+      });
+
+      await saveShopDraft(deps, request, { id: "shop-1", name: "Bean 2" });
+
+      expect((await repositories.shops.get("shop-1"))?.draft.photos).toEqual([
+        photo,
+      ]);
+    });
+
+    it("updates alt text but ignores client-supplied variants for stored photos", async () => {
+      const { repositories, storage, deps } = await setup();
+      const stored = await upload(storage, "p1");
+      await repositories.shops.save({
+        id: "shop-1",
+        draft: {
+          name: "Bean",
+          links: null,
+          sources: null,
+          photos: [{ id: "p1", alt: "Old", variants: stored }],
+        },
+        published: null,
+      });
+
+      await saveShopDraft(deps, request, {
+        id: "shop-1",
+        name: "Bean",
+        photos: [{ id: "p1", alt: "New", variants: [] }],
+      });
+
+      expect((await repositories.shops.get("shop-1"))?.draft.photos).toEqual([
+        { id: "p1", alt: "New", variants: stored },
+      ]);
+    });
+
+    it("deletes objects of removed photos that are not published", async () => {
+      const { repositories, storage, deps } = await setup();
+      const stored = await upload(storage, "p1");
+      await upload(storage, "p2");
+      await repositories.shops.save({
+        id: "shop-1",
+        draft: {
+          name: "Bean",
+          links: null,
+          sources: null,
+          photos: [{ id: "p1", alt: "One", variants: stored }],
+        },
+        published: null,
+      });
+
+      await saveShopDraft(deps, request, {
+        id: "shop-1",
+        name: "Bean",
+        photos: [],
+      });
+
+      expect(
+        (await repositories.shops.get("shop-1"))?.draft.photos,
+      ).toBeUndefined();
+      expect(storage.keys().sort()).toEqual([
+        photoObjectKey("p2", 480),
+        photoObjectKey("p2", 960),
+      ]);
+    });
+
+    it("keeps objects of removed photos that are still published", async () => {
+      const { repositories, storage, deps } = await setup();
+      const photo = {
+        id: "p1",
+        alt: "One",
+        variants: await upload(storage, "p1"),
+      };
+      const published = {
+        name: "Bean",
+        links: null,
+        sources: null,
+        photos: [photo],
+      };
+      await repositories.shops.save({
+        id: "shop-1",
+        draft: published,
+        published,
+      });
+
+      await saveShopDraft(deps, request, {
+        id: "shop-1",
+        name: "Bean",
+        photos: [],
+      });
+
+      expect(storage.keys()).toHaveLength(2);
+    });
   });
 });

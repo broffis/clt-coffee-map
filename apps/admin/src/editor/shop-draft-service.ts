@@ -1,18 +1,21 @@
 import type { SessionVerifier } from "../authentication/session";
 import { requireRequestPermission } from "../authorization/request";
+import { type ShopPhoto, validateShopPhotos } from "../domain/photo";
 import type { ShopDetails } from "../domain/shop";
 import type { AccessRepository } from "../persistence/access-repository";
 import type { Repositories } from "../persistence/repositories";
+import type { PhotoStorage } from "../photos/storage";
 
 export interface ShopDraftDependencies {
   readonly access: Pick<AccessRepository, "get">;
   readonly repositories: Pick<Repositories, "shops">;
+  readonly storage: PhotoStorage;
   readonly verifier: SessionVerifier<Request>;
   readonly newId: () => string;
 }
 
 export type ShopDraftErrors = Partial<
-  Record<"form" | "name" | "website", string>
+  Record<"form" | "name" | "photos" | "website", string>
 >;
 
 export type ShopDraftResult =
@@ -28,6 +31,86 @@ function isHttpsUrl(value: string): boolean {
     return new URL(value).protocol === "https:";
   } catch {
     return false;
+  }
+}
+
+const NOT_UPLOADED = "Photos must be uploaded before they are attached.";
+
+function parseVariants(value: unknown): unknown[] {
+  return Array.isArray(value) ? value : [];
+}
+
+function parseNewVariants(value: unknown): ShopPhoto["variants"] {
+  return parseVariants(value).map((item) => {
+    const variant = (
+      typeof item === "object" && item !== null ? item : {}
+    ) as Record<string, unknown>;
+    return {
+      width: Number(variant.width),
+      height: Number(variant.height),
+      key: text(variant.key),
+    };
+  });
+}
+
+// Stored photos keep their server-held variants and only take new alt text;
+// unknown IDs must carry variants that validate and exist in storage, so a
+// client can never reference objects the server did not write.
+async function resolvePhotos(
+  storage: PhotoStorage,
+  raw: unknown,
+  stored: readonly ShopPhoto[],
+): Promise<{ readonly photos: ShopPhoto[] } | { readonly error: string }> {
+  if (!Array.isArray(raw)) {
+    return { error: "Photos must be a list." };
+  }
+  const known = new Map(stored.map((photo) => [photo.id, photo]));
+  const photos: ShopPhoto[] = raw.map((item) => {
+    const photo = (
+      typeof item === "object" && item !== null ? item : {}
+    ) as Record<string, unknown>;
+    const id = text(photo.id).trim();
+    const current = known.get(id);
+    return {
+      id,
+      alt: text(photo.alt).trim(),
+      variants: current?.variants ?? parseNewVariants(photo.variants),
+    };
+  });
+  try {
+    validateShopPhotos(photos);
+  } catch (error) {
+    return { error: (error as RangeError).message };
+  }
+  for (const photo of photos) {
+    if (known.has(photo.id)) {
+      continue;
+    }
+    for (const variant of photo.variants) {
+      if (!(await storage.exists(variant.key))) {
+        return { error: NOT_UPLOADED };
+      }
+    }
+  }
+  return { photos };
+}
+
+// Orphaned objects are harmless and can be swept later, so a failed delete
+// must not fail an already persisted save.
+async function deleteRemovedPhotos(
+  storage: PhotoStorage,
+  before: readonly ShopPhoto[],
+  kept: readonly ShopPhoto[],
+  published: readonly ShopPhoto[],
+): Promise<void> {
+  const inUse = new Set([...kept, ...published].map((photo) => photo.id));
+  for (const photo of before) {
+    if (inUse.has(photo.id)) {
+      continue;
+    }
+    for (const variant of photo.variants) {
+      await storage.delete(variant.key).catch(() => undefined);
+    }
   }
 }
 
@@ -67,16 +150,32 @@ export async function saveShopDraft(
   if (requestedId !== "" && existing === null) {
     return { ok: false, errors: { form: "Shop not found." } };
   }
+  const stored = existing?.draft.photos ?? [];
+  let photos = stored;
+  if (fields.photos !== undefined) {
+    const resolved = await resolvePhotos(deps.storage, fields.photos, stored);
+    if ("error" in resolved) {
+      return { ok: false, errors: { photos: resolved.error } };
+    }
+    photos = resolved.photos;
+  }
   const id = existing?.id ?? deps.newId();
   const draft: ShopDetails = {
     name,
     links: website === "" ? null : { website, other: [] },
     sources: existing?.draft.sources ?? null,
+    ...(photos.length > 0 ? { photos } : {}),
   };
   await deps.repositories.shops.save({
     id,
     draft,
     published: existing?.published ?? null,
   });
+  await deleteRemovedPhotos(
+    deps.storage,
+    stored,
+    photos,
+    existing?.published?.photos ?? [],
+  );
   return { ok: true, id };
 }

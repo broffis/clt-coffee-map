@@ -8,6 +8,7 @@ import {
 import { EditorWorkspace } from "../editor/EditorWorkspace";
 import { loadEditorRecordsRequest } from "../editor/editor-records-client";
 import { saveLocationDraftRequest } from "../editor/location-draft-client";
+import { uploadPhotoRequest } from "../editor/photo-upload-client";
 import { updateLocationPublication } from "../editor/publication-client";
 import { saveShopDraftRequest } from "../editor/shop-draft-client";
 
@@ -74,6 +75,7 @@ export function Home() {
         <EditorWorkspace
           load={loadEditorRecordsRequest}
           saveShop={saveShopDraftRequest}
+          uploadPhoto={uploadPhotoRequest}
           saveLocation={saveLocationDraftRequest}
           updatePublication={updateLocationPublication}
           loadCandidates={loadCandidateRequest}

@@ -5,6 +5,7 @@ import {
   type PublicDetailData,
 } from "../../public-data/public-detail";
 import type { PublicJsonObject } from "../../public-data/public-reader";
+import { publicPhotoBaseUrl, readPublicPhotos } from "../../public-photos";
 
 export const Route = createFileRoute("/shops/$shopId")({
   loader: ({ params }) => loadPublicShop({ data: { shopId: params.shopId } }),
@@ -45,6 +46,21 @@ export function ShopDetailContent({ data }: { data: PublicDetailData }) {
       {typeof data.shop.details.description === "string" ? (
         <p>{data.shop.details.description}</p>
       ) : null}
+      {readPublicPhotos(data.shop.details, publicPhotoBaseUrl()).map(
+        (photo) => (
+          <img
+            key={photo.id}
+            src={photo.src}
+            srcSet={photo.srcSet}
+            sizes="(min-width: 960px) 960px, 100vw"
+            width={photo.width}
+            height={photo.height}
+            alt={photo.alt}
+            loading="lazy"
+            decoding="async"
+          />
+        ),
+      )}
       <p>
         {data.shop.locations.length}{" "}
         {data.shop.locations.length === 1 ? "location" : "locations"}

@@ -30,6 +30,15 @@ function database(): PublicMongoDatabase {
       published: {
         name: "Published shop",
         links: null,
+        photos: [
+          {
+            id: "photo-1",
+            alt: "Espresso bar",
+            variants: [
+              { width: 480, height: 320, key: "photos/photo-1/480.webp" },
+            ],
+          },
+        ],
         sources: ["private source"],
         privateNote: "do not export",
       },
@@ -82,7 +91,19 @@ describe("public Mongo reader", () => {
     await expect(reader.list()).resolves.toEqual([
       {
         id: "shop-1",
-        details: { name: "Published shop", links: null },
+        details: {
+          name: "Published shop",
+          links: null,
+          photos: [
+            {
+              id: "photo-1",
+              alt: "Espresso bar",
+              variants: [
+                { width: 480, height: 320, key: "photos/photo-1/480.webp" },
+              ],
+            },
+          ],
+        },
         locations: [
           {
             id: "location-1",

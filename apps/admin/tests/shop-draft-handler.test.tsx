@@ -5,6 +5,7 @@ import { handleShopDraftSave } from "../src/editor/shop-draft-handler";
 import { createInMemoryAccessRepository } from "../src/persistence/access-memory";
 import { PersistenceError } from "../src/persistence/errors";
 import { createInMemoryRepositories } from "../src/persistence/memory";
+import { MemoryPhotoStorage } from "../src/photos/storage-memory";
 
 const NOW = new Date("2026-11-18T20:00:00.000Z");
 const verified: SessionVerifier<Request> = {
@@ -26,7 +27,13 @@ async function setup() {
   const newId = () => "shop-new";
   return {
     repositories,
-    deps: { access, repositories, verifier: verified, newId },
+    deps: {
+      access,
+      repositories,
+      storage: new MemoryPhotoStorage(),
+      verifier: verified,
+      newId,
+    },
   };
 }
 

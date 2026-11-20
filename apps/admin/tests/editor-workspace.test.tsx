@@ -1,8 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { EditorWorkspace } from "../src/editor/EditorWorkspace";
 import type { CandidateLoadOutcome } from "../src/editor/candidate-client";
 import type { SaveOutcome } from "../src/editor/draft-request";
+import { EditorWorkspace } from "../src/editor/EditorWorkspace";
 import type { LoadOutcome } from "../src/editor/editor-records-client";
 import type { PublicationOutcome } from "../src/editor/publication-client";
 
@@ -200,6 +200,47 @@ describe("EditorWorkspace", () => {
         id: "s1",
         name: "Bean Here",
         website: "https://bean.example.test",
+        photos: [],
+      }),
+    );
+  });
+
+  it("loads a shop's photos into the form and uploads through the editor", async () => {
+    const variants = [{ width: 480, height: 320, key: "photos/p1/480.webp" }];
+    const withPhotos = {
+      shops: [
+        {
+          ...records.shops[0],
+          photos: [{ id: "p1", alt: "Counter", variants }],
+        },
+      ],
+    };
+    const saveShop = vi.fn(async () => ({ ok: true }) as SaveOutcome);
+    render(
+      <EditorWorkspace
+        load={async () => ({ ok: true, records: withPhotos })}
+        saveShop={saveShop}
+        saveLocation={vi.fn()}
+        updatePublication={vi.fn()}
+        uploadPhoto={vi.fn()}
+      />,
+    );
+    await screen.findByText("Bean There");
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Edit shop Bean There" }),
+    );
+
+    expect(screen.getByLabelText("Alternative text for photo 1")).toHaveValue(
+      "Counter",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+    await waitFor(() =>
+      expect(saveShop).toHaveBeenCalledWith({
+        id: "s1",
+        name: "Bean There",
+        website: "https://bean.example.test",
+        photos: [{ id: "p1", alt: "Counter", variants }],
       }),
     );
   });
@@ -219,6 +260,7 @@ describe("EditorWorkspace", () => {
     expect(saveShop).toHaveBeenLastCalledWith({
       name: "Fresh",
       website: "",
+      photos: [],
     });
     expect(load).toHaveBeenCalledTimes(2);
 
@@ -228,6 +270,7 @@ describe("EditorWorkspace", () => {
         id: "new-1",
         name: "Fresh",
         website: "",
+        photos: [],
       }),
     );
   });

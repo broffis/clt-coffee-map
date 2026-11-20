@@ -100,9 +100,10 @@ period, age reference, eligible review states, and deletion scope first.
 Never let inbox cleanup delete independently curated shop records.
 
 Shop records belong in MongoDB Atlas, selected in
-[ADR 0001](../docs/decisions/0001-mongodb-atlas.md). Store photos in Cloudflare
-R2 Standard and resize them during upload before publication, per
-[ADR 0002](../docs/decisions/0002-r2-photo-storage.md). Store photo references,
+[ADR 0001](../docs/decisions/0001-mongodb-atlas.md). Store photos in Tigris
+Standard (S3-compatible) and resize them during upload before publication, per
+[ADR 0013](../docs/decisions/0013-tigris-photo-storage.md), which supersedes
+the provider in [ADR 0002](../docs/decisions/0002-r2-photo-storage.md). Store photo references,
 not image bytes, in Atlas. The Atlas tier, image-processing details,
 map style, publication workflow, cache freshness/invalidation, and detailed
 admin UX are still undecided. Validate Vercel eligibility and runtime integration
@@ -146,6 +147,11 @@ billing, and offline/service-worker features until their roadmap stages.
 - Follow [CONTRIBUTING.md](CONTRIBUTING.md) for branch, PR, commit, release,
   testing, tooling, architecture decision, data validation, and accessibility
   policies, including strict incremental TDD and 90% branch coverage.
+- Every pull request title must be a Conventional Commit
+  (`<type>(optional-scope): lowercase imperative description`, for example
+  `feat(admin): implement private photo pipeline`); the `PR title` CI check
+  fails otherwise and the title becomes the squash commit for Release Please.
+  Set it when running `gh pr create`; never use a plain-English title.
 - Treat `ROADMAP.md` as the source of truth for product scope, boundaries, and
   deferred work.
 - Keep public curated shop data separate from visitor contact details,
