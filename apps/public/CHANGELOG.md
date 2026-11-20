@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/broffis/clt-coffee-map/compare/public-v0.2.0...public-v0.3.0) (2026-11-20)
+
+
+### Features
+
+* **public:** implement coffee shop discovery ([#103](https://github.com/broffis/clt-coffee-map/issues/103)) ([8d8502e](https://github.com/broffis/clt-coffee-map/commit/8d8502e2efe6c08e0b6e0103d3cc196688fe717d))
+
 ## [0.2.0](https://github.com/broffis/clt-coffee-map/compare/public-v0.1.0...public-v0.2.0) (2026-11-19)
 
 
