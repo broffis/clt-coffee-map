@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import type { PhotoUploadOutcome } from "../src/editor/photo-upload-client";
 import { type SaveOutcome, ShopDraftForm } from "../src/editor/ShopDraftForm";
 
 function setup(outcome: SaveOutcome = { ok: true }) {
@@ -33,6 +34,7 @@ describe("ShopDraftForm", () => {
         initialValues={{
           name: "Bean There",
           website: "https://b.example.test",
+          photos: [],
         }}
       />,
     );
@@ -43,6 +45,7 @@ describe("ShopDraftForm", () => {
       expect(save).toHaveBeenCalledWith({
         name: "Bean There",
         website: "https://b.example.test",
+        photos: [],
       }),
     );
   });
@@ -58,6 +61,7 @@ describe("ShopDraftForm", () => {
     expect(save).toHaveBeenCalledWith({
       name: "Bean There",
       website: "https://bean.example.test",
+      photos: [],
     });
   });
 
@@ -127,5 +131,150 @@ describe("ShopDraftForm", () => {
     fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
     await screen.findByRole("status");
     expect(leave()).toBe(false);
+  });
+
+  describe("photos", () => {
+    const variants = [{ width: 480, height: 320, key: "photos/p1/480.webp" }];
+    const photo = new File([new Uint8Array([1])], "front.jpg", {
+      type: "image/jpeg",
+    });
+
+    function setupPhotos(
+      upload: PhotoUploadOutcome = { ok: true, photo: { id: "p1", variants } },
+      initialPhotos: {
+        id: string;
+        alt: string;
+        variants: typeof variants;
+      }[] = [],
+    ) {
+      const save = vi.fn(async () => ({ ok: true }) as SaveOutcome);
+      const uploadPhoto = vi.fn(async () => upload);
+      render(
+        <ShopDraftForm
+          save={save}
+          uploadPhoto={uploadPhoto}
+          initialValues={{ name: "Bean", website: "", photos: initialPhotos }}
+        />,
+      );
+      return { save, uploadPhoto };
+    }
+
+    function choose() {
+      fireEvent.change(screen.getByLabelText("Add photo"), {
+        target: { files: [photo] },
+      });
+    }
+
+    it("hides the photo section without an upload function", () => {
+      setup();
+
+      expect(screen.queryByLabelText("Add photo")).not.toBeInTheDocument();
+    });
+
+    it("uploads a photo, requires alt text, and saves the reference", async () => {
+      const { save, uploadPhoto } = setupPhotos();
+
+      choose();
+      const alt = await screen.findByLabelText("Alternative text for photo 1");
+      expect(uploadPhoto).toHaveBeenCalledWith(photo);
+      type("Alternative text for photo 1", "Front counter");
+      expect(alt).toHaveValue("Front counter");
+      fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+
+      await waitFor(() =>
+        expect(save).toHaveBeenCalledWith({
+          name: "Bean",
+          website: "",
+          photos: [{ id: "p1", alt: "Front counter", variants }],
+        }),
+      );
+    });
+
+    it("shows upload failures without adding a photo", async () => {
+      setupPhotos({ ok: false, message: "Photos must be 10 MB or smaller." });
+
+      choose();
+
+      expect(await screen.findByRole("alert")).toHaveTextContent(
+        "Photos must be 10 MB or smaller.",
+      );
+      expect(
+        screen.queryByLabelText("Alternative text for photo 1"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("removes a photo and saves without it", async () => {
+      const { save } = setupPhotos(undefined, [
+        { id: "p1", alt: "Counter", variants },
+      ]);
+
+      fireEvent.click(screen.getByRole("button", { name: "Remove photo 1" }));
+      fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+
+      await waitFor(() =>
+        expect(save).toHaveBeenCalledWith({
+          name: "Bean",
+          website: "",
+          photos: [],
+        }),
+      );
+    });
+
+    it("shows a photo error from the server and keeps the photos", async () => {
+      const save = vi.fn(
+        async () =>
+          ({
+            ok: false,
+            errors: { photos: "Photo alternative text must not be blank." },
+          }) as SaveOutcome,
+      );
+      render(
+        <ShopDraftForm
+          save={save}
+          uploadPhoto={async () => ({
+            ok: true,
+            photo: { id: "p1", variants },
+          })}
+        />,
+      );
+
+      choose();
+      await screen.findByLabelText("Alternative text for photo 1");
+      fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+
+      expect(
+        await screen.findByText("Photo alternative text must not be blank."),
+      ).toHaveAttribute("role", "alert");
+      expect(
+        screen.getByLabelText("Alternative text for photo 1"),
+      ).toBeVisible();
+    });
+
+    it("ignores an empty file selection and disables adding while uploading", async () => {
+      let finish: (outcome: PhotoUploadOutcome) => void = () => undefined;
+      const uploadPhoto = vi.fn(
+        () =>
+          new Promise<PhotoUploadOutcome>((resolve) => {
+            finish = resolve;
+          }),
+      );
+      render(<ShopDraftForm save={vi.fn()} uploadPhoto={uploadPhoto} />);
+
+      fireEvent.change(screen.getByLabelText("Add photo"), {
+        target: { files: [] },
+      });
+      expect(uploadPhoto).not.toHaveBeenCalled();
+
+      choose();
+      await waitFor(() =>
+        expect(screen.getByLabelText("Add photo")).toBeDisabled(),
+      );
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "Uploading photo...",
+      );
+      finish({ ok: true, photo: { id: "p1", variants } });
+      await screen.findByLabelText("Alternative text for photo 1");
+      expect(screen.getByLabelText("Add photo")).toBeEnabled();
+    });
   });
 });

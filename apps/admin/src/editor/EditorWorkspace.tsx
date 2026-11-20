@@ -8,6 +8,7 @@ import type {
 } from "./editor-records-client";
 import { LocationDraftForm } from "./LocationDraftForm";
 import type { LocationDraftValues } from "./location-draft-client";
+import type { PhotoUploadOutcome } from "./photo-upload-client";
 import type {
   PublicationAction,
   PublicationOutcome,
@@ -46,6 +47,7 @@ export function EditorWorkspace({
   updatePublication,
   loadCandidates,
   reviewCandidate,
+  uploadPhoto,
 }: {
   readonly load: () => Promise<LoadOutcome>;
   readonly saveShop: (
@@ -59,6 +61,7 @@ export function EditorWorkspace({
     locationId: string | undefined,
     action: PublicationAction,
   ) => Promise<PublicationOutcome>;
+  readonly uploadPhoto?: (file: File) => Promise<PhotoUploadOutcome>;
   readonly loadCandidates?: () => Promise<CandidateLoadOutcome>;
   readonly reviewCandidate?: (
     candidateId: string,
@@ -363,7 +366,11 @@ export function EditorWorkspace({
                   open({
                     kind: "shop",
                     id: shop.id,
-                    initial: { name: shop.name, website: shop.website },
+                    initial: {
+                      name: shop.name,
+                      website: shop.website,
+                      photos: shop.photos ?? [],
+                    },
                   })
                 }
               >
@@ -448,6 +455,7 @@ export function EditorWorkspace({
           <ShopDraftForm
             key={selection.formKey}
             save={persistShop}
+            uploadPhoto={uploadPhoto}
             initialValues={selection.initial}
           />
         </section>

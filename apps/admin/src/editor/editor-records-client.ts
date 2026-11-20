@@ -1,3 +1,5 @@
+import type { PhotoValue } from "./ShopDraftForm";
+
 export interface EditorLocationRecord {
   readonly id: string;
   readonly published: boolean;
@@ -14,6 +16,7 @@ export interface EditorShopRecord {
   readonly id: string;
   readonly name: string;
   readonly website: string;
+  readonly photos?: readonly PhotoValue[];
   readonly published: boolean;
   readonly locations: readonly EditorLocationRecord[];
 }

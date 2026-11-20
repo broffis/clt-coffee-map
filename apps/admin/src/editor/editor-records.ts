@@ -28,6 +28,7 @@ export async function handleEditorRecords(
         id: shop.id,
         name: shop.draft.name,
         website: shop.draft.links?.website ?? "",
+        photos: shop.draft.photos ?? [],
         published: shop.published !== null,
         locations: (await deps.repositories.locations.listByShop(shop.id)).map(
           ({ id, draft, published }) => ({

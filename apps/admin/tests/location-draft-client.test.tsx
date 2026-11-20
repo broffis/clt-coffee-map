@@ -64,13 +64,23 @@ describe("saveShopDraftRequest id handling", () => {
       .mockResolvedValue(Response.json({ ok: true, id: "shop-1" }));
 
     await expect(
-      saveShopDraftRequest({ id: "shop-1", name: "Bean", website: "" }),
+      saveShopDraftRequest({
+        id: "shop-1",
+        name: "Bean",
+        website: "",
+        photos: [],
+      }),
     ).resolves.toEqual({ ok: true, id: "shop-1" });
 
     expect(fetch).toHaveBeenCalledWith(
       "/api/admin/shops",
       expect.objectContaining({
-        body: JSON.stringify({ id: "shop-1", name: "Bean", website: "" }),
+        body: JSON.stringify({
+          id: "shop-1",
+          name: "Bean",
+          website: "",
+          photos: [],
+        }),
       }),
     );
   });

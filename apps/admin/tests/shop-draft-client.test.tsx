@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { saveShopDraftRequest } from "../src/editor/shop-draft-client";
 
-const values = { name: "Bean There", website: "" };
+const values = { name: "Bean There", website: "", photos: [] };
 
 function respond(status: number, body: unknown) {
   return vi

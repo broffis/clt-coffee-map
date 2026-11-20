@@ -61,6 +61,7 @@ describe("editor records endpoint", () => {
           id: "shop-1",
           name: "Bean There",
           website: "",
+          photos: [],
           published: false,
           locations: [
             {
