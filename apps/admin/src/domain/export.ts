@@ -1,6 +1,7 @@
 import { copyRegularHours } from "./hours";
-import type { LocationDetails, ShopLocation } from "./location";
 import { copyContactLinks } from "./links";
+import type { LocationDetails, ShopLocation } from "./location";
+import { copyShopPhotos } from "./photo";
 import type { Shop, ShopDetails } from "./shop";
 
 export type PublishedShopDetails = Omit<ShopDetails, "sources">;
@@ -58,6 +59,9 @@ function copyPublishedShopDetails(details: ShopDetails): PublishedShopDetails {
   return {
     name: details.name,
     links: copyContactLinks(details.links),
+    ...(details.photos === undefined
+      ? {}
+      : { photos: copyShopPhotos(details.photos) }),
   };
 }
 
