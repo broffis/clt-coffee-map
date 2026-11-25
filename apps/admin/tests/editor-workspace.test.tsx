@@ -117,6 +117,34 @@ describe("EditorWorkspace", () => {
     );
   });
 
+  it("retries photo delivery without republishing shop details", async () => {
+    const { updatePublication } = setup({
+      load: async () => ({
+        ok: true,
+        records: {
+          ...records,
+          shops: records.shops.map((shop) => ({ ...shop, published: true })),
+        },
+      }),
+    });
+    await screen.findByText("Bean There");
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Retry photo delivery" }),
+    );
+
+    await waitFor(() =>
+      expect(updatePublication).toHaveBeenCalledWith(
+        "s1",
+        undefined,
+        "retry-photo-delivery",
+      ),
+    );
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Photo delivery completed.",
+    );
+  });
+
   it("unpublishes a published location", async () => {
     const { updatePublication } = setup({
       load: async () => ({

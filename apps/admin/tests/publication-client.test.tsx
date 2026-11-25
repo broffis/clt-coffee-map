@@ -77,6 +77,20 @@ describe("updateLocationPublication", () => {
     });
   });
 
+  it("explains that publication was saved when photo delivery fails", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      Response.json({ error: "photo-delivery-pending" }, { status: 503 }),
+    );
+
+    await expect(
+      updateLocationPublication("shop-1", "location-1", "publish-location"),
+    ).resolves.toEqual({
+      ok: false,
+      message:
+        "The change was saved, but photos could not be delivered. Reload the page and select Retry photo delivery.",
+    });
+  });
+
   it("maps network failures to a safe message", async () => {
     vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("network"));
 

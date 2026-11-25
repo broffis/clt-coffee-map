@@ -74,6 +74,53 @@ Biome currently formats/lints source and configuration, not Markdown or assets.
 The app-specific Release Please manifests are excluded from formatting because
 they are generated; Biome still lints them.
 
+## Photo storage setup
+
+The admin photo pipeline uses two S3-compatible Tigris Standard buckets.
+Uploads and drafts share the private bucket; never make it public. Published
+variants are copied into a separate public delivery bucket. Tigris requires
+payment-method verification for public buckets on newer organizations. Set
+these variables in the **admin server environment only** (locally in
+`apps/admin/.env.local`):
+
+```text
+PHOTO_STORAGE_ENDPOINT=https://t3.storage.dev
+PHOTO_STORAGE_BUCKET=<private-upload-bucket>
+PHOTO_DELIVERY_BUCKET=<different-public-delivery-bucket>
+PHOTO_STORAGE_REGION=auto
+PHOTO_STORAGE_ACCESS_KEY_ID=<server-only-access-key>
+PHOTO_STORAGE_SECRET_ACCESS_KEY=<server-only-secret>
+```
+
+The storage credentials need read access to the private bucket and write
+access to the public bucket; upload and draft cleanup also need write and
+delete access to the private bucket. Set `VITE_PUBLIC_PHOTO_BASE_URL` in the
+**public build environment** (locally in `apps/public/.env.local`) to the
+delivery bucket's HTTPS public origin, for example
+`https://<delivery-bucket>.t3.tigrisfiles.io`. Built-in HTTPS public domains
+require a bucket name without dots. Do not put storage credentials in browser
+variables, public deployment settings, source, or `.env.example`.
+
+Uploads accept JPEG, PNG, and WebP files up to 10 MB and produce 480, 960, and
+1600 pixel WebP variants without upscaling. The admin browser reduces files
+over 4 MB before sending them because Vercel function requests are limited to
+4.5 MB. Originals are not retained. Publishing saves the shop and location
+first, then copies the published variants with `Cache-Control: public,
+max-age=3600`. A failed copy leaves the publication saved and reports an error;
+reload the editor and select **Retry photo delivery** to retry the published
+snapshot without publishing draft edits. A partial failure can leave some
+images available and others missing.
+
+Removing a draft photo attempts to delete its private variants only when no
+current draft or published record refers to it; failed deletes can leave
+orphans. Public objects are not automatically deleted on replacement or
+unpublication, and their URLs can remain accessible. Cache expiry cannot revoke
+downloaded copies. Do not use this pipeline for photos needing guaranteed
+withdrawal; define and implement public cleanup before launch. Export Atlas
+records and both buckets to a separate backup before launch; storage alone is
+not a backup. Real Tigris operations, browser flows, and Vercel runtime remain
+unverified.
+
 Branch CI is being implemented in #53. `branch.yml` runs formatting, lint, types,
 coverage tests, and both production builds for pull requests and merge groups.
 It checks the latest PR update's proposed merge snapshot, not each intermediate

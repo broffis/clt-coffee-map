@@ -220,6 +220,18 @@ function ShopCard({
       className={`shop-card${selected ? " selected" : ""}`}
       onMouseEnter={onSelect}
     >
+      {shop.photos[0] ? (
+        <img
+          src={shop.photos[0].src}
+          srcSet={shop.photos[0].srcSet}
+          sizes="(min-width: 960px) 18rem, 100vw"
+          width={shop.photos[0].width}
+          height={shop.photos[0].height}
+          alt={shop.photos[0].alt}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : null}
       <h3>
         <Link to="/shops/$shopId" params={{ shopId: shop.id }}>
           {shop.name}

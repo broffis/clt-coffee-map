@@ -1,11 +1,37 @@
 export type PublicationAction =
   | "publish-location"
   | "unpublish-location"
-  | "republish-shop";
+  | "republish-shop"
+  | "retry-photo-delivery";
 
 export type PublicationOutcome =
   | { readonly ok: true }
   | { readonly ok: false; readonly message: string };
+
+async function unavailableMessage(response: Response): Promise<string> {
+  try {
+    const body: unknown = await response.json();
+    if (
+      typeof body === "object" &&
+      body !== null &&
+      "error" in body &&
+      body.error === "photo-delivery-pending"
+    ) {
+      return "The change was saved, but photos could not be delivered. Reload the page and select Retry photo delivery.";
+    }
+    if (
+      typeof body === "object" &&
+      body !== null &&
+      "error" in body &&
+      body.error === "public-update-pending"
+    ) {
+      return "The change was saved, but the public update could not be triggered. Try again later.";
+    }
+  } catch {
+    // A non-JSON response does not establish whether the change was saved.
+  }
+  return "Publication or the public update could not be completed. Check the current status and try again later.";
+}
 
 export async function updateLocationPublication(
   shopId: string,
@@ -51,13 +77,14 @@ export async function updateLocationPublication(
         message:
           action === "republish-shop"
             ? "The shop details could not be republished."
-            : "This location could not be published.",
+            : action === "retry-photo-delivery"
+              ? "Photo delivery could not be retried."
+              : "This location could not be published.",
       };
     case 503:
       return {
         ok: false,
-        message:
-          "The change was saved, but the public update could not be triggered. Try again later.",
+        message: await unavailableMessage(response),
       };
     default:
       return {

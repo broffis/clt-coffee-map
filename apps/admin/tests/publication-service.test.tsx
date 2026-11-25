@@ -7,6 +7,7 @@ import type { Shop } from "../src/domain/shop";
 import { createInMemoryAccessRepository } from "../src/persistence/access-memory";
 import { createInMemoryRepositories } from "../src/persistence/memory";
 import { updatePublication } from "../src/publication/publication-service";
+import { handlePublicationUpdate } from "../src/publication/publication-handler";
 
 const NOW = new Date("2026-11-19T15:00:00.000Z");
 const request = new Request("https://admin.example.test/");
@@ -48,14 +49,194 @@ async function setup() {
   const repositories = createInMemoryRepositories();
   await repositories.shops.save(shop);
   await repositories.locations.save(location);
+  const photoDelivery = { copy: vi.fn().mockResolvedValue(undefined) };
   return {
     access,
     repositories,
-    deps: { access, repositories, verifier },
+    photoDelivery,
+    deps: { access, repositories, verifier, photoDelivery },
   };
 }
 
 describe("updatePublication", () => {
+  it("copies photos only after the shop and location are published", async () => {
+    const { repositories, deps, photoDelivery } = await setup();
+    const photo = {
+      id: "p1",
+      alt: "Counter",
+      variants: [{ width: 480, height: 320, key: "photos/p1/480.webp" }],
+    };
+    await repositories.shops.save({
+      ...shop,
+      draft: { ...shop.draft, photos: [photo] },
+    });
+    photoDelivery.copy.mockImplementation(async () => {
+      expect(
+        (await repositories.shops.get(shop.id))?.published?.photos,
+      ).toEqual([photo]);
+      expect(
+        (await repositories.locations.get(location.id))?.published,
+      ).not.toBeNull();
+    });
+
+    await updatePublication(deps, request, {
+      action: "publish-location",
+      shopId: shop.id,
+      locationId: location.id,
+    });
+
+    expect(photoDelivery.copy).toHaveBeenCalledWith("photos/p1/480.webp");
+  });
+
+  it("leaves publication saved and retries copying after a delivery failure", async () => {
+    const { repositories, deps, photoDelivery } = await setup();
+    await repositories.shops.save({
+      ...shop,
+      draft: {
+        ...shop.draft,
+        photos: [
+          {
+            id: "p1",
+            alt: "Counter",
+            variants: [{ width: 480, height: 320, key: "photos/p1/480.webp" }],
+          },
+        ],
+      },
+    });
+    photoDelivery.copy.mockRejectedValueOnce(new Error("delivery unavailable"));
+    const input = {
+      action: "publish-location",
+      shopId: shop.id,
+      locationId: location.id,
+    };
+
+    await expect(updatePublication(deps, request, input)).rejects.toThrow();
+    expect(
+      (await repositories.locations.get(location.id))?.published,
+    ).not.toBeNull();
+    await expect(
+      updatePublication(deps, request, input),
+    ).resolves.toMatchObject({
+      ok: true,
+    });
+    expect(photoDelivery.copy).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not copy a draft if saving its location fails", async () => {
+    const { repositories, deps, photoDelivery } = await setup();
+    await repositories.shops.save({
+      ...shop,
+      draft: {
+        ...shop.draft,
+        photos: [
+          {
+            id: "p1",
+            alt: "Counter",
+            variants: [{ width: 480, height: 320, key: "photos/p1/480.webp" }],
+          },
+        ],
+      },
+    });
+    vi.spyOn(repositories.locations, "save").mockRejectedValueOnce(
+      new Error("storage unavailable"),
+    );
+
+    await expect(
+      updatePublication(deps, request, {
+        action: "publish-location",
+        shopId: shop.id,
+        locationId: location.id,
+      }),
+    ).rejects.toThrow("storage unavailable");
+    expect(photoDelivery.copy).not.toHaveBeenCalled();
+  });
+
+  it("does not copy photos when republishing a shop with no published locations", async () => {
+    const { repositories, deps, photoDelivery } = await setup();
+    await repositories.shops.save({
+      ...shop,
+      draft: {
+        ...shop.draft,
+        photos: [
+          {
+            id: "p1",
+            alt: "Counter",
+            variants: [{ width: 480, height: 320, key: "photos/p1/480.webp" }],
+          },
+        ],
+      },
+      published: shop.draft,
+    });
+
+    await updatePublication(deps, request, {
+      action: "republish-shop",
+      shopId: shop.id,
+    });
+    expect(photoDelivery.copy).not.toHaveBeenCalled();
+  });
+
+  it("returns a specific retryable response for photo delivery failures", async () => {
+    const { repositories, deps, photoDelivery } = await setup();
+    await repositories.shops.save({
+      ...shop,
+      draft: {
+        ...shop.draft,
+        photos: [
+          {
+            id: "p1",
+            alt: "Counter",
+            variants: [{ width: 480, height: 320, key: "photos/p1/480.webp" }],
+          },
+        ],
+      },
+    });
+    photoDelivery.copy.mockRejectedValue(new Error("provider details"));
+    const response = await handlePublicationUpdate(
+      deps,
+      new Request("https://admin.example.test/api/admin/publication", {
+        method: "POST",
+        body: JSON.stringify({
+          action: "publish-location",
+          shopId: shop.id,
+          locationId: location.id,
+        }),
+      }),
+    );
+
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({ error: "photo-delivery-pending" });
+  });
+
+  it("retries delivery of published photos without publishing newer drafts", async () => {
+    const { repositories, deps, photoDelivery } = await setup();
+    const photo = {
+      id: "p1",
+      alt: "Counter",
+      variants: [{ width: 480, height: 320, key: "photos/p1/480.webp" }],
+    };
+    await repositories.shops.save({
+      ...shop,
+      published: { ...shop.draft, photos: [photo] },
+      draft: { ...shop.draft, name: "Unpublished edit" },
+    });
+    await repositories.locations.save({
+      ...location,
+      published: location.draft,
+    });
+
+    await expect(
+      updatePublication(deps, request, {
+        action: "retry-photo-delivery",
+        shopId: shop.id,
+      }),
+    ).resolves.toMatchObject({ ok: true });
+
+    expect(photoDelivery.copy).toHaveBeenCalledWith("photos/p1/480.webp");
+    expect((await repositories.shops.get(shop.id))?.published?.name).toBe(
+      "Draft name",
+    );
+  });
+
   it("rejects non-object publication data", async () => {
     const { deps } = await setup();
 

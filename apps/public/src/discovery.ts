@@ -3,6 +3,11 @@ import type {
   PublicLocation,
   PublicShop,
 } from "./public-data/public-reader";
+import {
+  publicPhotoBaseUrl,
+  readPublicPhotos,
+  type PublicPhoto,
+} from "./public-photos";
 
 export const locationTypes = [
   "cafe",
@@ -25,6 +30,7 @@ export interface DiscoveryShop {
   readonly id: string;
   readonly name: string;
   readonly details: PublicJsonObject;
+  readonly photos: readonly PublicPhoto[];
   readonly locations: readonly DiscoveryLocation[];
 }
 
@@ -49,6 +55,7 @@ export function createDiscoveryShops(
     id: shop.id,
     name: stringValue(shop.details.name) ?? "Unnamed coffee shop",
     details: shop.details,
+    photos: readPublicPhotos(shop.details, publicPhotoBaseUrl()),
     locations: shop.locations.map((location) =>
       toDiscoveryLocation(
         location,
