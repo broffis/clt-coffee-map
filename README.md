@@ -23,6 +23,25 @@ Public development runs at `http://127.0.0.1:3000`. In another terminal, run
 `pnpm dev:admin` for the separate admin shell at `http://127.0.0.1:3001`.
 Both commands fail if their port is occupied rather than silently switching.
 
+### Preview discovery with sample data
+
+1. Run `pnpm dev:public` from the repository root.
+2. Open `http://127.0.0.1:3000/__preview/discovery`.
+3. Use `http://127.0.0.1:3000/` to return to the normal published-data view;
+   no server restart or flag is needed to switch.
+
+The preview renders the real discovery UI with fictional shops from
+`apps/public/preview/discovery.tsx`. Edit that file to adjust the sample data;
+do not add real private data or credentials. The preview does not read or write
+the database, but the map may request tiles from the configured provider.
+Sample shop detail links do not work yet. Extend the preview separately as
+other pages are built.
+
+The preview route is served only by the Vite development server and is excluded
+from production builds. If it appears blank after the dev server reloads,
+restart `pnpm dev:public` and reload the preview page; stale optimized
+dependencies have caused this locally.
+
 ## Workspace and boundaries
 
 - `apps/public`: TanStack Start public app. The homepage is prerendered.
