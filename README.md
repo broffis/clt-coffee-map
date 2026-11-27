@@ -111,15 +111,39 @@ reload the editor and select **Retry photo delivery** to retry the published
 snapshot without publishing draft edits. A partial failure can leave some
 images available and others missing.
 
+Editors can optionally choose an attached photo as the company logo. Directory
+cards and map-pin popups use the published logo selection, or the first
+published photo when no valid selection exists. Removing the selected photo
+clears the draft selection. Like other shop details, a logo change remains
+private until the shop details are published or republished.
+
 Removing a draft photo attempts to delete its private variants only when no
 current draft or published record refers to it; failed deletes can leave
 orphans. Public objects are not automatically deleted on replacement or
 unpublication, and their URLs can remain accessible. Cache expiry cannot revoke
 downloaded copies. Do not use this pipeline for photos needing guaranteed
-withdrawal; define and implement public cleanup before launch. Export Atlas
-records and both buckets to a separate backup before launch; storage alone is
-not a backup. Real Tigris operations, browser flows, and Vercel runtime remain
-unverified.
+withdrawal. The owner removes obsolete public objects manually in the Tigris
+console; there is no app cleanup action.
+
+Before removing public photos:
+
+1. Stop all publishing, republishing, and photo-delivery retries; wait for
+   in-flight operations to finish. Keep them stopped until cleanup is complete.
+2. Back up Atlas records and both buckets to a separate location. Identify the
+   exact public variant keys to remove. Check every shop's published photos and
+   its published locations in Atlas; retain any key used by a shop with a
+   published location. If uncertain, do not delete it.
+3. Confirm public regeneration and deployment have completed so current pages
+   no longer reference the keys. In the Tigris console, delete only those
+   specific keys from the **public delivery bucket**, never the private bucket.
+4. Verify the current public pages and object URLs, then resume publication.
+   Cached or downloaded copies may remain accessible. If deletion was a
+   mistake, restore the exact keys from backup or retry delivery from a
+   published snapshot whose private variants still exist.
+
+Rehearse this procedure and establish recurring backups before launch; storage
+alone is not a backup. The real provider probe succeeded once, but browser
+flows, public image reads, and Vercel runtime remain unverified.
 
 Branch CI is being implemented in #53. `branch.yml` runs formatting, lint, types,
 coverage tests, and both production builds for pull requests and merge groups.

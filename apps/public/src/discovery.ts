@@ -31,7 +31,13 @@ export interface DiscoveryShop {
   readonly name: string;
   readonly details: PublicJsonObject;
   readonly photos: readonly PublicPhoto[];
+  readonly thumbnail: PublicPhoto | null;
   readonly locations: readonly DiscoveryLocation[];
+}
+
+export interface MapLocation extends DiscoveryLocation {
+  readonly coordinates: readonly [number, number];
+  readonly photo: PublicPhoto | null;
 }
 
 export interface DiscoveryFilters {
@@ -51,18 +57,26 @@ export interface MapBounds {
 export function createDiscoveryShops(
   shops: readonly PublicShop[],
 ): readonly DiscoveryShop[] {
-  return shops.map((shop) => ({
-    id: shop.id,
-    name: stringValue(shop.details.name) ?? "Unnamed coffee shop",
-    details: shop.details,
-    photos: readPublicPhotos(shop.details, publicPhotoBaseUrl()),
-    locations: shop.locations.map((location) =>
-      toDiscoveryLocation(
-        location,
-        stringValue(shop.details.name) ?? "Unnamed coffee shop",
+  return shops.map((shop) => {
+    const photos = readPublicPhotos(shop.details, publicPhotoBaseUrl());
+    const thumbnail =
+      photos.find((photo) => photo.id === shop.details.logoPhotoId) ??
+      photos[0] ??
+      null;
+    return {
+      id: shop.id,
+      name: stringValue(shop.details.name) ?? "Unnamed coffee shop",
+      details: shop.details,
+      photos,
+      thumbnail,
+      locations: shop.locations.map((location) =>
+        toDiscoveryLocation(
+          location,
+          stringValue(shop.details.name) ?? "Unnamed coffee shop",
+        ),
       ),
-    ),
-  }));
+    };
+  });
 }
 
 export function filterDiscoveryShops(
@@ -116,12 +130,17 @@ export function getTypes(shops: readonly DiscoveryShop[]): readonly string[] {
 
 export function mapLocations(
   shops: readonly DiscoveryShop[],
-): readonly DiscoveryLocation[] {
+): readonly MapLocation[] {
   return shops.flatMap((shop) =>
-    shop.locations.filter(
-      (location): location is DiscoveryLocation =>
-        location.coordinates !== null,
-    ),
+    shop.locations
+      .filter(
+        (
+          location,
+        ): location is DiscoveryLocation & {
+          readonly coordinates: readonly [number, number];
+        } => location.coordinates !== null,
+      )
+      .map((location) => ({ ...location, photo: shop.thumbnail })),
   );
 }
 

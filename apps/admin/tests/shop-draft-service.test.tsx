@@ -166,6 +166,79 @@ describe("saveShopDraft", () => {
       ]);
     });
 
+    it("stores an optional logo selected from the attached photos without changing the published logo", async () => {
+      const { repositories, storage, deps } = await setup();
+      const photo = {
+        id: "p1",
+        alt: "Counter",
+        variants: await upload(storage, "p1"),
+      };
+      await repositories.shops.save({
+        id: "shop-1",
+        draft: { name: "Bean", links: null, sources: null, photos: [photo] },
+        published: {
+          name: "Bean",
+          links: null,
+          sources: null,
+          photos: [photo],
+        },
+      });
+
+      await expect(
+        saveShopDraft(deps, request, {
+          id: "shop-1",
+          name: "Bean",
+          logoPhotoId: "p1",
+        }),
+      ).resolves.toEqual({ ok: true, id: "shop-1" });
+      const shop = await repositories.shops.get("shop-1");
+      expect(shop?.draft.logoPhotoId).toBe("p1");
+      expect(shop?.published?.logoPhotoId).toBeUndefined();
+    });
+
+    it("rejects a logo not in the attached photos and clears a removed logo", async () => {
+      const { repositories, storage, deps } = await setup();
+      const photo = {
+        id: "p1",
+        alt: "Counter",
+        variants: await upload(storage, "p1"),
+      };
+      await repositories.shops.save({
+        id: "shop-1",
+        draft: {
+          name: "Bean",
+          links: null,
+          sources: null,
+          photos: [photo],
+          logoPhotoId: "p1",
+        },
+        published: null,
+      });
+
+      await expect(
+        saveShopDraft(deps, request, {
+          id: "shop-1",
+          name: "Bean",
+          logoPhotoId: "other",
+        }),
+      ).resolves.toMatchObject({
+        ok: false,
+        errors: { logoPhotoId: expect.any(String) },
+      });
+      expect((await repositories.shops.get("shop-1"))?.draft.logoPhotoId).toBe(
+        "p1",
+      );
+
+      await saveShopDraft(deps, request, {
+        id: "shop-1",
+        name: "Bean",
+        photos: [],
+      });
+      expect(
+        (await repositories.shops.get("shop-1"))?.draft.logoPhotoId,
+      ).toBeUndefined();
+    });
+
     it("rejects photos that were never uploaded without writing", async () => {
       const { repositories, storage, deps } = await setup();
       const uploaded = await upload(storage, "p1");

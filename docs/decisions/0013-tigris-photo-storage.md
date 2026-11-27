@@ -134,9 +134,12 @@ not prove that a later regeneration or deployment completed.
   saves attempt to delete removed private variants only if no published copy
   references them; failed deletions can leave orphans. Public objects are not
   automatically removed on replacement or unpublication and can remain
-  accessible by URL. Public cleanup and recovery procedures remain launch
-  work. Before launch, export Atlas records and both buckets to a separate
-  operator-controlled backup location; object storage alone is not a backup.
+  accessible by URL. The owner manually removes obsolete public objects in the
+  Tigris console after checking published references and deployed pages, as
+  described in the README. Pause publication and delivery retries during the
+  check and deletion. Rehearse cleanup and recovery before launch; export Atlas
+  records and both buckets to a separate operator-controlled backup location,
+  because object storage alone is not a backup.
 - Processing runtime, image dimensions/formats, and Vercel compute, memory, and
   upload limits remain implementation-time decisions per ADR 0002 and
   [ADR 0006](0006-vercel-prerendered-hosting.md).

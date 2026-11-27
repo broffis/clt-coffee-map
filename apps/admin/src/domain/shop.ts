@@ -13,6 +13,7 @@ export interface ShopDetails {
   readonly sources: readonly SourceReference<"name" | "links">[] | null;
   // Absent means no photos; kept optional so existing records stay valid.
   readonly photos?: readonly ShopPhoto[];
+  readonly logoPhotoId?: string;
 }
 
 export interface Shop {
@@ -30,6 +31,12 @@ export function publishShopDetails(shop: Shop): Shop {
   validateSources(shop.draft.sources, ["name", "links"]);
   if (shop.draft.photos !== undefined) {
     validateShopPhotos(shop.draft.photos);
+  }
+  if (
+    shop.draft.logoPhotoId !== undefined &&
+    !shop.draft.photos?.some((photo) => photo.id === shop.draft.logoPhotoId)
+  ) {
+    throw new RangeError("Choose a logo from the attached photos.");
   }
 
   return {

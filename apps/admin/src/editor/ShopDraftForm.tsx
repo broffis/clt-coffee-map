@@ -13,6 +13,7 @@ export interface ShopDraftValues {
   readonly name: string;
   readonly website: string;
   readonly photos: readonly PhotoValue[];
+  readonly logoPhotoId?: string;
 }
 
 type FieldName = "name" | "website";
@@ -30,7 +31,7 @@ export function ShopDraftForm({
 }) {
   const prefix = useId();
   const [errors, setErrors] = useState<
-    Partial<Record<FieldName | "photos" | "form", string>>
+    Partial<Record<FieldName | "photos" | "logoPhotoId" | "form", string>>
   >({});
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -118,6 +119,9 @@ export function ShopDraftForm({
                   type="button"
                   onClick={() => {
                     setSaved(false);
+                    if (form.getFieldValue("logoPhotoId") === photo.id) {
+                      form.setFieldValue("logoPhotoId", "");
+                    }
                     api.handleChange(
                       api.state.value.filter((item) => item.id !== photo.id),
                     );
@@ -127,6 +131,37 @@ export function ShopDraftForm({
                 </button>
               </div>
             ))}
+            <form.Field name="logoPhotoId">
+              {(logo) => (
+                <div>
+                  <label htmlFor={`${prefix}-logo`}>Company logo</label>
+                  <select
+                    id={`${prefix}-logo`}
+                    value={logo.state.value ?? ""}
+                    aria-invalid={errors.logoPhotoId ? true : undefined}
+                    aria-describedby={
+                      errors.logoPhotoId ? `${prefix}-logo-error` : undefined
+                    }
+                    onChange={(event) => {
+                      setSaved(false);
+                      logo.handleChange(event.target.value);
+                    }}
+                  >
+                    <option value="">Use the first photo</option>
+                    {api.state.value.map((photo, index) => (
+                      <option key={photo.id} value={photo.id}>
+                        {`Photo ${index + 1}${photo.alt ? `: ${photo.alt}` : ""}`}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.logoPhotoId && (
+                    <p id={`${prefix}-logo-error`} role="alert">
+                      {errors.logoPhotoId}
+                    </p>
+                  )}
+                </div>
+              )}
+            </form.Field>
             <label htmlFor={`${prefix}-add-photo`}>Add photo</label>
             <input
               id={`${prefix}-add-photo`}

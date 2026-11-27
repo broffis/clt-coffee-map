@@ -38,13 +38,16 @@ export function Directory({ data }: { data: PublicHomeData }) {
     () => (data.ok ? createDiscoveryShops(data.shops) : []),
     [data],
   );
-  const filters: DiscoveryFilters = {
-    search,
-    neighborhoodId,
-    type,
-    mapBounds: limitToMap ? mapBounds : null,
-  };
-  const filteredShops = filterDiscoveryShops(shops, filters);
+  const activeBounds = limitToMap ? mapBounds : null;
+  const filteredShops = useMemo(() => {
+    const filters: DiscoveryFilters = {
+      search,
+      neighborhoodId,
+      type,
+      mapBounds: activeBounds,
+    };
+    return filterDiscoveryShops(shops, filters);
+  }, [shops, search, neighborhoodId, type, activeBounds]);
   const neighborhoods = useMemo(() => getNeighborhoods(shops), [shops]);
   const types = useMemo(() => getTypes(shops), [shops]);
   const locations = useMemo(() => mapLocations(filteredShops), [filteredShops]);
@@ -220,14 +223,19 @@ function ShopCard({
       className={`shop-card${selected ? " selected" : ""}`}
       onMouseEnter={onSelect}
     >
-      {shop.photos[0] ? (
+      {shop.thumbnail ? (
         <img
-          src={shop.photos[0].src}
-          srcSet={shop.photos[0].srcSet}
+          className={
+            shop.thumbnail.id === shop.details.logoPhotoId
+              ? "shop-logo"
+              : undefined
+          }
+          src={shop.thumbnail.src}
+          srcSet={shop.thumbnail.srcSet}
           sizes="(min-width: 960px) 18rem, 100vw"
-          width={shop.photos[0].width}
-          height={shop.photos[0].height}
-          alt={shop.photos[0].alt}
+          width={shop.thumbnail.width}
+          height={shop.thumbnail.height}
+          alt={shop.thumbnail.alt}
           loading="lazy"
           decoding="async"
         />

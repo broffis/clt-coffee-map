@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   createDiscoveryShops,
   filterDiscoveryShops,
@@ -65,6 +65,64 @@ describe("discovery model", () => {
     expect(mapLocations(shops).map((location) => location.shopId)).toEqual([
       "shop-1",
     ]);
+  });
+
+  it("uses the selected logo for filtered map locations, falling back to the first photo", () => {
+    vi.stubEnv("VITE_PUBLIC_PHOTO_BASE_URL", "https://photos.example.test");
+    try {
+      const input = {
+        id: "shop-1",
+        details: {
+          name: "Uptown Coffee",
+          logoPhotoId: "p2",
+          photos: [
+            {
+              id: "p1",
+              alt: "Counter",
+              variants: [
+                { width: 480, height: 320, key: "photos/p1/480.webp" },
+              ],
+            },
+            {
+              id: "p2",
+              alt: "Logo",
+              variants: [
+                { width: 480, height: 320, key: "photos/p2/480.webp" },
+              ],
+            },
+          ],
+        },
+        locations: [
+          {
+            id: "location-1",
+            shopId: "shop-1",
+            details: { type: "cafe", coordinates: [35.2, -80.8] },
+          },
+          {
+            id: "location-2",
+            shopId: "shop-1",
+            details: { type: "bakery", coordinates: [35.3, -80.9] },
+          },
+        ],
+      };
+      const filtered = filterDiscoveryShops(createDiscoveryShops([input]), {
+        search: "",
+        neighborhoodId: "",
+        type: "bakery",
+        mapBounds: null,
+      });
+      expect(mapLocations(filtered)).toMatchObject([
+        { id: "location-2", photo: { alt: "Logo" } },
+      ]);
+      const fallback = createDiscoveryShops([
+        { ...input, details: { ...input.details, logoPhotoId: "missing" } },
+      ]);
+      expect(mapLocations(fallback)[0]).toMatchObject({
+        photo: { alt: "Counter" },
+      });
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 
   it("supports type, neighborhood, and map-area filtering", () => {

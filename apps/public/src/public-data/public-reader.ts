@@ -57,7 +57,7 @@ interface LocationDocument extends Document {
 }
 
 const PUBLISHED = { published: { $ne: null } };
-const SHOP_PUBLIC_FIELDS = ["name", "links", "photos"] as const;
+const SHOP_PUBLIC_FIELDS = ["name", "links", "photos", "logoPhotoId"] as const;
 const LOCATION_PUBLIC_FIELDS = [
   "regionId",
   "cityId",

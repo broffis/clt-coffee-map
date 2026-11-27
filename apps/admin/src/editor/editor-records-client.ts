@@ -17,6 +17,7 @@ export interface EditorShopRecord {
   readonly name: string;
   readonly website: string;
   readonly photos?: readonly PhotoValue[];
+  readonly logoPhotoId?: string;
   readonly published: boolean;
   readonly locations: readonly EditorLocationRecord[];
 }

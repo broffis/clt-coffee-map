@@ -384,6 +384,9 @@ export function EditorWorkspace({
                       name: shop.name,
                       website: shop.website,
                       photos: shop.photos ?? [],
+                      ...(shop.logoPhotoId === undefined
+                        ? {}
+                        : { logoPhotoId: shop.logoPhotoId }),
                     },
                   })
                 }
