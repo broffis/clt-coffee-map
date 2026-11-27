@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.11.0...admin-v0.12.0) (2026-11-27)
+
+
+### Features
+
+* **photos:** deliver published photos and support shop logos ([#110](https://github.com/broffis/clt-coffee-map/issues/110)) ([abcd28c](https://github.com/broffis/clt-coffee-map/commit/abcd28c84bbc37ff3312464a71bd4e8f1f890b22))
+
 ## [0.11.0](https://github.com/broffis/clt-coffee-map/compare/admin-v0.10.0...admin-v0.11.0) (2026-11-20)
 
 
