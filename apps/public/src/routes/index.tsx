@@ -11,6 +11,7 @@ import {
   type MapBounds,
   mapLocations,
 } from "../discovery";
+import { fallbackImage, showFallbackImage } from "../fallback-image";
 import { MapView } from "../map-view";
 import {
   loadPublicShops,
@@ -85,12 +86,16 @@ export function Directory({ data }: { data: PublicHomeData }) {
   return (
     <main>
       <header className="site-header">
+        <p className="site-eyebrow">Charlotte, North Carolina</p>
         <h1>CLT Coffee Map</h1>
         <p>Discover local coffee shops without creating an account.</p>
       </header>
       <div className="site-main">
-        <section aria-labelledby="filters-heading">
-          <h2 id="filters-heading">Find a coffee shop</h2>
+        <section className="filter-panel" aria-labelledby="filters-heading">
+          <div className="filter-heading">
+            <h2 id="filters-heading">Find a coffee shop</h2>
+            <p>Explore by name, neighborhood, or type.</p>
+          </div>
           <div className="directory-toolbar">
             <label>
               Search
@@ -100,33 +105,37 @@ export function Directory({ data }: { data: PublicHomeData }) {
                 placeholder="Shop or neighborhood"
               />
             </label>
-            <label>
+            <label className="map-limit-control">
               Neighborhood
-              <select
-                value={neighborhoodId}
-                onChange={(event) => setNeighborhoodId(event.target.value)}
-              >
-                <option value="">All neighborhoods</option>
-                {neighborhoods.map((neighborhood) => (
-                  <option key={neighborhood} value={neighborhood}>
-                    {neighborhood}
-                  </option>
-                ))}
-              </select>
+              <span className="select-control">
+                <select
+                  value={neighborhoodId}
+                  onChange={(event) => setNeighborhoodId(event.target.value)}
+                >
+                  <option value="">All neighborhoods</option>
+                  {neighborhoods.map((neighborhood) => (
+                    <option key={neighborhood} value={neighborhood}>
+                      {neighborhood}
+                    </option>
+                  ))}
+                </select>
+              </span>
             </label>
             <label>
               Type
-              <select
-                value={type}
-                onChange={(event) => setType(event.target.value)}
-              >
-                <option value="">All types</option>
-                {types.map((locationType) => (
-                  <option key={locationType} value={locationType}>
-                    {locationType}
-                  </option>
-                ))}
-              </select>
+              <span className="select-control">
+                <select
+                  value={type}
+                  onChange={(event) => setType(event.target.value)}
+                >
+                  <option value="">All types</option>
+                  {types.map((locationType) => (
+                    <option key={locationType} value={locationType}>
+                      {locationType}
+                    </option>
+                  ))}
+                </select>
+              </span>
             </label>
           </div>
           <label>
@@ -162,11 +171,13 @@ export function Directory({ data }: { data: PublicHomeData }) {
           aria-label="Coffee shop discovery"
         >
           <div className="discovery-list">
-            <h2 id="directory-heading">Coffee shops</h2>
-            <p>
-              {filteredShops.length}{" "}
-              {filteredShops.length === 1 ? "shop" : "shops"} found
-            </p>
+            <div className="discovery-list-heading">
+              <h2 id="directory-heading">Coffee shops</h2>
+              <p>
+                {filteredShops.length}{" "}
+                {filteredShops.length === 1 ? "shop" : "shops"} found
+              </p>
+            </div>
             {filteredShops.length === 0 ? (
               <p role="status">No shops match these filters.</p>
             ) : (
@@ -238,24 +249,37 @@ function ShopCard({
           alt={shop.thumbnail.alt}
           loading="lazy"
           decoding="async"
+          onError={(event) => showFallbackImage(event.currentTarget)}
         />
-      ) : null}
-      <h3>
-        <Link to="/shops/$shopId" params={{ shopId: shop.id }}>
-          {shop.name}
-        </Link>
-      </h3>
-      <p>
-        ({shop.locations.length}{" "}
-        {shop.locations.length === 1 ? "location" : "locations"})
-      </p>
-      {shop.locations.map((location) => (
-        <p key={location.id}>
-          {[location.type, formatLocation(location)]
-            .filter(Boolean)
-            .join(" · ")}
+      ) : (
+        <img
+          className="shop-placeholder"
+          src={fallbackImage}
+          alt=""
+          width={1080}
+          height={1080}
+          loading="lazy"
+          decoding="async"
+        />
+      )}
+      <div className="shop-card-content">
+        <h3>
+          <Link to="/shops/$shopId" params={{ shopId: shop.id }}>
+            {shop.name}
+          </Link>
+        </h3>
+        <p>
+          ({shop.locations.length}{" "}
+          {shop.locations.length === 1 ? "location" : "locations"})
         </p>
-      ))}
+        {shop.locations.map((location) => (
+          <p key={location.id}>
+            {[location.type, formatLocation(location)]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+        ))}
+      </div>
     </li>
   );
 }

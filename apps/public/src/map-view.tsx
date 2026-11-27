@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import type { MapBounds, MapLocation } from "./discovery";
+import { fallbackImage, showFallbackImage } from "./fallback-image";
 import { publicMapConfig } from "./public-map-config";
 
 interface MapViewProps {
@@ -32,6 +33,7 @@ export function MapView({
 
   useEffect(() => {
     let active = true;
+    let resizeObserver: ResizeObserver | undefined;
     void import("leaflet").then((leaflet) => {
       if (!active || element.current === null || map.current !== null) {
         return;
@@ -57,6 +59,10 @@ export function MapView({
         });
       });
       map.current = instance;
+      if (typeof ResizeObserver !== "undefined") {
+        resizeObserver = new ResizeObserver(() => instance.invalidateSize());
+        resizeObserver.observe(element.current);
+      }
       setReady(true);
       onBoundsChange({
         north: instance.getBounds().getNorth(),
@@ -67,6 +73,7 @@ export function MapView({
     });
     return () => {
       active = false;
+      resizeObserver?.disconnect();
       map.current?.remove();
       map.current = null;
       markers.current = [];
@@ -189,18 +196,27 @@ function sameMarkerContent(left: MapLocation, right: MapLocation): boolean {
 function createPopup(location: MapLocation): HTMLElement {
   const popup = document.createElement("div");
   popup.className = "shop-map-popup";
-  if (location.photo !== null) {
-    const image = document.createElement("img");
+  const image = document.createElement("img");
+  if (location.photo === null) {
+    image.src = fallbackImage;
+    image.alt = "";
+    image.width = 1080;
+    image.height = 1080;
+    image.className = "shop-placeholder";
+  } else {
+    image.addEventListener("error", () => showFallbackImage(image), {
+      once: true,
+    });
     image.src = location.photo.src;
     image.srcset = location.photo.srcSet;
     image.sizes = "200px";
     image.width = location.photo.width;
     image.height = location.photo.height;
     image.alt = location.photo.alt;
-    image.loading = "lazy";
-    image.decoding = "async";
-    popup.append(image);
   }
+  image.loading = "lazy";
+  image.decoding = "async";
+  popup.append(image);
   const link = document.createElement("a");
   link.href = `/shops/${encodeURIComponent(location.shopId)}`;
   link.textContent = location.shopName;

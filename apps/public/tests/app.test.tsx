@@ -150,6 +150,30 @@ describe("public application scaffold", () => {
     expect(screen.getByText("Mobile Beans")).toBeVisible();
     expect(screen.getByText("1 mapped locations")).toBeVisible();
 
+    fireEvent.change(screen.getByLabelText("Search"), {
+      target: { value: "mobile" },
+    });
+    expect(screen.queryByText("Uptown Coffee")).not.toBeInTheDocument();
+    expect(screen.getByText("Mobile Beans")).toBeVisible();
+    fireEvent.change(screen.getByLabelText("Search"), {
+      target: { value: "" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Map" }));
+    expect(screen.getByRole("button", { name: "Map" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(screen.getByLabelText("Coffee shop discovery")).toHaveAttribute(
+      "data-mobile-view",
+      "map",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "List" }));
+    expect(screen.getByRole("button", { name: "List" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+
     fireEvent.change(screen.getByLabelText("Type"), {
       target: { value: "mobile coffee" },
     });
@@ -215,6 +239,17 @@ describe("public application scaffold", () => {
       vi.unstubAllEnvs();
     });
 
+    it("uses a decorative local fallback in a directory card without a published photo", () => {
+      vi.stubEnv("VITE_PUBLIC_PHOTO_BASE_URL", "");
+      const { container } = render(
+        <Directory data={{ ok: true, shops: [shop] }} />,
+      );
+      const image = container.querySelector(".shop-card img");
+      expect(image).toHaveAttribute("alt", "");
+      expect(image?.getAttribute("src")).toContain("clt-coffee-map-logo");
+      expect(image).not.toHaveAttribute("srcset");
+    });
+
     it("renders responsive images with alt text when delivery is configured", () => {
       vi.stubEnv("VITE_PUBLIC_PHOTO_BASE_URL", "https://photos.example.test");
       render(<ShopDetailContent data={{ ok: true, shop }} />, {
@@ -250,6 +285,16 @@ describe("public application scaffold", () => {
       expect(
         screen.getAllByRole("img", { name: "Front counter" }),
       ).toHaveLength(1);
+    });
+
+    it("replaces a failed published directory image with the decorative fallback", () => {
+      vi.stubEnv("VITE_PUBLIC_PHOTO_BASE_URL", "https://photos.example.test");
+      render(<Directory data={{ ok: true, shops: [shop] }} />);
+      const image = screen.getByRole("img", { name: "Front counter" });
+      fireEvent.error(image);
+      expect(image.getAttribute("src")).toContain("clt-coffee-map-logo");
+      expect(image).not.toHaveAttribute("srcset");
+      expect(image).toHaveAttribute("alt", "");
     });
 
     it("uses the selected logo instead of the first photo in the directory", () => {

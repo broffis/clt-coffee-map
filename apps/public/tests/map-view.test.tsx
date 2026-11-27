@@ -17,6 +17,7 @@ const leafletMock = vi.hoisted(() => {
     }),
     getBounds: vi.fn(() => bounds),
     remove: vi.fn(),
+    invalidateSize: vi.fn(),
   };
   const markers: {
     remove: ReturnType<typeof vi.fn>;
@@ -66,6 +67,7 @@ describe("MapView", () => {
     leafletMock.tileLayer.mockClear();
     leafletMock.circleMarker.mockClear();
     leafletMock.map.remove.mockClear();
+    leafletMock.map.invalidateSize.mockClear();
     leafletMock.markers.length = 0;
   });
 
@@ -169,6 +171,13 @@ describe("MapView", () => {
     const image = popup.querySelector("img");
     expect(image).toHaveAttribute("alt", "Coffee counter");
     expect(image).toHaveAttribute("srcset", locations[0]?.photo.srcSet);
+    if (image === null) {
+      throw new Error("Expected a popup image.");
+    }
+    fireEvent.error(image);
+    expect(image.getAttribute("src")).toContain("clt-coffee-map-logo");
+    expect(image).not.toHaveAttribute("srcset");
+    expect(image).toHaveAttribute("alt", "");
 
     if (marker === undefined) {
       throw new Error("Expected a map marker.");
@@ -200,8 +209,42 @@ describe("MapView", () => {
         />,
       );
     });
+
     expect(marker.remove).not.toHaveBeenCalled();
     expect(leafletMock.circleMarker).toHaveBeenCalledTimes(1);
+  });
+
+  it("resizes the map when its panel becomes visible", async () => {
+    let onResize: (() => void) | undefined;
+    const observe = vi.fn();
+    const disconnect = vi.fn();
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        constructor(callback: () => void) {
+          onResize = callback;
+        }
+        observe = observe;
+        disconnect = disconnect;
+      },
+    );
+    try {
+      const { unmount } = render(
+        <MapView
+          locations={[]}
+          selectedShopId={null}
+          onSelectShop={vi.fn()}
+          onBoundsChange={vi.fn()}
+        />,
+      );
+      await waitFor(() => expect(observe).toHaveBeenCalledOnce());
+      onResize?.();
+      expect(leafletMock.map.invalidateSize).toHaveBeenCalled();
+      unmount();
+      expect(disconnect).toHaveBeenCalledOnce();
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it("shows the shop name when no photo is available", async () => {
@@ -230,7 +273,10 @@ describe("MapView", () => {
     const popup = leafletMock.markers[0]?.bindPopup.mock
       .calls[0]?.[0] as HTMLElement;
     expect(popup.textContent).toContain("Coffee shop");
-    expect(popup.querySelector("img")).toBeNull();
+    expect(popup.querySelector("img")).toHaveAttribute("alt", "");
+    expect(popup.querySelector("img")?.getAttribute("src")).toContain(
+      "clt-coffee-map-logo",
+    );
   });
 
   it("reconciles changed and removed locations and uses the latest selection callback", async () => {

@@ -1,7 +1,35 @@
 :root {
-  color: #2f211b;
-  background: #fffaf3;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --color-page: #f7f6f3;
+  --color-surface: #fff;
+  --color-subtle: #f1efeb;
+  --color-text: #242522;
+  --color-muted: #565b55;
+  --color-border: #d7dad4;
+  --color-accent: #305d49;
+  --color-accent-hover: #214634;
+  --color-focus: #164cbb;
+  --font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-size-small: 0.875rem;
+  --font-size-body: 1rem;
+  --font-size-heading: 1.25rem;
+  --font-size-title: clamp(2rem, 4vw, 2.75rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --radius-control: 0.5rem;
+  --radius-card: 0.75rem;
+  --radius-panel: 1rem;
+  --shadow-panel: 0 2px 12px rgb(27 37 29 / 5%);
+  --border-default: 1px solid var(--color-border);
+  color: var(--color-text);
+  background: var(--color-page);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
   line-height: 1.5;
 }
 
@@ -14,7 +42,16 @@ body {
 }
 
 a {
-  color: #7d3f20;
+  color: var(--color-accent);
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
 }
 
 button,
@@ -25,14 +62,22 @@ select {
 
 button,
 select,
-input {
-  border: 1px solid #bca995;
-  border-radius: 0.4rem;
-  padding: 0.55rem 0.7rem;
+input:not([type="checkbox"]) {
+  border: var(--border-default);
+  border-radius: var(--radius-control);
+  padding: 0.65rem var(--space-3);
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 button {
   cursor: pointer;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--color-accent);
+  width: 1rem;
+  height: 1rem;
 }
 
 .site-header,
@@ -42,93 +87,210 @@ button {
 }
 
 .site-header {
-  padding: 1.5rem 0 1rem;
+  padding: var(--space-12) 0 var(--space-8);
+}
+
+.site-header h1 {
+  font-size: var(--font-size-title);
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  margin: 0 0 var(--space-2);
+}
+
+.site-header p {
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.site-header .site-eyebrow {
+  color: var(--color-accent);
+  font-size: var(--font-size-small);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
 }
 
 .site-main {
-  padding-bottom: 3rem;
+  padding-bottom: var(--space-12);
+}
+
+.filter-panel,
+.discovery-list,
+.discovery-map-panel {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-panel);
+  min-width: 0;
+}
+
+.filter-panel {
+  margin-bottom: var(--space-6);
+  padding: var(--space-6);
+}
+
+.filter-heading h2,
+.discovery-list-heading h2,
+.map-panel-heading h2 {
+  font-size: var(--font-size-heading);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.filter-heading p,
+.discovery-list-heading p,
+.map-panel-heading span {
+  color: var(--color-muted);
+  font-size: var(--font-size-small);
+  margin: var(--space-1) 0 0;
 }
 
 .directory-toolbar {
   display: grid;
-  gap: 0.75rem;
+  gap: var(--space-4);
   grid-template-columns: minmax(12rem, 2fr) repeat(2, minmax(9rem, 1fr));
-  margin: 1.5rem 0;
+  margin: var(--space-5) 0 var(--space-4);
 }
 
 .directory-toolbar label {
   display: grid;
-  gap: 0.25rem;
+  gap: var(--space-2);
+  font-size: var(--font-size-small);
   font-weight: 600;
+  min-width: 0;
+}
+
+.directory-toolbar input,
+.directory-toolbar select {
+  width: 100%;
+}
+
+.select-control {
+  display: block;
+  position: relative;
+}
+
+.select-control select {
+  appearance: none;
+  padding-right: var(--space-12);
+}
+
+.select-control::after {
+  border-bottom: 2px solid var(--color-muted);
+  border-right: 2px solid var(--color-muted);
+  content: "";
+  height: 0.45rem;
+  pointer-events: none;
+  position: absolute;
+  right: var(--space-4);
+  top: 50%;
+  transform: translateY(-70%) rotate(45deg);
+  width: 0.45rem;
+}
+
+@media (forced-colors: active) {
+  .select-control::after {
+    border-color: CanvasText;
+  }
+}
+
+.map-limit-control {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--space-2);
+  font-size: var(--font-size-small);
 }
 
 .discovery-layout {
   display: grid;
-  gap: 1rem;
+  gap: var(--space-6);
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-}
-
-.discovery-list,
-.discovery-map-panel {
-  background: #fff;
-  border: 1px solid #e3d6c7;
-  border-radius: 0.75rem;
-  min-width: 0;
+  align-items: start;
 }
 
 .discovery-list {
-  padding: 1rem;
+  padding: var(--space-5);
+}
+
+.discovery-list-heading {
+  margin-bottom: var(--space-4);
 }
 
 .discovery-list ul {
   display: grid;
-  gap: 0.75rem;
+  gap: var(--space-3);
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .shop-card {
-  border: 1px solid #e3d6c7;
-  border-radius: 0.5rem;
-  padding: 0.85rem;
+  align-items: start;
+  border: var(--border-default);
+  border-radius: var(--radius-card);
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 6rem minmax(0, 1fr);
+  padding: var(--space-3);
 }
 
 .shop-card img {
+  aspect-ratio: 1;
+  border-radius: var(--radius-control);
   display: block;
-  width: 100%;
-  max-height: 12rem;
+  height: auto;
   object-fit: cover;
-  border-radius: 0.35rem;
-  margin-bottom: 0.75rem;
+  width: 100%;
 }
 
-.shop-card img.shop-logo {
+.shop-card img.shop-logo,
+.shop-card img.shop-placeholder {
+  background: var(--color-subtle);
   object-fit: contain;
 }
 
-.shop-card.selected {
-  border-color: #c96f3b;
-  box-shadow: 0 0 0 2px #f4b942;
+.shop-card.selected,
+.shop-card:focus-within {
+  border-color: var(--color-accent);
 }
 
 .shop-card h3 {
+  font-size: var(--font-size-body);
   margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.shop-card h3 a {
+  color: var(--color-text);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
 }
 
 .shop-card p {
-  margin: 0.35rem 0 0;
+  color: var(--color-muted);
+  font-size: var(--font-size-small);
+  margin: var(--space-1) 0 0;
+  overflow-wrap: anywhere;
+}
+
+.discovery-map-panel {
+  overflow: hidden;
+  position: sticky;
+  top: var(--space-4);
 }
 
 .map-panel-heading {
   align-items: baseline;
   display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
   justify-content: space-between;
-  padding: 1rem 1rem 0;
+  padding: var(--space-5);
 }
 
 .map-view {
-  height: 34rem;
+  height: 36rem;
   min-height: 18rem;
   width: 100%;
 }
@@ -139,43 +301,80 @@ button {
   max-width: 200px;
   max-height: 120px;
   object-fit: contain;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
 }
 
 .map-fallback {
   align-items: center;
-  background: #f5eee5;
+  background: var(--color-subtle);
   display: flex;
-  height: 100%;
   justify-content: center;
   min-height: 18rem;
-  padding: 2rem;
+  padding: var(--space-8);
   text-align: center;
 }
 
 .mobile-view-toggle {
   display: none;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 @media (max-width: 700px) {
+  .site-header {
+    padding: var(--space-8) 0 var(--space-6);
+  }
+
+  .filter-panel,
+  .discovery-list {
+    padding: var(--space-4);
+  }
+
   .directory-toolbar {
     grid-template-columns: 1fr;
   }
 
   .mobile-view-toggle {
+    background: var(--color-subtle);
+    border-radius: var(--radius-control);
     display: flex;
-    gap: 0.5rem;
+    gap: var(--space-1);
+    padding: var(--space-1);
+  }
+
+  .mobile-view-toggle button {
+    background: transparent;
+    border-color: transparent;
+    flex: 1;
   }
 
   .mobile-view-toggle button[aria-pressed="true"] {
-    background: #5b351f;
-    color: #fff;
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .discovery-layout {
+    display: block;
+  }
+
+  .discovery-map-panel {
+    position: static;
   }
 
   .discovery-layout[data-mobile-view="map"] .discovery-list,
   .discovery-layout[data-mobile-view="list"] .discovery-map-panel {
     display: none;
+  }
+
+  .map-view {
+    height: min(65vh, 36rem);
+  }
+}
+
+@media (max-width: 360px) {
+  .shop-card {
+    grid-template-columns: 4.5rem minmax(0, 1fr);
   }
 }
 
