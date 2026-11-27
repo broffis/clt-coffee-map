@@ -15,7 +15,7 @@ export interface ShopDraftDependencies {
 }
 
 export type ShopDraftErrors = Partial<
-  Record<"form" | "name" | "photos" | "website", string>
+  Record<"form" | "name" | "photos" | "logoPhotoId" | "website", string>
 >;
 
 export type ShopDraftResult =
@@ -159,12 +159,34 @@ export async function saveShopDraft(
     }
     photos = resolved.photos;
   }
+  if (
+    fields.logoPhotoId !== undefined &&
+    fields.logoPhotoId !== null &&
+    typeof fields.logoPhotoId !== "string"
+  ) {
+    return {
+      ok: false,
+      errors: { logoPhotoId: "Choose a logo from the attached photos." },
+    };
+  }
+  const logoPhotoId =
+    fields.logoPhotoId === undefined
+      ? existing?.draft.logoPhotoId
+      : text(fields.logoPhotoId).trim() || undefined;
+  const logoExists = photos.some((photo) => photo.id === logoPhotoId);
+  if (fields.logoPhotoId !== undefined && logoPhotoId && !logoExists) {
+    return {
+      ok: false,
+      errors: { logoPhotoId: "Choose a logo from the attached photos." },
+    };
+  }
   const id = existing?.id ?? deps.newId();
   const draft: ShopDetails = {
     name,
     links: website === "" ? null : { website, other: [] },
     sources: existing?.draft.sources ?? null,
     ...(photos.length > 0 ? { photos } : {}),
+    ...(logoExists && logoPhotoId !== undefined ? { logoPhotoId } : {}),
   };
   await deps.repositories.shops.save({
     id,

@@ -1,6 +1,7 @@
 import { SessionVerificationError } from "../authentication/session";
 import { AuthorizationError } from "../authorization/service";
 import { PersistenceError } from "../persistence/errors";
+import { PhotoDeliveryError } from "../photos/delivery";
 import { PublicRegenerationError } from "../publication/public-regeneration";
 
 const headers = { "Cache-Control": "private, no-store" };
@@ -28,6 +29,12 @@ export function respondToEditorError(error: unknown): Response {
   if (error instanceof PublicRegenerationError) {
     return Response.json(
       { error: "public-update-pending" },
+      { status: 503, headers },
+    );
+  }
+  if (error instanceof PhotoDeliveryError) {
+    return Response.json(
+      { error: "photo-delivery-pending" },
       { status: 503, headers },
     );
   }

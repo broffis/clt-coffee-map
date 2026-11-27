@@ -48,6 +48,22 @@ async function setup() {
 }
 
 describe("editor records endpoint", () => {
+  it("returns the draft logo selection for editing", async () => {
+    const { repositories, deps } = await setup();
+    const shop = await repositories.shops.get("shop-1");
+    if (shop === null) {
+      throw new Error("Expected shop fixture.");
+    }
+    await repositories.shops.save({
+      ...shop,
+      draft: { ...shop.draft, logoPhotoId: "photo-1" },
+    });
+    const response = await handleEditorRecords(deps, request);
+    expect(await response.json()).toMatchObject({
+      shops: [{ logoPhotoId: "photo-1" }],
+    });
+  });
+
   it("returns draft shops with their locations, privately", async () => {
     const { deps } = await setup();
 

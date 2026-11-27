@@ -94,6 +94,19 @@ button {
   padding: 0.85rem;
 }
 
+.shop-card img {
+  display: block;
+  width: 100%;
+  max-height: 12rem;
+  object-fit: cover;
+  border-radius: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.shop-card img.shop-logo {
+  object-fit: contain;
+}
+
 .shop-card.selected {
   border-color: #c96f3b;
   box-shadow: 0 0 0 2px #f4b942;
@@ -118,6 +131,15 @@ button {
   height: 34rem;
   min-height: 18rem;
   width: 100%;
+}
+
+.shop-map-popup img {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  max-height: 120px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
 }
 
 .map-fallback {

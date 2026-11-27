@@ -165,6 +165,34 @@ describe("ShopDraftForm", () => {
       });
     }
 
+    it("allows choosing an optional logo and clears it when that photo is removed", async () => {
+      const { save } = setupPhotos(undefined, [
+        { id: "p1", alt: "Counter", variants },
+        {
+          id: "p2",
+          alt: "Logo",
+          variants: [{ width: 480, height: 320, key: "photos/p2/480.webp" }],
+        },
+      ]);
+      const logo = screen.getByLabelText("Company logo");
+      expect(logo).toHaveValue("");
+      fireEvent.change(logo, { target: { value: "p2" } });
+      fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+      await waitFor(() =>
+        expect(save).toHaveBeenLastCalledWith(
+          expect.objectContaining({ logoPhotoId: "p2" }),
+        ),
+      );
+      fireEvent.click(screen.getByRole("button", { name: "Remove photo 2" }));
+      expect(logo).toHaveValue("");
+      fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+      await waitFor(() =>
+        expect(save).toHaveBeenLastCalledWith(
+          expect.objectContaining({ logoPhotoId: "" }),
+        ),
+      );
+    });
+
     it("hides the photo section without an upload function", () => {
       setup();
 

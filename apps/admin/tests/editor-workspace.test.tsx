@@ -62,6 +62,32 @@ function setup(
 }
 
 describe("EditorWorkspace", () => {
+  it("reopens a shop with its saved logo selection", async () => {
+    const logo = {
+      id: "p1",
+      alt: "Logo",
+      variants: [{ width: 480, height: 320, key: "photos/p1/480.webp" }],
+    };
+    render(
+      <EditorWorkspace
+        load={async () => ({
+          ok: true,
+          records: {
+            shops: [{ ...records.shops[0], photos: [logo], logoPhotoId: "p1" }],
+          },
+        })}
+        saveShop={async () => ({ ok: true })}
+        saveLocation={async () => ({ ok: true })}
+        updatePublication={async () => ({ ok: true })}
+        uploadPhoto={async () => ({ ok: false, message: "Not used" })}
+      />,
+    );
+    fireEvent.click(
+      await screen.findByRole("button", { name: "Edit shop Bean There" }),
+    );
+    expect(screen.getByLabelText("Company logo")).toHaveValue("p1");
+  });
+
   it("lists shops with their locations after loading", async () => {
     setup();
 
@@ -114,6 +140,34 @@ describe("EditorWorkspace", () => {
     );
     expect(await screen.findByRole("status")).toHaveTextContent(
       "Shop details republished.",
+    );
+  });
+
+  it("retries photo delivery without republishing shop details", async () => {
+    const { updatePublication } = setup({
+      load: async () => ({
+        ok: true,
+        records: {
+          ...records,
+          shops: records.shops.map((shop) => ({ ...shop, published: true })),
+        },
+      }),
+    });
+    await screen.findByText("Bean There");
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Retry photo delivery" }),
+    );
+
+    await waitFor(() =>
+      expect(updatePublication).toHaveBeenCalledWith(
+        "s1",
+        undefined,
+        "retry-photo-delivery",
+      ),
+    );
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Photo delivery completed.",
     );
   });
 

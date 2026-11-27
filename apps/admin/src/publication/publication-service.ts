@@ -5,8 +5,10 @@ import {
   republishShopDetails,
   unpublishLocation,
 } from "../domain/publication";
+import { validateShopPhotos } from "../domain/photo";
 import type { AccessRepository } from "../persistence/access-repository";
 import type { Repositories } from "../persistence/repositories";
+import { type PhotoDelivery, PhotoDeliveryError } from "../photos/delivery";
 import type {
   PublicRegenerationRequest,
   PublicRegenerationTrigger,
@@ -16,6 +18,7 @@ export interface PublicationDependencies {
   readonly access: Pick<AccessRepository, "get">;
   readonly repositories: Pick<Repositories, "shops" | "locations">;
   readonly verifier: SessionVerifier<Request>;
+  readonly photoDelivery: PhotoDelivery;
   readonly publicRegeneration?: PublicRegenerationTrigger;
 }
 
@@ -29,7 +32,8 @@ export type PublicationResult =
       readonly action:
         | "publish-location"
         | "unpublish-location"
-        | "republish-shop";
+        | "republish-shop"
+        | "retry-photo-delivery";
       readonly shopId: string;
       readonly locationId?: string;
     }
@@ -65,7 +69,8 @@ export async function updatePublication(
   const publicationAction =
     action === "publish-location" ||
     action === "unpublish-location" ||
-    action === "republish-shop"
+    action === "republish-shop" ||
+    action === "retry-photo-delivery"
       ? action
       : null;
   const errors: PublicationErrors = {};
@@ -73,7 +78,11 @@ export async function updatePublication(
   if (shopId === "") {
     errors.shopId = "Choose a shop.";
   }
-  if (locationId === "" && publicationAction !== "republish-shop") {
+  if (
+    locationId === "" &&
+    publicationAction !== "republish-shop" &&
+    publicationAction !== "retry-photo-delivery"
+  ) {
     errors.locationId = "Choose a location.";
   }
   if (publicationAction === null) {
@@ -96,12 +105,24 @@ export async function updatePublication(
   }
   if (
     publicationAction !== "republish-shop" &&
+    publicationAction !== "retry-photo-delivery" &&
     (location === null || location.shopId !== shop.id)
   ) {
     return { ok: false, errors: { form: "Shop or location not found." } };
   }
 
-  if (publicationAction === "republish-shop") {
+  if (publicationAction === "retry-photo-delivery") {
+    const locations = await deps.repositories.locations.listByShop(shopId);
+    if (
+      shop.published === null ||
+      !locations.some((item) => item.published !== null)
+    ) {
+      return {
+        ok: false,
+        errors: { form: "Publish a location before retrying photo delivery." },
+      };
+    }
+  } else if (publicationAction === "republish-shop") {
     if (shop.published === null) {
       return {
         ok: false,
@@ -141,9 +162,33 @@ export async function updatePublication(
     }
     await deps.repositories.locations.save(unpublishLocation(location));
   }
+  if (publicationAction !== "unpublish-location") {
+    const currentShop = await deps.repositories.shops.get(shopId);
+    const locations = await deps.repositories.locations.listByShop(shopId);
+    if (
+      currentShop?.published !== null &&
+      currentShop?.published !== undefined &&
+      locations.some((item) => item.published !== null)
+    ) {
+      try {
+        const photos = currentShop.published.photos ?? [];
+        validateShopPhotos(photos);
+        for (const photo of photos) {
+          for (const variant of photo.variants) {
+            await deps.photoDelivery.copy(variant.key);
+          }
+        }
+      } catch {
+        throw new PhotoDeliveryError();
+      }
+    }
+  }
   if (deps.publicRegeneration !== undefined) {
     const regeneration: PublicRegenerationRequest = {
-      action: publicationAction,
+      action:
+        publicationAction === "retry-photo-delivery"
+          ? "republish-shop"
+          : publicationAction,
       shopId,
       ...(locationId === "" ? {} : { locationId }),
     };

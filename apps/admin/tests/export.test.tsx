@@ -73,6 +73,22 @@ function location(
 }
 
 describe("published export", () => {
+  it("exports the published logo selection rather than the draft selection", () => {
+    const original = shop();
+    if (original.published === null) {
+      throw new Error("Expected published shop.");
+    }
+    const result = exportPublishedShop(
+      {
+        ...original,
+        draft: { ...original.draft, logoPhotoId: "draft-logo" },
+        published: { ...original.published, logoPhotoId: "published-logo" },
+      },
+      [location("location-1", "shop-1", true)],
+    );
+    expect(result?.details.logoPhotoId).toBe("published-logo");
+  });
+
   it("exports only published details and matching published locations", () => {
     const result = exportPublishedShop(shop(), [
       location("location-1", "shop-1", true),

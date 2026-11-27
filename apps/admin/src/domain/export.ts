@@ -62,6 +62,9 @@ function copyPublishedShopDetails(details: ShopDetails): PublishedShopDetails {
     ...(details.photos === undefined
       ? {}
       : { photos: copyShopPhotos(details.photos) }),
+    ...(details.logoPhotoId === undefined
+      ? {}
+      : { logoPhotoId: details.logoPhotoId }),
   };
 }
 

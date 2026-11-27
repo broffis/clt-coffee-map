@@ -30,6 +30,7 @@ function database(): PublicMongoDatabase {
       published: {
         name: "Published shop",
         links: null,
+        logoPhotoId: "photo-1",
         photos: [
           {
             id: "photo-1",
@@ -94,6 +95,7 @@ describe("public Mongo reader", () => {
         details: {
           name: "Published shop",
           links: null,
+          logoPhotoId: "photo-1",
           photos: [
             {
               id: "photo-1",

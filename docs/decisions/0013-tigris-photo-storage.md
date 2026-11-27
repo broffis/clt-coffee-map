@@ -103,8 +103,15 @@ the published variant key (`apps/public/src/public-photos.ts`). The setting is
 a build-time HTTPS origin, not a secret, so it can point at the Tigris public
 bucket or a custom domain and be changed without a code change. Photos are
 omitted, and the rest of the page still renders, when it is unset. Keys that do
-not match `photos/<id>/<width>.webp` are ignored. Cache headers and the custom
-domain remain open until a bucket exists.
+not match `photos/<id>/<width>.webp` are ignored.
+
+Uploads and drafts stay in a private bucket. After the publication records are
+saved, the admin server copies the published variants to a separate public
+bucket using S3 CopyObject. This ordering avoids copying a draft from a failed
+publication, but a copy failure leaves the shop published with missing images.
+The editor reports that state and provides a retry for the published snapshot.
+Copies may partially succeed; retries repeat the copy. A successful copy does
+not prove that a later regeneration or deployment completed.
 
 ## Consequences
 
@@ -112,16 +119,27 @@ domain remain open until a bucket exists.
   (upload-time resizing; Apache-2.0, native libvips binaries, subject to
   Vercel function size and memory limits; replaceable by any image library
   behind `processPhoto`) and `@aws-sdk/client-s3` (standard S3 client used
-  only in `storage-s3.ts`; replaceable by any S3-compatible client behind
-  `PhotoStorage`). Neither has recurring cost.
+  in `storage-s3.ts` and `delivery-s3.ts`; replaceable by an S3-compatible
+  client behind the storage and delivery interfaces). Neither has recurring
+  cost.
 - Update #72 and launch checks to reference Tigris rather than R2.
-- Public images may be served from the bucket's public domains or a custom
-  domain. Decide delivery, cache behavior, and domain during implementation
-  without exposing private uploads or drafts.
+- Keep the upload bucket private and use a separate public delivery bucket.
+  Use the Tigris public bucket hostname first; defer a custom domain until the
+  public app has a stable production hostname and the bucket is verified.
+- Copy published variants with `Cache-Control: public, max-age=3600`. A one-hour
+  cache limits stale responses but cannot revoke downloaded copies.
 - Use a bucket with no dots in its name unless a custom domain is configured,
   because public bucket domains do not support them.
-- Define original-file retention, replacement/deletion behavior, and media
-  export and recovery before launch; object storage alone is not a backup.
+- The application does not retain original uploads after processing. Draft
+  saves attempt to delete removed private variants only if no published copy
+  references them; failed deletions can leave orphans. Public objects are not
+  automatically removed on replacement or unpublication and can remain
+  accessible by URL. The owner manually removes obsolete public objects in the
+  Tigris console after checking published references and deployed pages, as
+  described in the README. Pause publication and delivery retries during the
+  check and deletion. Rehearse cleanup and recovery before launch; export Atlas
+  records and both buckets to a separate operator-controlled backup location,
+  because object storage alone is not a backup.
 - Processing runtime, image dimensions/formats, and Vercel compute, memory, and
   upload limits remain implementation-time decisions per ADR 0002 and
   [ADR 0006](0006-vercel-prerendered-hosting.md).

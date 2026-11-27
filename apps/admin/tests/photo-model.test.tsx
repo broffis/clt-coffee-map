@@ -84,6 +84,22 @@ describe("validateShopPhotos", () => {
 });
 
 describe("shop photos", () => {
+  it("publishes a valid logo selection and rejects a missing photo", () => {
+    const shop = shopWith([photo()]);
+    expect(
+      publishShopDetails({
+        ...shop,
+        draft: { ...shop.draft, logoPhotoId: "photo-1" },
+      }).published?.logoPhotoId,
+    ).toBe("photo-1");
+    expect(() =>
+      publishShopDetails({
+        ...shop,
+        draft: { ...shop.draft, logoPhotoId: "missing" },
+      }),
+    ).toThrow("Choose a logo from the attached photos.");
+  });
+
   it("publishes a copy of validated photos", () => {
     const original = photo();
     const result = publishShopDetails(shopWith([original]));

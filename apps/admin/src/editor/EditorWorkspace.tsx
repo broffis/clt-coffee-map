@@ -230,6 +230,20 @@ export function EditorWorkspace({
     });
   }
 
+  async function retryPhotoDelivery(shopId: string): Promise<void> {
+    setShopPublicationState({ id: shopId, busy: true });
+    const outcome = await updatePublication(
+      shopId,
+      undefined,
+      "retry-photo-delivery",
+    );
+    setShopPublicationState({
+      id: shopId,
+      busy: false,
+      message: outcome.ok ? "Photo delivery completed." : outcome.message,
+    });
+  }
+
   if (state.status === "loading") {
     return <p role="status">Loading shops...</p>;
   }
@@ -370,6 +384,9 @@ export function EditorWorkspace({
                       name: shop.name,
                       website: shop.website,
                       photos: shop.photos ?? [],
+                      ...(shop.logoPhotoId === undefined
+                        ? {}
+                        : { logoPhotoId: shop.logoPhotoId }),
                     },
                   })
                 }
@@ -390,6 +407,16 @@ export function EditorWorkspace({
                     shopPublicationState.busy
                       ? "Republishing..."
                       : "Republish shop details"}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={
+                      shopPublicationState?.id === shop.id &&
+                      shopPublicationState.busy
+                    }
+                    onClick={() => void retryPhotoDelivery(shop.id)}
+                  >
+                    Retry photo delivery
                   </button>
                   {shopPublicationState?.id === shop.id &&
                     shopPublicationState.message !== undefined && (

@@ -208,7 +208,7 @@ describe("public application scaffold", () => {
           },
         ],
       },
-      locations: [],
+      locations: [{ id: "location-1", shopId: "shop-1", details: {} }],
     };
 
     afterEach(() => {
@@ -233,6 +233,56 @@ describe("public application scaffold", () => {
       expect(image).toHaveAttribute("width", "960");
       expect(image).toHaveAttribute("height", "640");
       expect(image).toHaveAttribute("loading", "lazy");
+    });
+
+    it("shows the first published photo in the directory card", () => {
+      vi.stubEnv("VITE_PUBLIC_PHOTO_BASE_URL", "https://photos.example.test");
+      render(
+        <Directory
+          data={{
+            ok: true,
+            shops: [shop],
+          }}
+        />,
+        { container: document },
+      );
+
+      expect(
+        screen.getAllByRole("img", { name: "Front counter" }),
+      ).toHaveLength(1);
+    });
+
+    it("uses the selected logo instead of the first photo in the directory", () => {
+      vi.stubEnv("VITE_PUBLIC_PHOTO_BASE_URL", "https://photos.example.test");
+      render(
+        <Directory
+          data={{
+            ok: true,
+            shops: [
+              {
+                ...shop,
+                details: {
+                  ...shop.details,
+                  logoPhotoId: "p2",
+                  photos: [
+                    ...shop.details.photos,
+                    {
+                      id: "p2",
+                      alt: "Company logo",
+                      variants: [
+                        { width: 480, height: 320, key: "photos/p2/480.webp" },
+                      ],
+                    },
+                  ],
+                },
+              },
+            ],
+          }}
+        />,
+        { container: document },
+      );
+      expect(screen.getByRole("img", { name: "Company logo" })).toBeVisible();
+      expect(screen.queryByRole("img", { name: "Front counter" })).toBeNull();
     });
 
     it("omits photos but keeps the details when delivery is not configured", () => {

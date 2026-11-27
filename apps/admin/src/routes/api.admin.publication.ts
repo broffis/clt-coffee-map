@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { clerkSessionVerifier } from "../authentication/clerk-server";
 import { serverAccessReader } from "../persistence/access-server";
 import { serverEditorRepositories } from "../persistence/editor-server";
+import { serverPhotoDelivery } from "../photos/delivery-server";
 import { createPublicRegenerationTrigger } from "../publication/public-regeneration";
 import { handlePublicationUpdate } from "../publication/publication-handler";
 
@@ -9,6 +10,7 @@ const dependencies = {
   access: serverAccessReader,
   repositories: serverEditorRepositories,
   verifier: clerkSessionVerifier,
+  photoDelivery: serverPhotoDelivery,
   publicRegeneration: createPublicRegenerationTrigger(process.env),
 };
 
