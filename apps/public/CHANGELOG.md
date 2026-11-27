@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/broffis/clt-coffee-map/compare/public-v0.4.0...public-v0.5.0) (2026-11-27)
+
+
+### Features
+
+* **photos:** deliver published photos and support shop logos ([#110](https://github.com/broffis/clt-coffee-map/issues/110)) ([abcd28c](https://github.com/broffis/clt-coffee-map/commit/abcd28c84bbc37ff3312464a71bd4e8f1f890b22))
+
 ## [0.4.0](https://github.com/broffis/clt-coffee-map/compare/public-v0.3.0...public-v0.4.0) (2026-11-20)
 
 
